@@ -38,6 +38,6 @@ jobs:
       - name: Editorconfig checker
         run: yarn run editorconfig:checker # check code by .editorconfig
       - name: ESLint
-        run: yarn run lint # run eslint
+        run: yarn run eslint # run eslint
       - name: Jest Tests
         run: yarn run test # run tests
