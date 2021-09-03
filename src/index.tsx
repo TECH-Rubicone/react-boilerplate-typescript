@@ -7,6 +7,8 @@ import App from './layouts';
 
 import reportWebVitals from './reportWebVitals';
 
+import './styles';
+
 ReactDOM.render(
   <React.StrictMode>
     <App />
