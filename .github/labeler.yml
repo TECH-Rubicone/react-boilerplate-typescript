@@ -1,0 +1,23 @@
+# Add 'documentation' label to any md file changes
+documentation:
+  - ./*.md
+  - ./documentation/*.md
+
+# Add 'feature' label to any change within the 'core' package
+feature:
+  - ./src/**/*
+
+# Add 'test' label to any change to *.spec.js files within the source dir
+test:
+  - src/**/*.spec.js
+  - test/**/*
+  - jest.config.json
+  - jest-setup.ts
+
+# Add 'ci' label to any change in .github
+ci:
+  - .github/**/*
+
+# workflow
+workflow:
+  - ./.*
