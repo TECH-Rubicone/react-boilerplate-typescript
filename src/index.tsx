@@ -1,9 +1,11 @@
 // outsource dependencies
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 
 // local dependencies
-import App from './layouts';
+import store from './store';
+import App from './layouts/index';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -11,7 +13,9 @@ import './styles';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
