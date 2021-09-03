@@ -1,14 +1,15 @@
 // outsource libraries
 import React, { memo } from 'react';
+import { Container } from 'reactstrap';
 
 // local dependencies
 import App from './app';
 
 const Layouts = () => {
-  return <div>
+  return <Container>
     <h1>Layouts</h1>
     <App />
-  </div>;
+  </Container>;
 };
 
 export default memo(Layouts);

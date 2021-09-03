@@ -9,6 +9,8 @@ import App from './layouts/index';
 
 import reportWebVitals from './reportWebVitals';
 
+import './styles';
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
