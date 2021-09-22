@@ -1,13 +1,13 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 
 //outsource dependencies
 import { useField } from 'formik';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import InputMask from 'react-input-mask';
 import DatePicker from 'react-datepicker';
 import React, { useCallback, useMemo, memo } from 'react';
 
-// configs
 import config from 'configs/app-config';
 
 // hooks
@@ -16,7 +16,22 @@ import { useMoment } from 'hooks/moment';
 //local dependencies
 import FieldWrap from './field-wrap';
 
-const FDatepicker = props => {
+interface IFDatepickerProps {
+  name: string,
+  format?: string,
+  success?: string,
+  skipTouch?: boolean,
+  inputMask?: string,
+  dateFormat?: string,
+  description?: string,
+  explanation?: string,
+  placeholder?: string,
+  classNameLabel?: string,
+  classNameFormGroup?: string,
+  label?: React.ReactChild | React.ReactNode,
+}
+
+const FDatepicker: React.FC<IFDatepickerProps> = props => {
   const {
     classNameFormGroup, classNameLabel,
     name, label, success, skipTouch, description, explanation,
@@ -70,35 +85,6 @@ const FDatepicker = props => {
       {...attr}
     />
   </FieldWrap>;
-};
-
-FDatepicker.propTypes = {
-  label: PropTypes.element,
-  format: PropTypes.string,
-  success: PropTypes.string,
-  skipTouch: PropTypes.bool,
-  inputMask: PropTypes.string,
-  dateFormat: PropTypes.string,
-  description: PropTypes.string,
-  explanation: PropTypes.string,
-  placeholder: PropTypes.string,
-  classNameLabel: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  classNameFormGroup: PropTypes.string,
-};
-
-FDatepicker.defaultProps = {
-  label: null,
-  success: null,
-  skipTouch: false,
-  description: null,
-  explanation: null,
-  classNameLabel: '',
-  classNameFormGroup: '',
-  inputMask: '99.99.9999',
-  dateFormat: 'dd.MM.yyyy',
-  format: config.REACT_APP_CLIENT_TIME_FORMAT,
-  placeholder: config.REACT_APP_CLIENT_TIME_FORMAT,
 };
 
 export default memo(FDatepicker);

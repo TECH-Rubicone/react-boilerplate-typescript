@@ -1,15 +1,20 @@
 // outsource dependencies
-import { Formik, } from 'formik';
+import { Formik, FormikErrors } from 'formik';
 import React, { memo, useCallback } from 'react';
 import { useController } from 'redux-saga-controller';
 import { Button, Col, Container, Form, Row } from 'reactstrap';
 
 // local dependencies
 import controller from './controller';
-import FInput from '../../../components/input';
+import FInput from 'components/input';
 
-function validate (values) {
-  const errors = {};
+interface FormValues {
+  username: string,
+  password: string,
+}
+
+function validate (values: FormValues) {
+  const errors: FormikErrors<FormValues> = {};
   if (!values.username) {
     errors.username = 'Required';
   } else if (
@@ -45,9 +50,19 @@ const SignIn = () => {
                 </h3>
               </Col>
               <Col xs={{ size: 10, offset: 1 }}>
-                <FInput type="text" name="username" placeholder="Email Address" label={<strong>Email Address</strong>} />
-                <FInput type="password" name="password" placeholder="Password" label={<strong>Password</strong>} />
-                <Button block outline type="submit" color="primary" className="mb-3" disabled={isSubmitting} style={{ borderRadius: 20 }}>
+                <FInput
+                  type="text"
+                  name="username"
+                  placeholder="Email Address"
+                  label={<strong className="required-asterisk"> Email Address </strong>}
+                />
+                <FInput
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  label={<strong className="required-asterisk"> Password </strong>}
+                />
+                <Button block outline type="submit" color="primary" className="mb-3" disabled={isSubmitting}>
                   <span>LOGIN</span>
                 </Button>
               </Col>

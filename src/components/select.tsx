@@ -1,21 +1,41 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 // outsource dependencies
 import Select from 'react-select';
 import { useField } from 'formik';
-import PropTypes from 'prop-types';
 import React, { memo, useCallback } from 'react';
 
 // local dependencies
 import FieldWrap from './field-wrap';
 
-const FSelect = ({
+interface IFSelect {
+  name?: string;
+  success?: string;
+  disabled: boolean;
+  placeholder: string;
+  skipTouch?: boolean;
+  explanation?: string;
+  onError?: any;// func
+  description?: string;
+  onSuccess?: any;// func
+  onFinally?: any;// func
+  classNameLabel?: string;
+  parseValue?: any;// func
+  prepareValue?: any; // func
+  classNameFormGroup?: string;
+  label?: React.ReactChild | React.ReactNode;
+}
+
+const FSelect: React.FC<IFSelect> = ({
   label, skipTouch, success, description, explanation, classNameLabel, classNameFormGroup,
   disabled, name, prepareValue, onSuccess, onError, onFinally, parseValue, ...attr
 }) => {
-  const [field, meta, { setValue, setTouched }] = useField(name);
+  const [field, meta, { setValue, setTouched }] = useField(name as string);
   const invalid = (skipTouch || meta.touched) && !!meta.error;
   const valid = (skipTouch || meta.touched) && !meta.error;
 
-  const onChange = useCallback(value => {
+  const onChange = useCallback((value: any) => {
     try {
       setValue(prepareValue(value));
       onSuccess(value);
@@ -51,42 +71,9 @@ const FSelect = ({
   </FieldWrap>;
 };
 
-FSelect.propTypes = {
-  name: PropTypes.string,
-  onError: PropTypes.func,
-  label: PropTypes.element,
-  onSuccess: PropTypes.func,
-  onFinally: PropTypes.func,
-  success: PropTypes.string,
-  skipTouch: PropTypes.bool,
-  parseValue: PropTypes.func,
-  prepareValue: PropTypes.func,
-  description: PropTypes.string,
-  explanation: PropTypes.string,
-  classNameLabel: PropTypes.string,
-  disabled: PropTypes.bool.isRequired,
-  classNameFormGroup: PropTypes.string,
-  placeholder: PropTypes.string.isRequired,
-};
-FSelect.defaultProps = {
-  name: '',
-  label: null,
-  success: null,
-  onError: e => e,
-  skipTouch: false,
-  description: null,
-  explanation: null,
-  classNameLabel: '',
-  onSuccess: e => e,
-  onFinally: e => e,
-  parseValue: e => e,
-  prepareValue: e => e,
-  classNameFormGroup: '',
-};
-
 export default memo(FSelect);
 
-export const stylesReactSelect = (valid, invalid) => theme => ({
+export const stylesReactSelect = (valid: boolean, invalid: boolean) => (theme: any) => ({
   ...theme,
   colors: valid === invalid
     ? theme.colors
@@ -125,16 +112,16 @@ export const stylesReactSelect = (valid, invalid) => theme => ({
 });
 
 export const stylesReactSelectSmall = { // NOTE try to change size as "form-control-sm" in bootstrap
-  control: (base, state) => ({ ...base, minHeight: 31, borderColor: state.isDisabled ? '#ced4da' : base.borderColor, backgroundColor: state.isDisabled ? '#e9ecef' : '#ffffff' }),
-  dropdownIndicator: base => ({ ...base, minHeight: 1, height: 28, alignItems: 'center', padding: '8px 4px' }),
-  clearIndicator: base => ({ ...base, minHeight: 1, height: 28, alignItems: 'center', padding: '8px 4px' }),
-  indicatorsContainer: base => ({ ...base, minHeight: 1, height: 'auto', }),
-  valueContainer: base => ({ ...base, minHeight: 1, height: 'auto' }),
-  container: base => ({ ...base, minHeight: 1, height: 'auto' }),
-  placeholder: base => ({ ...base, minHeight: 1, height: 22 }),
-  input: base => ({ ...base, minHeight: 1, height: 22 }),
+  control: (base: any, state: any) => ({ ...base, minHeight: 31, borderColor: state.isDisabled ? '#ced4da' : base.borderColor, backgroundColor: state.isDisabled ? '#e9ecef' : '#ffffff' }),
+  dropdownIndicator: (base: any) => ({ ...base, minHeight: 1, height: 28, alignItems: 'center', padding: '8px 4px' }),
+  clearIndicator: (base: any) => ({ ...base, minHeight: 1, height: 28, alignItems: 'center', padding: '8px 4px' }),
+  indicatorsContainer: (base: any) => ({ ...base, minHeight: 1, height: 'auto', }),
+  valueContainer: (base: any) => ({ ...base, minHeight: 1, height: 'auto' }),
+  container: (base: any) => ({ ...base, minHeight: 1, height: 'auto' }),
+  placeholder: (base: any) => ({ ...base, minHeight: 1, height: 22 }),
+  input: (base: any) => ({ ...base, minHeight: 1, height: 22 }),
 };
 
 export const defaultStyles = {
-  control: (base, state) => ({ ...base, borderColor: state.isDisabled ? '#ced4da' : base.borderColor, backgroundColor: state.isDisabled ? '#e9ecef' : '#ffffff' }),
+  control: (base: any, state: any) => ({ ...base, borderColor: state.isDisabled ? '#ced4da' : base.borderColor, backgroundColor: state.isDisabled ? '#e9ecef' : '#ffffff' }),
 };

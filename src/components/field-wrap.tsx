@@ -1,12 +1,24 @@
-
 // outsource dependencies
 import cx from 'classnames';
-import PropTypes from 'prop-types';
 import React, { memo } from 'react';
 import { FormFeedback, FormGroup, FormText, Label } from 'reactstrap';
 
+interface IFieldWrap {
+  id: string;
+  valid: boolean;
+  invalid: boolean;
+  success?: string;
+  className?: string;
+  description?: string;
+  error?: string | null;
+  classNameLabel?: string;
+  label?: React.ReactNode | React.ReactChild;
+  children: React.ReactNode | React.ReactChild;
+  explanation?: React.ReactNode | React.ReactChild | string;
+}
+
 // Show description, label and form error using prepared components
-const FieldWrap = props => {
+const FieldWrap: React.FC<IFieldWrap> = props => {
   const {
     success, error, description, explanation, label, className, valid, invalid, id, children, classNameLabel
   } = props;
@@ -22,30 +34,6 @@ const FieldWrap = props => {
     { valid && <FormFeedback id={id} valid={valid}>{ success }</FormFeedback> }
     { description && <FormText> { description } </FormText> }
   </FormGroup>;
-};
-
-FieldWrap.propTypes = {
-  label: PropTypes.node,
-  error: PropTypes.string,
-  success: PropTypes.string,
-  className: PropTypes.string,
-  description: PropTypes.string,
-  explanation: PropTypes.string,
-  id: PropTypes.string.isRequired,
-  classNameLabel: PropTypes.string,
-  valid: PropTypes.bool.isRequired,
-  invalid: PropTypes.bool.isRequired,
-  children: PropTypes.node.isRequired,
-};
-
-FieldWrap.defaultProps = {
-  label: null,
-  error: '',
-  success: '',
-  className: '',
-  description: '',
-  explanation: '',
-  classNameLabel: '',
 };
 
 export default memo(FieldWrap);

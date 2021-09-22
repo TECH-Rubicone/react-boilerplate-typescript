@@ -1,18 +1,37 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 // outsource dependencies
 import { useField } from 'formik';
-import PropTypes from 'prop-types';
 import React, { memo, useCallback } from 'react';
 
 // local dependencies
 import FieldWrap from './field-wrap';
 import SelectEntity from '../select-entity';
 
-const FSelectEntity = props => {
+interface IFSelectEntity {
+  name?: string;
+  onError?: any; // func
+  onSuccess?: any; // func
+  onFinally?: any; // func
+  success?: string;
+  disabled: boolean;
+  skipTouch?: boolean;
+  placeholder: string;
+  description?: string;
+  explanation?: string;
+  classNameLabel?: string;
+  // onChange: func.isRequired;
+  classNameFormGroup?: string;
+  label?: React.ReactNode | React.ReactChild;
+}
+
+const FSelectEntity: React.FC<IFSelectEntity> = props => {
   const {
     description, explanation, classNameLabel, classNameFormGroup,
     label, skipTouch, success, disabled, name, onSuccess, onError, onFinally, ...attr
   } = props;
-  const [field, meta, { setValue, setTouched }] = useField(name);
+  const [field, meta, { setValue, setTouched }] = useField(name as string);
   const invalid = (skipTouch || meta.touched) && !!meta.error;
   const valid = (skipTouch || meta.touched) && !meta.error;
 
@@ -53,39 +72,9 @@ const FSelectEntity = props => {
   </FieldWrap>;
 };
 
-FSelectEntity.propTypes = {
-  label: PropTypes.element,
-  name: PropTypes.string,
-  onError: PropTypes.func,
-  onSuccess: PropTypes.func,
-  onFinally: PropTypes.func,
-  success: PropTypes.string,
-  skipTouch: PropTypes.bool,
-  description: PropTypes.string,
-  explanation: PropTypes.string,
-  classNameLabel: PropTypes.string,
-  classNameFormGroup: PropTypes.string,
-  disabled: PropTypes.bool.isRequired,
-  // onChange: PropTypes.func.isRequired,
-  placeholder: PropTypes.string.isRequired,
-};
-FSelectEntity.defaultProps = {
-  name: '',
-  label: null,
-  success: null,
-  onError: e => e,
-  skipTouch: false,
-  description: null,
-  explanation: null,
-  onSuccess: e => e,
-  onFinally: e => e,
-  classNameLabel: '',
-  classNameFormGroup: '',
-};
-
 export default memo(FSelectEntity);
 
-export const stylesReactSelect = (valid, invalid) => theme => ({
+export const stylesReactSelect = (valid: boolean, invalid: boolean) => (theme: any) => ({
   ...theme,
   colors: valid === invalid
     ? { ...theme.colors }

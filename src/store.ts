@@ -3,23 +3,17 @@ import createSagaMiddleware from 'redux-saga';
 import { createBrowserHistory } from 'history';
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import { reducer as controllerReducer, sagas as controllerSagas, path } from 'redux-saga-controller';
-import { connectRouter, routerMiddleware as createRouterMiddleware, push } from 'connected-react-router';
 
 // export history outside to be able to dispatch navigation actions from anywhere
 export const history = createBrowserHistory();
 
-// TODO: delete connected-react-router
-// make middleware for intercepting and dispatching navigation actions
-const routerMiddleware = createRouterMiddleware(history);
-
 // NOTE Build the middleware to run our Saga
 const saga = createSagaMiddleware();
-export const middleware = compose(applyMiddleware(saga, routerMiddleware));
+export const middleware = compose(applyMiddleware(saga));
 
 // NOTE explain to ts what is it ;) to avoid type errors for --declaration
 export const reducers = combineReducers({
   [path]: controllerReducer,
-  router: connectRouter(history),
   // NOTE whatever what you may need
   // ...
 });
@@ -31,4 +25,4 @@ saga.run(controllerSagas);
 
 export default store;
 
-export const historyPush = (path) => store.dispatch(push(path));
+export const historyPush = (path: string) => history.push(path);

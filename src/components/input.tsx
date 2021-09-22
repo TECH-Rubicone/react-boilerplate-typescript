@@ -1,13 +1,28 @@
 // outsource dependencies
 import { useField } from 'formik';
-import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import React, { memo } from 'react';
+import { InputType } from 'reactstrap/es/Input';
 
 // local dependencies
 import FieldWrap from './field-wrap';
 
-const FInput = props => {
+interface IFInputProps {
+  type?: InputType,
+  name: string,
+  success?: string,
+  skipTouch?: boolean,
+  explanation?: string,
+  description?: string,
+  placeholder?: string,
+  classNameLabel?: string,
+  classNameFormGroup?: string,
+  label?: React.ReactChild | React.ReactNode,
+  addonAppend?: React.ReactChild | React.ReactNode,
+  addonPrepend?: React.ReactChild | React.ReactNode,
+}
+
+const FInput: React.FC<IFInputProps> = props => {
   const {
     label, skipTouch, success, description, explanation, classNameLabel,
     classNameFormGroup, name, type, addonPrepend, addonAppend, ...attr
@@ -40,32 +55,6 @@ const FInput = props => {
     />
     { addonAppend }
   </FieldWrap>;
-};
-
-FInput.propTypes = {
-  type: PropTypes.string,
-  label: PropTypes.element,
-  success: PropTypes.string,
-  skipTouch: PropTypes.bool,
-  explanation: PropTypes.string,
-  description: PropTypes.string,
-  addonAppend: PropTypes.element,
-  addonPrepend: PropTypes.element,
-  classNameLabel: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  classNameFormGroup: PropTypes.string,
-};
-FInput.defaultProps = {
-  label: null,
-  success: null,
-  type: 'string',
-  skipTouch: false,
-  description: null,
-  explanation: null,
-  addonAppend: null,
-  addonPrepend: null,
-  classNameLabel: '',
-  classNameFormGroup: '',
 };
 
 export default memo(FInput);

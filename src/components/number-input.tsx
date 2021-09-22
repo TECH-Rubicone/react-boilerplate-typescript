@@ -1,6 +1,8 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 // outsource dependencies
 import { useField } from 'formik';
-import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import NumberFormat from 'react-number-format';
@@ -9,7 +11,23 @@ import React, { memo, useCallback } from 'react';
 // local dependencies
 import FieldWrap from './field-wrap';
 
-const FNumberInput = props => {
+interface IFNumberInput {
+  name: string;
+  lang?: string;
+  prefix?: string;
+  success?: string;
+  skipTouch?: boolean;
+  allowNegative?: boolean;
+  description?: string;
+  explanation?: string;
+  decimalScale?: number;
+  classNameLabel?: string;
+  fixedDecimalScale?: boolean;
+  classNameFormGroup?: string;
+  label?: React.ReactNode | React.ReactChild;
+}
+
+const FNumberInput: React.FC<IFNumberInput> = props => {
   const {
     label, skipTouch, success, description, explanation, classNameLabel, classNameFormGroup, name, ...attr
   } = props;
@@ -45,37 +63,6 @@ const FNumberInput = props => {
       {...attr}
     />
   </FieldWrap>;
-};
-
-FNumberInput.propTypes = {
-  lang: PropTypes.string,
-  prefix: PropTypes.string,
-  label: PropTypes.element,
-  success: PropTypes.string,
-  skipTouch: PropTypes.bool,
-  allowNegative: PropTypes.bool,
-  description: PropTypes.string,
-  explanation: PropTypes.string,
-  decimalScale: PropTypes.number,
-  classNameLabel: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  fixedDecimalScale: PropTypes.bool,
-  classNameFormGroup: PropTypes.string,
-};
-FNumberInput.defaultProps = {
-  lang: 'en_EN',
-  // lang: 'de_DE',
-  label: null,
-  prefix: '€ ',
-  success: null,
-  decimalScale: 2,
-  skipTouch: false,
-  description: null,
-  explanation: null,
-  classNameLabel: '',
-  allowNegative: false,
-  classNameFormGroup: '',
-  fixedDecimalScale: true,
 };
 
 export default memo(FNumberInput);

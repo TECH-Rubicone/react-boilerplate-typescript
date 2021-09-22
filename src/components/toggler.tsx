@@ -1,13 +1,24 @@
 // outsource dependencies
 import { useField } from 'formik';
-import PropTypes from 'prop-types';
 import React, { memo } from 'react';
 import { CustomInput, Label } from 'reactstrap';
 
 // local dependencies
 import FieldWrap from './field-wrap';
 
-const FToggler = props => {
+interface IFToggler {
+  name: string;
+  disabled?: boolean;
+  success?: string;
+  skipTouch?: boolean;
+  description?: string;
+  explanation?: string;
+  classNameLabel?: string;
+  classNameFormGroup?: string;
+  label?: React.ReactNode | React.ReactChild;
+}
+
+const FToggler: React.FC<IFToggler> = props => {
   const {
     disabled, label, skipTouch, success, description, explanation, classNameFormGroup, classNameLabel, name
   } = props;
@@ -39,28 +50,6 @@ const FToggler = props => {
       />
     </Label>
   </FieldWrap>;
-};
-
-FToggler.propTypes = {
-  label: PropTypes.element,
-  disabled: PropTypes.bool,
-  success: PropTypes.string,
-  skipTouch: PropTypes.bool,
-  description: PropTypes.string,
-  explanation: PropTypes.string,
-  classNameLabel: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  classNameFormGroup: PropTypes.string,
-};
-FToggler.defaultProps = {
-  label: null,
-  success: null,
-  disabled: false,
-  skipTouch: false,
-  description: null,
-  explanation: null,
-  classNameLabel: '',
-  classNameFormGroup: '',
 };
 
 export default memo(FToggler);

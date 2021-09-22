@@ -1,13 +1,37 @@
 // outsource dependencies
 import { useField } from 'formik';
-import PropTypes from 'prop-types';
 import { CustomInput } from 'reactstrap';
 import React, { memo, useMemo } from 'react';
 
 // local dependencies
 import FieldWrap from './field-wrap';
+import { CustomInputType } from 'reactstrap/es/CustomInput';
 
-const FRadio = props => {
+interface IFRadio {
+  name: string;
+  options?: any;
+  success?: string;
+  skipTouch?: boolean;
+  description?: string;
+  getOptionLabel?: any; // func
+  getOptionValue?: any; // func
+  classNameFormGroup?: string;
+  label?: React.ReactNode | React.ReactChild;
+  explanation?: React.ReactNode | React.ReactChild | string;
+}
+
+interface IProperty {
+  id: string | number;
+  type: CustomInputType;
+  label?: React.ReactNode;
+  inline?: boolean;
+  valid?: boolean;
+  invalid?: boolean;
+  htmlFor?: string;
+  value: string | number;
+}
+
+const FRadio: React.FC<IFRadio> = props => {
   const {
     label, success, description, explanation,
     classNameFormGroup, skipTouch, options, name,
@@ -18,7 +42,7 @@ const FRadio = props => {
   const invalid = (skipTouch || meta.touched) && !!meta.error;
   const valid = (skipTouch || meta.touched) && !meta.error;
 
-  const properties = useMemo(() => options.map(item => ({
+  const properties = useMemo(() => options.map((item: any) => ({
     ...attr,
     value: getOptionValue(item),
     label: getOptionLabel(item),
@@ -38,43 +62,17 @@ const FRadio = props => {
     className={classNameFormGroup}
     error={skipTouch || meta.touched ? meta.error : null}
   >
-    { properties.map(item => <CustomInput
+    { properties.map((item: IProperty) => <CustomInput
       key={item.value}
       // field
       {...field}
       // outer
-      type="radio"
       valid={valid}
       invalid={invalid}
       // inner
       {...item}
     />) }
   </FieldWrap>;
-};
-
-
-FRadio.propTypes = {
-  label: PropTypes.node,
-  options: PropTypes.array,
-  success: PropTypes.string,
-  skipTouch: PropTypes.bool,
-  explanation: PropTypes.node,
-  description: PropTypes.string,
-  getOptionLabel: PropTypes.func,
-  getOptionValue: PropTypes.func,
-  name: PropTypes.string.isRequired,
-  classNameFormGroup: PropTypes.string,
-};
-FRadio.defaultProps = {
-  label: null,
-  options: [],
-  success: null,
-  explanation: null,
-  skipTouch: false,
-  description: null,
-  getOptionLabel: e => e,
-  getOptionValue: e => e,
-  classNameFormGroup: '',
 };
 
 export default memo(FRadio);
