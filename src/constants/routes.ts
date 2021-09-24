@@ -1,38 +1,24 @@
-export const NEW_ID = 'new';
+// services
+import { defineRoute, ANNOTATION } from 'services/route';
 
 export const LAYOUT_APP = '/app';
 export const LAYOUT_AUTH = '/auth';
 
-export const TEST = (ROUTE => ({
-  ROUTE,
-  LINK: () => ROUTE,
-}))(`${LAYOUT_APP}/test`);
+export const ADMINISTRATIVE = defineRoute(`${LAYOUT_APP}/administrative`, {});
 
-export const WELCOME = (ROUTE => ({
-  ROUTE,
-  LINK: () => ROUTE,
-}))(`${LAYOUT_APP}/welcome`);
+export const SIGN_IN = defineRoute(`${LAYOUT_AUTH}/sign-in`, {});
+export const WELCOME = defineRoute(`${LAYOUT_APP}/welcome`, {});
 
-export const SIGN_IN = (ROUTE => ({
-  ROUTE,
-  LINK: () => ROUTE,
-}))(`${LAYOUT_AUTH}/sign-in`);
-
-export const USERS = (ROUTE => ({
-  ROUTE,
-  REGEXP: new RegExp(`${ROUTE}/.*`, 'i'),
-  ROOT: `${ROUTE}/list`,
-  EDIT: `${ROUTE}/edit/:id`,
-  LINK: () => (`${ROUTE}/list`),
-  LINK_EDIT: (id: number | string) => `${ROUTE}/edit/${id}`,
-}))(`${LAYOUT_APP}/users`);
-
-/*
-export const LAYOUT_SIGN_IN = (ROUTE => ({
-  ROUTE,
-  REGEXP: new RegExp(`${ROUTE}/.*`, 'i'),
-  ROOT: `${ROUTE}/root`,
-  EDIT: `${ROUTE}/edit/:id`,
-  LINK: () => (`${ROUTE}/root`),
-  LINK_EDIT: ({ id }: {id: number}) => `${ROUTE}/edit/${id || NEW_ID}`,
-}))(`${LAYOUT_AUTH}/sign-in`);*/
+// NOTE ADMINISTRATIVE
+export const ADMINISTRATIVE_HOME = defineRoute(`${ADMINISTRATIVE.ROUTE}/home`, {});
+export const ADMINISTRATIVE_USERS = defineRoute(`${ADMINISTRATIVE.ROUTE}/users`, {});
+export const ADMINISTRATIVE_USERS_LIST = defineRoute(`${ADMINISTRATIVE.ROUTE}/users/list`, {
+  query: [
+    ANNOTATION.PAGE({ defaults: 0 }),
+    ANNOTATION.SIZE({ defaults: 10 }),
+    ANNOTATION.SEARCH({ defaults: '', short: 'search' }),
+  ]
+});
+export const ADMINISTRATIVE_USERS_EDIT = defineRoute(`${ADMINISTRATIVE.ROUTE}/users/edit/:id`, {
+  params: [ANNOTATION.ID({})]
+});

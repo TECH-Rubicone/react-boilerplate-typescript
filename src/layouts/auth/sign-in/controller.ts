@@ -4,7 +4,7 @@ import { put, call, takeEvery } from 'redux-saga/effects';
 
 // local dependencies
 import { historyPush } from 'store';
-import { USERS } from 'constants/routes';
+import * as ROUTES from 'constants/routes';
 import { instanceAPI, instancePUB } from 'services/api.service';
 import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 
@@ -71,7 +71,7 @@ function * signInSaga ({ payload }: Act<SignInPayload>) {
     const session: ITokenData = yield call(instancePUB, '/auth/token', { method: 'POST', data: payload });
     yield call(instanceAPI.setupSession, session);
     // yield call(instanceAPI.setupSession, session);
-    yield call(historyPush, USERS.ROOT);
+    yield call(historyPush, ROUTES.WELCOME.LINK());
   } catch ({ message }) {
     yield put(controller.action.updateCtrl({ errorMessage: message }));
     alert(`ERROR ${message}`);

@@ -6,7 +6,6 @@ import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from
 
 // local dependencies
 import controller from './controller';
-import { USERS, NEW_ID } from 'constants/routes';
 import SearchInput from 'components/search-input';
 
 const Actions = () => {
@@ -61,8 +60,7 @@ const Actions = () => {
         </DropdownMenu>
       </UncontrolledDropdown>
     </div>
-    <Link to={USERS.LINK_EDIT(NEW_ID)} className="btn btn-success">
-      +
+    <Link to={"#"} className="btn btn-success">
       Create User
     </Link>
   </div>;

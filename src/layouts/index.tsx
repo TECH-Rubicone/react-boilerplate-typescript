@@ -18,13 +18,11 @@ const Layouts = () => {
 
   useEffect(() => {
     initialize();
-    return () => {
-      clearCtrl();
-    };
+    return () => { clearCtrl(); };
   }, [initialize, clearCtrl]);
 
   if (!health) {
-    return <span>SOMETHING WENT WRONG</span>;
+    return <span>Site is under Maintenance</span>;
   }
   if (!initialized || !isControllerConnected) {
     return <span>Preloader</span>;
