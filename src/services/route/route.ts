@@ -158,6 +158,3 @@ export default class Route {
   QUERY = (search?: string) => this.parseQuery(_.isString(search) ? search : Route.getSearch());
 }
 
-
-
-

@@ -60,7 +60,7 @@ const Actions = () => {
         </DropdownMenu>
       </UncontrolledDropdown>
     </div>
-    <Link to={"#"} className="btn btn-success">
+    <Link to={'#'} className="btn btn-success">
       Create User
     </Link>
   </div>;
