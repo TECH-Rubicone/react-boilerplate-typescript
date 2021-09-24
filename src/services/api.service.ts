@@ -4,9 +4,11 @@ import qs from 'qs';
 import _ from 'lodash';
 import axios, { AxiosError, AxiosStatic, AxiosRequestConfig, AxiosResponse } from 'axios';
 
+// configs
+import config from 'configs';
+
 // local dependencies
 import storage from './storage.service';
-import config from '../configs';
 
 // absolute path to API
 export const API_PATH = process.env.REACT_APP_SERVICE_URL as string + process.env.REACT_APP_API_PATH as string;

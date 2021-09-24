@@ -29,8 +29,8 @@ const Layouts = () => {
   }
 
   return <Switch>
-    <Route path={ROUTES.LAYOUT_APP} component={App} />
-    <Route path={ROUTES.LAYOUT_AUTH} component={Auth} />
+    <Route path={ROUTES.APP.ROUTE} component={App} />
+    <Route path={ROUTES.AUTH.ROUTE} component={Auth} />
     <Redirect to={ROUTES.SIGN_IN.ROUTE} />
   </Switch>;
 };

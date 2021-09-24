@@ -1,13 +1,14 @@
 // services
 import { defineRoute, ANNOTATION } from 'services/route';
 
-export const LAYOUT_APP = '/app';
-export const LAYOUT_AUTH = '/auth';
 
-export const ADMINISTRATIVE = defineRoute(`${LAYOUT_APP}/administrative`, {});
+export const APP = defineRoute('/app', {});
+export const AUTH = defineRoute('/auth', {});
 
-export const SIGN_IN = defineRoute(`${LAYOUT_AUTH}/sign-in`, {});
-export const WELCOME = defineRoute(`${LAYOUT_APP}/welcome`, {});
+export const ADMINISTRATIVE = defineRoute(`${APP.ROUTE}/administrative`, {});
+
+export const SIGN_IN = defineRoute(`${AUTH.ROUTE}/sign-in`, {});
+export const WELCOME = defineRoute(`${APP.ROUTE}/welcome`, {});
 
 // NOTE ADMINISTRATIVE
 export const ADMINISTRATIVE_HOME = defineRoute(`${ADMINISTRATIVE.ROUTE}/home`, {});
