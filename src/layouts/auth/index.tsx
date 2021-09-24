@@ -8,8 +8,8 @@ import * as ROUTES from '../../constants/routes';
 
 const Auth = () => <Switch>
   {/*<Route path={ROUTES.SIGN_UP} component={App} />*/}
-  <Route path={ROUTES.LAYOUT_SIGN_IN} component={SignIn} />
-  <Redirect to={ROUTES.LAYOUT_SIGN_IN} />
+  <Route path={ROUTES.SIGN_IN.ROUTE} component={SignIn} />
+  <Redirect to={ROUTES.SIGN_IN.ROUTE} />
 </Switch>;
 
 export default Auth;
