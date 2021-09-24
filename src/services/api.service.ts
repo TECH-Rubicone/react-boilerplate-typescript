@@ -18,7 +18,7 @@ const AUTH_HEADER = 'Authorization';
 const ACCESS_TOKEN = 'accessToken';
 const REFRESH_TOKEN = 'refreshToken';
 
-type ITokenData = {
+type ITokenData = null | {
   accessToken: string;
   refreshToken: string;
   accessTokenValiditySeconds: number;
@@ -46,7 +46,7 @@ export const getAccessToken = (): string => _.get(storage.get(AUTH_STORE), ACCES
 
 const getRefreshToken = (): string => _.get(storage.get(AUTH_STORE), REFRESH_TOKEN, null);
 
-const hasStoredSession = (): boolean => !_.isEmpty(storage.get(AUTH_STORE));
+const hasStoredSession = (): boolean => _.isEmpty(storage.get(AUTH_STORE));
 
 const getAuthHeader = (): string => AUTH_BEARER + getAccessToken();
 
@@ -154,7 +154,7 @@ PUB.interceptors.response.use(
  */
 
 interface IAxiosInstance extends AxiosStatic {
-  restoreSessionFromStore: () => void,
+  restoreSessionFromStore: () => boolean,
   setupSession: (session: ITokenData) => void,
   onAuthFailApplicationAction: (error: AxiosError) => void,
 }
@@ -174,10 +174,11 @@ const API = axios.create({
  * sync check to known is user logged in
  * NOTE to known more {@link https://gist.github.com/mkjiau/650013a99c341c9f23ca00ccb213db1c | axios-interceptors-refresh-token}
  */
+
 API.interceptors.response.use(
   prepareResponse,
   (error: AxiosError) => ((
-    hasStoredSession()
+    !hasStoredSession()
     && error.request.status === 401
     // NOTE support request may get 401 (JAVA Spring is fucking genius ...) we must skip restoring for that case
     && !/sign-out|\/oauth\/token/.test(error.config.url as string)
@@ -211,9 +212,10 @@ const handleRefreshSession = (error: AxiosError) => {
   const config = error.config as IConfig;
   if (!isRefreshing) {
     isRefreshing = true;
-    PUB.post('/auth/token/refresh', { refreshToken: getRefreshToken() })
-      .then(session => {
-        API.setupSession(session.data);
+    // NOTE PUB instance result does not match the AxiosRequest type
+    axios.post<ITokenData>(`${API_PATH}/auth/token/refresh`, { refreshToken: getRefreshToken() })
+      .then(response => {
+        API.setupSession(response.data);
         // NOTE resend all
         stuckRequests.map(({ config, resolve, reject }) => {
           // NOTE setup new authentication header in old request config
@@ -249,7 +251,7 @@ const handleRefreshSession = (error: AxiosError) => {
 /**
  * provide correct way to restore session
  */
-API.restoreSessionFromStore = (): boolean => Boolean(!hasStoredSession()
+API.restoreSessionFromStore = (): boolean => Boolean(hasStoredSession()
   ? (API.defaults.headers[AUTH_HEADER] = void(0))
   : (API.defaults.headers[AUTH_HEADER] = getAuthHeader()));
 
