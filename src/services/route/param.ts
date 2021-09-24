@@ -26,10 +26,6 @@ export default class Param<T, D> {
   extract: (value: string) => T | string = value => value;
 
   constructor (options: ParamOptions<T, D>) {
-    this.applyValidOptions(options);
-  }
-
-  applyValidOptions (options: ParamOptions<T, D>) {
     this.name = options.name;
     this.short = options.short ?? this.name;
     if (!_.isUndefined(options.defaults)) {
