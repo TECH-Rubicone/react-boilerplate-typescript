@@ -1,12 +1,12 @@
 // outsource dependencies
 import { Action } from 'redux';
 import { put, call, takeEvery } from 'redux-saga/effects';
-import { ActionCreators, ActionCreator, Controller, create } from 'redux-saga-controller';
 
 // local dependencies
 import { historyPush } from 'store';
-import { LAYOUT_TEST } from 'constants/routes';
+import { USERS } from 'constants/routes';
 import { instanceAPI, instancePUB } from 'services/api.service';
+import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 
 // NOTE action shortcut
 interface Act<Payload> extends Action {
@@ -28,9 +28,9 @@ interface ITokenData {
 
 interface IInitial {
   disabled: boolean,
-  errorMessage: string | null | unknown,
-  data: ITokenData | null,
+  initialized: boolean,
   initialValues: SignInPayload,
+  errorMessage: string | null | unknown,
 }
 
 interface IActions extends ActionCreators<IInitial> {
@@ -39,12 +39,11 @@ interface IActions extends ActionCreators<IInitial> {
 
 const controller: Controller<IActions, IInitial> = create({
   prefix: 'sign-in',
-  actions: ['signIn'],
+  actions: ['signIn', 'initialize'],
   initial: {
     disabled: false,
     errorMessage: null,
-
-    data: null,
+    initialized: false,
     initialValues: {
       username: '',
       password: '',
@@ -53,19 +52,26 @@ const controller: Controller<IActions, IInitial> = create({
   },
   subscriber: function * () {
     yield takeEvery(controller.action.signIn.TYPE, signInSaga);
+    yield takeEvery(controller.action.initialize.TYPE, initializeSaga);
   }
 });
 
 export default controller;
 
 // sagas
+function * initializeSaga () {
+  yield put(controller.action.clearCtrl());
+  yield put(controller.action.updateCtrl({ initialized: true }));
+}
+
 function * signInSaga ({ payload }: Act<SignInPayload>) {
   yield put(controller.action.clearCtrl());
-  yield put(controller.action.updateCtrl({ disabled: true, errorMessage: 'null' }));
+  yield put(controller.action.updateCtrl({ disabled: true, errorMessage: null }));
   try {
     const session: ITokenData = yield call(instancePUB, '/auth/token', { method: 'POST', data: payload });
     yield call(instanceAPI.setupSession, session);
-    yield call(historyPush, LAYOUT_TEST);
+    // yield call(instanceAPI.setupSession, session);
+    yield call(historyPush, USERS.ROOT);
   } catch ({ message }) {
     yield put(controller.action.updateCtrl({ errorMessage: message }));
     alert(`ERROR ${message}`);
