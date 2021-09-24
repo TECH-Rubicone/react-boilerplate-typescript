@@ -7,10 +7,10 @@ import { InputType } from 'reactstrap/es/Input';
 // local dependencies
 import FieldWrap from './field-wrap';
 
-interface IFInputProps {
-  type?: InputType,
+interface FInputProps {
   name: string,
   success?: string,
+  type?: InputType,
   skipTouch?: boolean,
   explanation?: string,
   description?: string,
@@ -22,7 +22,7 @@ interface IFInputProps {
   addonPrepend?: React.ReactChild | React.ReactNode,
 }
 
-const FInput: React.FC<IFInputProps> = props => {
+const FInput: React.FC<FInputProps> = props => {
   const {
     label, skipTouch, success, description, explanation, classNameLabel,
     classNameFormGroup, name, type, addonPrepend, addonAppend, ...attr

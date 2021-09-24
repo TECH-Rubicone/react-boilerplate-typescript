@@ -3,7 +3,7 @@ import cx from 'classnames';
 import React, { memo } from 'react';
 import { FormFeedback, FormGroup, FormText, Label } from 'reactstrap';
 
-interface IFieldWrap {
+interface FieldWrap {
   id: string;
   valid: boolean;
   invalid: boolean;
@@ -18,7 +18,7 @@ interface IFieldWrap {
 }
 
 // Show description, label and form error using prepared components
-const FieldWrap: React.FC<IFieldWrap> = props => {
+const FieldWrap: React.FC<FieldWrap> = props => {
   const {
     success, error, description, explanation, label, className, valid, invalid, id, children, classNameLabel
   } = props;

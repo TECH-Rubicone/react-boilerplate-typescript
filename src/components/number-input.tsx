@@ -11,7 +11,7 @@ import React, { memo, useCallback } from 'react';
 // local dependencies
 import FieldWrap from './field-wrap';
 
-interface IFNumberInput {
+interface FNumberInput {
   name: string;
   lang?: string;
   prefix?: string;
@@ -27,7 +27,7 @@ interface IFNumberInput {
   label?: React.ReactNode | React.ReactChild;
 }
 
-const FNumberInput: React.FC<IFNumberInput> = props => {
+const FNumberInput: React.FC<FNumberInput> = props => {
   const {
     label, skipTouch, success, description, explanation, classNameLabel, classNameFormGroup, name, ...attr
   } = props;

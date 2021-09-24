@@ -2,12 +2,12 @@
 import { useField } from 'formik';
 import { CustomInput } from 'reactstrap';
 import React, { memo, useMemo } from 'react';
+import { CustomInputType } from 'reactstrap/es/CustomInput';
 
 // local dependencies
 import FieldWrap from './field-wrap';
-import { CustomInputType } from 'reactstrap/es/CustomInput';
 
-interface IFRadio {
+interface FRadio {
   name: string;
   options?: any;
   success?: string;
@@ -20,7 +20,7 @@ interface IFRadio {
   explanation?: React.ReactNode | React.ReactChild | string;
 }
 
-interface IProperty {
+interface Property {
   id: string | number;
   type: CustomInputType;
   label?: React.ReactNode;
@@ -31,7 +31,7 @@ interface IProperty {
   value: string | number;
 }
 
-const FRadio: React.FC<IFRadio> = props => {
+const FRadio: React.FC<FRadio> = props => {
   const {
     label, success, description, explanation,
     classNameFormGroup, skipTouch, options, name,
@@ -62,7 +62,7 @@ const FRadio: React.FC<IFRadio> = props => {
     className={classNameFormGroup}
     error={skipTouch || meta.touched ? meta.error : null}
   >
-    { properties.map((item: IProperty) => <CustomInput
+    { properties.map((item: Property) => <CustomInput
       key={item.value}
       // field
       {...field}

@@ -1,39 +1,31 @@
 // outsource dependencies
 import _ from 'lodash';
-import moment from 'moment';
 import React, { memo, useCallback, useMemo } from 'react';
 import { Button, CustomInput, FormGroup, Label, Table } from 'reactstrap';
 import { useControllerActions, useControllerData } from 'redux-saga-controller';
 
 // local dependencies
 import ListRow from './list-row';
-import controller from './controller';
+import controller, { Filters, User } from './controller';
 
 const List = () => {
   const { users, disabled, selectedUsers } = useControllerData(controller);
   const { updateCtrl } = useControllerActions(controller);
 
-  const preparedUsers = useMemo(() => users.map(user => {
-    const createdDate = moment(user.createdDate, 'YYYY-MM-DD').isValid() ? moment(user.createdDate) : null;
-    return { ...user, createdDate };
-  }),
-  [users]
-  );
-
   const isEveryChecked = useMemo(
-    () => preparedUsers.every(user => _.find(selectedUsers, { id: user.id })),
-    [preparedUsers, selectedUsers]
+    () => users.every((user: User) => _.find(selectedUsers, { id: user.id })),
+    [users, selectedUsers]
   );
 
   const toggleSelections = useCallback(event => {
-    let selected = [];
+    let selected = [] as User[];
     if (event.target.checked) {
-      selected = selectedUsers.concat(preparedUsers);
+      selected = selectedUsers.concat(users);
     }
     updateCtrl({ selectedUsers: selected });
-  }, [preparedUsers, selectedUsers, updateCtrl]);
+  }, [users, selectedUsers, updateCtrl]);
 
-  return <div className="list">
+  return <div className="list mb-2">
     <Table striped>
       <thead>
         <tr>
@@ -47,28 +39,28 @@ const List = () => {
                     type="checkbox"
                     disabled={disabled}
                     onChange={toggleSelections}
-                    checked={selectedUsers.length && isEveryChecked}
+                    checked={Boolean(selectedUsers.length && isEveryChecked)}
                   />
                 </Label>
               </FormGroup>
               <h6 className="text-info mb-0">
-                <SortByField field="name">Name</SortByField>
+                <SortByField field="name" disabled={disabled}>Name</SortByField>
               </h6>
             </div>
           </th>
           <th className="align-middle">
             <h6 className="text-info mb-0">
-              <SortByField field="id">Id</SortByField>
+              <SortByField field="id" disabled={disabled}>Id</SortByField>
             </h6>
           </th>
           <th className="align-middle">
             <h6 className="text-info mb-0">
-              <SortByField field="createdDate">Creation Date</SortByField>
+              <SortByField field="createdDate" disabled={disabled}>Creation Date</SortByField>
             </h6>
           </th>
           <th className="align-middle">
             <h6 className="text-info mb-0">
-              <SortByField field="roles">Roles</SortByField>
+              <SortByField field="roles" disabled>Roles</SortByField>
             </h6>
           </th>
           <th className="align-middle">
@@ -79,35 +71,41 @@ const List = () => {
         </tr>
       </thead>
       <tbody>
-        {(preparedUsers ?? []).map(user => <ListRow key={user.id} {...user} />)}
+        {(users ?? []).map((user: User) => <ListRow key={user.id} {...user} />)}
       </tbody>
     </Table>
   </div>;
 };
 
-const SortByField = memo(({ disabled, children, field }) => {
+interface SortByFieldProps {
+  field: string;
+  disabled: boolean;
+  children: React.ReactNode | React.ReactChild;
+}
+
+const SortByField: React.FC<SortByFieldProps> = memo(({ disabled, children, field }) => {
   const { sortField, sortDirection } = useControllerData(controller);
   const { updateFilters } = useControllerActions(controller);
   const isSameField = sortField === field ? !sortDirection : false;
   const updateSort = useCallback(
-    () => updateFilters({ sortField: field, sortDirection: isSameField }),
+    () => updateFilters({ sortField: field, sortDirection: isSameField } as Filters),
     [sortField, field, sortDirection, updateFilters]
   );
-  return <Button
-    color="link"
-    disabled={disabled}
-    onClick={updateSort}
-  >
+  return <Button color="link" disabled={disabled} onClick={updateSort} >
     <SortIcon status={field === sortField ? sortDirection : null} />
     <strong className="text-info">{children}</strong>
   </Button>;
 });
 
-const SortIcon = memo(({ status }) => {
-  const statusMap = useMemo(status => _.isNull(status) ? ' * ' : status ? ' ! ' : ' i ', [status]);
+interface SortIconProps {
+  status: boolean | null;
+}
+
+const SortIcon: React.FC<SortIconProps> = memo(({ status }) => {
+  const statusMap = useMemo(() => _.isNull(status) ? ' * ' : status ? ' i ' : ' ! ', [status]);
   return <span>
     {statusMap}
   </span>;
 });
 
-export default List;
+export default memo(List);

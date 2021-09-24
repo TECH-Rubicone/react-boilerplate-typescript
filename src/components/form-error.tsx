@@ -8,13 +8,13 @@ import React, { memo } from 'react';
 // services
 import _ from 'services/lodash.service';
 
-interface IFormError {
+interface FormError {
   errors: any,
   name: string,
   children?: React.ReactNode | React.ReactChild,
 }
 
-const FormError: React.FC<IFormError> = memo(({ name, errors, children }) => _.isString(_.get(errors, name))
+const FormError: React.FC<FormError> = memo(({ name, errors, children }) => _.isString(_.get(errors, name))
   ? <Alert color="danger"> { _.get(errors, name) } </Alert>
   : children);
 

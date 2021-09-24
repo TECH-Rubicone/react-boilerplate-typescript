@@ -6,7 +6,7 @@ import { CustomInput, Label } from 'reactstrap';
 // local dependencies
 import FieldWrap from './field-wrap';
 
-interface IFToggler {
+interface FToggler {
   name: string;
   disabled?: boolean;
   success?: string;
@@ -18,7 +18,7 @@ interface IFToggler {
   label?: React.ReactNode | React.ReactChild;
 }
 
-const FToggler: React.FC<IFToggler> = props => {
+const FToggler: React.FC<FToggler> = props => {
   const {
     disabled, label, skipTouch, success, description, explanation, classNameFormGroup, classNameLabel, name
   } = props;
