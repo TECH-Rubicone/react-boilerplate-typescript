@@ -1,55 +1,55 @@
 // outsource dependencies
-import { Formik, FormikErrors } from 'formik';
-import React, { memo, useCallback } from 'react';
+import * as yup from 'yup';
+import { Formik, Form } from 'formik';
+import React, { memo, useCallback, useMemo } from 'react';
 import { useController } from 'redux-saga-controller';
-import { Button, Col, Container, Form, Row } from 'reactstrap';
+import { Button, Card, CardBody, CardFooter, CardHeader, Col, Container, Row, Spinner } from 'reactstrap';
+
+// components
+import FInput from 'components/input';
 
 // local dependencies
 import controller from './controller';
-import FInput from 'components/input';
 
-interface FormValues {
-  username: string,
-  password: string,
-}
+// configure
 
-function validate (values: FormValues) {
-  const errors: FormikErrors<FormValues> = {};
-  if (!values.username) {
-    errors.username = 'Required';
-  } else if (
-    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.username)
-  ) {
-    errors.username = 'Invalid email address';
-  }
-  if (!values.password) {
-    errors.password = 'Required';
-  }
-  return errors;
-}
-
+// TODO Add alert error for errorMessage
+// TODO Add i18next
 const SignIn = () => {
-  const [{ initialValues, disabled }, { signIn }] = useController(controller);
+  const [
+    { initialized, disabled, errorMessage, initialValues },
+    { signIn }
+  ] = useController(controller);
 
-  const onSubmit = useCallback((values, { setSubmitting }) => {
+  const validationSchema = useMemo(() => yup.object().shape({
+    username: yup.string()
+      .required('VALIDATION_ERROR.REQUIRED_FIELD')
+      .email('VALIDATION_ERROR.INVALID_EMAIL'),
+    password: yup.string()
+      .required('VALIDATION_ERROR.REQUIRED_FIELD')
+      .min(8, 'VALIDATION_ERROR.MIN_LENGTH_CHARACTERS')
+  }), []);
+
+  const onSubmit = useCallback(values => {
     signIn(values);
-    setSubmitting(disabled);
-  },
-  [signIn, disabled]
-  );
+  }, [signIn, disabled]);
 
-  return <Formik initialValues={initialValues} validate={validate} onSubmit={onSubmit}>
-    { ({ handleSubmit, isSubmitting }) => <Form onSubmit={handleSubmit} className="d-flex align-items-center justify-content-center h-100 bg-secondary">
-      <Container fluid style={{ width: '300px', maxWidth: '80%' }} className="bg-white">
-        <Row>
-          <Col md="12">
-            <Row className="h-100">
-              <Col xs="12" className="text-center pt-3 mb-3">
-                <h3 className="pt-1 text-center text-primary">
-                  BOILERPLATE
-                </h3>
-              </Col>
-              <Col xs={{ size: 10, offset: 1 }}>
+  return <Container fluid className="h-100">
+    <Row className="d-flex justify-content-center align-items-center h-100">
+      <Col md={6} xs={12}>
+        <Card>
+          <CardHeader>
+            <h3 className="pt-1 text-center text-primary">
+              BOILERPLATE
+            </h3>
+          </CardHeader>
+          <CardBody>
+            <Formik
+              onSubmit={onSubmit}
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+            >
+              <Form>
                 <FInput
                   type="text"
                   name="username"
@@ -62,19 +62,26 @@ const SignIn = () => {
                   placeholder="Password"
                   label={<strong className="required-asterisk"> Password </strong>}
                 />
-                <Button block outline type="submit" color="primary" className="mb-3" disabled={isSubmitting}>
-                  <span>LOGIN</span>
+                <Button
+                  outline
+                  type="submit"
+                  color="primary"
+                  className="mb-3 w-100 d-flex align-items-center justify-content-center"
+                  disabled={disabled}
+                >
+                  LOGIN
+                  { disabled && <Spinner size="sm" className="ml-2" /> }
                 </Button>
-              </Col>
-              <Col xs="12" className="text-center mb-3">
-                Forgot password
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Container>
-    </Form> }
-  </Formik>;
+              </Form>
+            </Formik>
+          </CardBody>
+          <CardFooter>
+            Forgot password
+          </CardFooter>
+        </Card>
+      </Col>
+    </Row>
+  </Container>;
 };
 
 export default memo(SignIn);

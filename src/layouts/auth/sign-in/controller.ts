@@ -3,7 +3,6 @@ import { Action } from 'redux';
 import { put, call, takeEvery } from 'redux-saga/effects';
 
 // local dependencies
-import { historyPush } from 'store';
 import * as ROUTES from 'constants/routes';
 import { instanceAPI, instancePUB } from 'services/api.service';
 import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
@@ -19,25 +18,25 @@ interface SignInPayload {
   client: string,
 }
 
-interface ITokenData {
+interface TokenDto {
   accessToken: string,
   refreshToken: string,
   accessTokenValiditySeconds: number,
   refreshTokenValiditySeconds: number,
 }
 
-interface IInitial {
+interface Initial {
   disabled: boolean,
   initialized: boolean,
   initialValues: SignInPayload,
   errorMessage: string | null | unknown,
 }
 
-interface IActions extends ActionCreators<IInitial> {
+interface Actions extends ActionCreators<Initial> {
   signIn: ActionCreator<SignInPayload>;
 }
 
-const controller: Controller<IActions, IInitial> = create({
+const controller: Controller<Actions, Initial> = create({
   prefix: 'sign-in',
   actions: ['signIn', 'initialize'],
   initial: {
@@ -60,21 +59,18 @@ export default controller;
 
 // sagas
 function * initializeSaga () {
-  yield put(controller.action.clearCtrl());
   yield put(controller.action.updateCtrl({ initialized: true }));
 }
 
 function * signInSaga ({ payload }: Act<SignInPayload>) {
-  yield put(controller.action.clearCtrl());
   yield put(controller.action.updateCtrl({ disabled: true, errorMessage: null }));
   try {
-    const session: ITokenData = yield call(instancePUB, '/auth/token', { method: 'POST', data: payload });
+    const session: TokenDto = yield call(instancePUB, '/auth/token', { method: 'POST', data: payload });
     yield call(instanceAPI.setupSession, session);
-    // yield call(instanceAPI.setupSession, session);
-    yield call(historyPush, ROUTES.WELCOME.LINK());
+    yield call(ROUTES.APP.PUSH);
   } catch ({ message }) {
     yield put(controller.action.updateCtrl({ errorMessage: message }));
-    alert(`ERROR ${message}`);
+    // TODO Implement toastr message
   }
   yield put(controller.action.updateCtrl({ disabled: false }));
 }

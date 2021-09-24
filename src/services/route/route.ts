@@ -156,5 +156,12 @@ export default class Route {
   PARAMS = (pathname?: string) => this.parsePath(_.isString(pathname) ? pathname : Route.getPathname());
 
   QUERY = (search?: string) => this.parseQuery(_.isString(search) ? search : Route.getSearch());
-}
 
+  PUSH = (params?: { [key: string]: any; }, query?: { [key: string]: any; }) => {
+    history.push(this.LINK(params, query));
+  };
+
+  REPLACE = (params?: { [key: string]: any; }, query?: { [key: string]: any; }) => {
+    history.replace(this.LINK(params, query));
+  };
+}
