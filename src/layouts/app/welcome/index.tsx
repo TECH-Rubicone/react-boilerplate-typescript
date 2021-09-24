@@ -11,7 +11,7 @@ const Welcome = () => <Container className="d-flex h-100 p-3 mx-auto flex-column
     <nav className="nav nav-masthead">
       <NavLink to={ROUTES.SIGN_IN.LINK()} className="nav-link">SignIn</NavLink>
       <NavLink to={ROUTES.WELCOME.LINK()} className="nav-link">Welcome</NavLink>
-      <NavLink to={ROUTES.TEST.LINK()} className="nav-link">Home</NavLink>
+      <NavLink to={ROUTES.ADMINISTRATIVE.LINK()} className="nav-link">Administrative</NavLink>
     </nav>
   </header>
   <main>

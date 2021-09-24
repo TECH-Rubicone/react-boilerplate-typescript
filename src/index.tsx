@@ -2,12 +2,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 
 // local dependencies
 import App from './layouts';
 import store from './store';
 import reportWebVitals from './reportWebVitals';
+
+import { history } from 'services/route';
 
 // styles
 import './styles';
@@ -15,9 +17,9 @@ import './styles';
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
+      <Router history={history}>
         <App />
-      </BrowserRouter>
+      </Router>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

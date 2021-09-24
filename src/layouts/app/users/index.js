@@ -8,7 +8,7 @@ import * as ROUTES from 'constants/routes';
 
 const Users = () => {
   return <Switch>
-    <Route to={ROUTES.USERS.ROOT} component={ListPage} />
+    <Route to={ROUTES.USERS.ROUTE} component={ListPage} />
     {/*<Route to={ROUTES.USERS.EDIT} component={List} />*/}
     <Redirect to={ROUTES.WELCOME.ROUTE} />
   </Switch>;

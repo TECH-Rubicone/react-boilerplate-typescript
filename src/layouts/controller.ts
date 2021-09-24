@@ -1,8 +1,6 @@
 import { call, delay, put, takeEvery } from 'redux-saga/effects';
 import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 import { getAccessToken, instanceAPI, instancePUB } from '../services/api.service';
-import { historyPush } from 'store';
-import * as ROUTES from 'constants/routes';
 
 type IPermission = {
   id: number;
@@ -68,6 +66,7 @@ function * initializeSaga () {
     if (status !== 'UP') {
       throw new Error('API down for maintenance');
     }
+    yield delay(1000);
     yield put(controller.action.updateCtrl({ health: true }));
   } catch ({ message }) {
     yield put(controller.action.updateCtrl({ health: false }));
@@ -77,6 +76,7 @@ function * initializeSaga () {
     return;
   }
   // NOTE try to restore user auth
+  yield delay(1000);
   try {
     const hasSession: boolean = yield call(instanceAPI.restoreSessionFromStore);
     if (hasSession) {
@@ -86,7 +86,7 @@ function * initializeSaga () {
   } catch ({ message }) {
     yield call(signOutSaga);
   }
-  yield call(historyPush, ROUTES.USERS.ROOT);
+  // yield call(historyPush, ROUTES.ADMINISTRATIVE_USERS.LINK());
   // NOTE initialization done
   yield put(controller.action.updateCtrl({ initialized: true }));
 }
