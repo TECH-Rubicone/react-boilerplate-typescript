@@ -1,7 +1,11 @@
 // outsource dependencies
 import createSagaMiddleware from 'redux-saga';
+import { createBrowserHistory } from 'history';
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import { reducer as controllerReducer, sagas as controllerSagas, path } from 'redux-saga-controller';
+
+// export history outside to be able to dispatch navigation actions from anywhere
+export const history = createBrowserHistory();
 
 // NOTE Build the middleware to run our Saga
 const saga = createSagaMiddleware();
@@ -20,3 +24,5 @@ const store = createStore(reducers, middleware);
 saga.run(controllerSagas);
 
 export default store;
+
+export const historyPush = (path: string) => history.push(path);
