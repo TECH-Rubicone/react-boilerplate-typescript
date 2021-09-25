@@ -12,7 +12,6 @@ import _ from 'services/lodash.service';
 
 interface CustomToastProps {
     user: IUser
-    className?: string,
 }
 
 const TOAST_ID = 'TOAST_ID';
