@@ -1,6 +1,6 @@
 import { call, delay, put, takeEvery } from 'redux-saga/effects';
-import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 import { getAccessToken, instanceAPI, instancePUB } from '../services/api.service';
+import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 
 type IPermission = {
   id: number;
@@ -29,7 +29,7 @@ export type IUser = null | {
   permissions: IPermission[];
 }
 
-interface IInitial {
+export interface IInitial {
   health: boolean;
   disabled: boolean;
   user: IUser | null;
@@ -44,7 +44,7 @@ interface IActions extends ActionCreators<IInitial>{
   initialize: ActionCreator<InitializePayload>,
 }
 
-const controller: Controller<IActions, IInitial> = create({
+export const controller: Controller<IActions, IInitial> = create({
   prefix: 'root',
   actions: ['initialize', 'getSelf'],
   initial: {

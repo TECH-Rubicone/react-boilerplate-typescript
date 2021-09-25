@@ -1,11 +1,14 @@
 // outsource dependencies
 import { Action } from 'redux';
-import { put, call, takeEvery } from 'redux-saga/effects';
+import { toast } from 'react-toastify';
+import { put, call, takeEvery, select } from 'redux-saga/effects';
+import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 
 // local dependencies
 import * as ROUTES from 'constants/routes';
+import { sendCustomToast } from 'components/toast';
 import { instanceAPI, instancePUB } from 'services/api.service';
-import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
+import { controller as rootController, IInitial } from 'layouts/controller';
 
 // NOTE action shortcut
 interface Act<Payload> extends Action {
@@ -36,7 +39,7 @@ interface Actions extends ActionCreators<Initial> {
   signIn: ActionCreator<SignInPayload>;
 }
 
-const controller: Controller<Actions, Initial> = create({
+export const controller: Controller<Actions, Initial> = create({
   prefix: 'sign-in',
   actions: ['signIn', 'initialize'],
   initial: {
@@ -59,6 +62,11 @@ export default controller;
 
 // sagas
 function * initializeSaga () {
+  yield put(controller.action.clearCtrl());
+  const { user }: IInitial = yield select(rootController.select);
+  if (user) {
+    yield call(sendCustomToast, user);
+  }
   yield put(controller.action.updateCtrl({ initialized: true }));
 }
 
@@ -68,9 +76,10 @@ function * signInSaga ({ payload }: Act<SignInPayload>) {
     const session: TokenDto = yield call(instancePUB, '/auth/token', { method: 'POST', data: payload });
     yield call(instanceAPI.setupSession, session);
     yield call(ROUTES.APP.PUSH);
+    yield call(toast.success, 'Welcome! We are really glad to see you!');
   } catch ({ message }) {
     yield put(controller.action.updateCtrl({ errorMessage: message }));
-    // TODO Implement toastr message
+    yield call(toast.error, `${message}`);
   }
   yield put(controller.action.updateCtrl({ disabled: false }));
 }

@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 
 // local dependencies
 import App from './layouts';
@@ -18,6 +19,17 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <Router history={history}>
+        <ToastContainer
+          rtl={false}
+          closeOnClick
+          pauseOnHover
+          theme="colored"
+          pauseOnFocusLoss
+          autoClose={5000}
+          newestOnTop={false}
+          position="top-right"
+          hideProgressBar={false}
+        />
         <App />
       </Router>
     </Provider>
