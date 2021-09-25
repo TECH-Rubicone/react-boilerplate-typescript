@@ -1,13 +1,13 @@
 // outsource dependencies
 import { Action } from 'redux';
 import { toast } from 'react-toastify';
-import { put, call, takeEvery, select } from 'redux-saga/effects';
+import { put, call, takeEvery, select, delay } from 'redux-saga/effects';
 import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 
 // local dependencies
 import * as ROUTES from 'constants/routes';
-import { sendCustomToast } from 'components/toast';
 import { instanceAPI, instancePUB } from 'services/api.service';
+import { showCustomToast, dismissToast } from 'components/toast';
 import { controller as rootController, IInitial } from 'layouts/controller';
 
 // NOTE action shortcut
@@ -65,18 +65,19 @@ function * initializeSaga () {
   yield put(controller.action.clearCtrl());
   const { user }: IInitial = yield select(rootController.select);
   if (user) {
-    yield call(sendCustomToast, user);
+    yield call(showCustomToast, user);
   }
   yield put(controller.action.updateCtrl({ initialized: true }));
 }
 
 function * signInSaga ({ payload }: Act<SignInPayload>) {
+  yield call(dismissToast);
   yield put(controller.action.updateCtrl({ disabled: true, errorMessage: null }));
   try {
     const session: TokenDto = yield call(instancePUB, '/auth/token', { method: 'POST', data: payload });
     yield call(instanceAPI.setupSession, session);
-    yield call(ROUTES.APP.PUSH);
     yield call(toast.success, 'Welcome! We are really glad to see you!');
+    yield call(ROUTES.APP.PUSH);
   } catch ({ message }) {
     yield put(controller.action.updateCtrl({ errorMessage: message }));
     yield call(toast.error, `${message}`);

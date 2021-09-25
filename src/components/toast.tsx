@@ -40,7 +40,9 @@ const toastOptions: ToastOptions = {
   }
 };
 
-export const sendCustomToast = (user: IUser) => {
+export const dismissToast = () => toast.dismiss(TOAST_ID);
+
+export const showCustomToast = (user: IUser) => {
   toast(<CustomToast user={user}/>, toastOptions);
 };
 
