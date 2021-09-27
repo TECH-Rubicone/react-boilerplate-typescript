@@ -9,7 +9,7 @@ import React, { memo, useCallback } from 'react';
 // local dependencies
 import FieldWrap from './field-wrap';
 
-interface IFSelect {
+interface FSelect {
   name?: string;
   success?: string;
   disabled: boolean;
@@ -27,7 +27,7 @@ interface IFSelect {
   label?: React.ReactChild | React.ReactNode;
 }
 
-const FSelect: React.FC<IFSelect> = ({
+const FSelect: React.FC<FSelect> = ({
   label, skipTouch, success, description, explanation, classNameLabel, classNameFormGroup,
   disabled, name, prepareValue, onSuccess, onError, onFinally, parseValue, ...attr
 }) => {

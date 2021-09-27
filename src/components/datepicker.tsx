@@ -16,7 +16,7 @@ import { useMoment } from 'hooks/moment';
 //local dependencies
 import FieldWrap from './field-wrap';
 
-interface IFDatepickerProps {
+interface FDatepickerProps {
   name: string,
   format?: string,
   success?: string,
@@ -31,7 +31,7 @@ interface IFDatepickerProps {
   label?: React.ReactChild | React.ReactNode,
 }
 
-const FDatepicker: React.FC<IFDatepickerProps> = props => {
+const FDatepicker: React.FC<FDatepickerProps> = props => {
   const {
     classNameFormGroup, classNameLabel,
     name, label, success, skipTouch, description, explanation,

@@ -1,66 +1,80 @@
 /* eslint no-useless-escape: "off" */
 import _ from 'lodash';
 
-// polyfill from MDN https://developer.mozilla.org/en-US/docs/Web/API/Storage/LocalStorage
-const cookieStorage: ICookie = {
-  getItem: (sKey: string): string | null => (!cookieStorage.hasProperty(sKey) ? null
-    : unescape(document.cookie.replace(
-      new RegExp(`(?:^|.*;\\s*)${ escape(sKey).replace(/[\-.+*]/g, '\\$&') }\\s*\\=\\s*((?:[^;](?!;))*[^;]?).*`),
-      '$1'
-    ))),
-
-  setItem: (sKey: string, sValue: string): string | null => (!sKey ? null
-    : (document.cookie = `${escape(sKey) }=${ escape(sValue) }; expires=Tue, 19 Jan 2038 03:14:07 GMT; path=/`)) && null,
-
-  removeItem: (sKey: string): string | null => (!cookieStorage.hasProperty(sKey) ? null
-    : (document.cookie = `${escape(sKey) }=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`)) && null,
-
-  hasProperty: (sKey: string): boolean => (!sKey ? false
-    : (new RegExp(`(?:^|;\\s*)${ escape(sKey).replace(/[\-.+*]/g, '\\$&') }\\s*\\=`)).test(document.cookie)),
-};
-
-interface IStorage {
-  getItem: (key: string) => string;
-  removeItem: (key: string) => string;
-  setItem: (key: string, value: string) => string;
-}
-interface ICookie {
-  hasProperty: (key: string) => boolean;
-  getItem: (key: string) => string | null;
-  removeItem: (key: string) => string | null;
-  setItem: (key: string, value: string) => string | null;
+interface Storage {
+  get: (key: string) => string | null;
+  remove: (key: string) => void;
+  set: (key: string, data: string) => void;
 }
 
-// app integration
-class Storage {
-  static store = window.localStorage;
+class LocalStorage implements Storage {
+  private store = window.localStorage;
 
-  static initialize = () => {
-    Storage.store = window.localStorage;
-    try { // NOTE check availability of localStorage
-      Storage.store.setItem('test', 'test');
-      Storage.store.removeItem('test');
-    } catch (e) {
-      // Storage.store = cookieStorage;
+  get = (key: string): string | null => {
+    const data = this.store.getItem(key);
+    if (_.isNull(data)) {
+      return data;
     }
-    // TODO may be we should sync some data between "local" & "cookie"
-    return Storage;
+    return JSON.parse(data);
+  }
+
+  remove = (key: string): void => {
+    this.store.removeItem(key);
+  }
+
+  set = (key: string, data: string): void => {
+    this.remove(key);
+    this.store.setItem(key, JSON.stringify(data));
+  }
+}
+
+class CookieStorage implements Storage {
+  private store = document.cookie;
+
+  get = (key: string): string | null => (!this.hasProperty(key) ? null
+    : unescape(this.store.replace(
+      new RegExp(`(?:^|.*;\\s*)${ escape(key).replace(/[\-.+*]/g, '\\$&') }\\s*\\=\\s*((?:[^;](?!;))*[^;]?).*`),
+      '$1'
+    )));
+
+  remove = (key: string): string | null => (!this.hasProperty(key) ? null
+    : (this.store = `${escape(key)}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`)) && null;
+
+  set = (key: string, sValue: string): string | null => (!key ? null
+    : (this.store = `${escape(key) }=${ escape(sValue) }; expires=Tue, 19 Jan 2038 03:14:07 GMT; path=/`)) && null;
+
+  hasProperty = (key: string): boolean => (!key ? false
+    : (new RegExp(`(?:^|;\\s*)${ escape(key).replace(/[\-.+*]/g, '\\$&') }\\s*\\=`)).test(this.store));
+}
+
+class StorageClient {
+  private store: Storage;
+
+  constructor () {
+    this.store = new LocalStorage();
+    try {
+      // NOTE check availability of localStorage
+      this.store.set('test', 'test');
+      this.store.remove('test');
+    } catch (e) {
+      this.store = new CookieStorage();
+    }
+  }
+
+  remove = (name: string): void => this.store.remove(name);
+
+  set = (name: string, data: any): void => {
+    this.store.remove(name);
+    this.store.set(name, JSON.stringify(data));
   };
 
-  static remove = (name: string): void => Storage.store.removeItem(name);
-
-  static set = (name: string, data: any): void => {
-    Storage.remove(name);
-    Storage.store.setItem(name, JSON.stringify(data));
-  };
-
-  static get = (name: string): string | null => {
-    const data = Storage.store.getItem(name);
+  get = (name: string): string | null => {
+    const data = this.store.get(name);
     if (_.isNull(data)) {
       return data;
     }
     return JSON.parse(data);
   };
 }
-// NOTE storage is Singleton
-export default Storage.initialize();
+
+export default new StorageClient();

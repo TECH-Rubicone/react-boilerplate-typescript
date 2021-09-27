@@ -18,7 +18,7 @@ type UserData = {
   age: number;
   [key: string]: unknown
 }
-interface IInitial {
+interface Initial {
   initialized: boolean;
   disabled: boolean;
   data: UserData | null
@@ -33,7 +33,7 @@ interface SomePayload {
 }
 type GetSelfPayload = { id: string | number };
 // You should add interface for actions its only one way to define payload annotation
-interface IActions extends ActionCreators<IInitial> {
+interface Actions extends ActionCreators<Initial> {
   initialize: ActionCreator<InitializePayload>;
   someAction: ActionCreator<SomePayload>;
   getSelf: ActionCreator<GetSelfPayload>;
@@ -57,7 +57,7 @@ interface IActions extends ActionCreators<IInitial> {
 //   '¯\\_(ツ)_/¯'
 // );
 
-export const controller:Controller<IActions, IInitial> = create({
+export const controller:Controller<Actions, Initial> = create({
   prefix: '¯\\_(ツ)_/¯',
   actions: ['initialize', 'getSelf'],
   initial: {
@@ -75,7 +75,7 @@ export const controller:Controller<IActions, IInitial> = create({
 function * initializeSaga ({ type, payload } : Act<InitializePayload>) {
   // NOTE bring reducer to initial state before start initialization
   yield put(controller.action.clearCtrl());
-  const { initialized }: IInitial = yield select(controller.select);
+  const { initialized }: Initial = yield select(controller.select);
   console.info(`%c ${type} `, 'color: #FF6766; font-weight: bolder; font-size: 12px;'
     , '\n let assume it`s initial request ;):', payload
     , '\n initialized:', initialized
