@@ -1,9 +1,11 @@
+// outsource dependencies
 import { call, delay, put, takeEvery } from 'redux-saga/effects';
 import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 
+// local dependencies
 import { getAccessToken, instanceAPI, instancePUB } from '../services/api.service';
 
-type IPermission = {
+type Permission = {
   id: number;
   name: string;
 };
@@ -27,10 +29,10 @@ export type Me = null | {
   clinicRole: string;
   createdDate: string;
   hasDrChronoToken: boolean;
-  permissions: IPermission[];
+  permissions: Permission[];
 }
 
-interface Initial {
+export interface Initial {
   health: boolean;
   disabled: boolean;
   user: Me | null;
@@ -45,7 +47,7 @@ interface Actions extends ActionCreators<Initial>{
   initialize: ActionCreator<InitializePayload>,
 }
 
-const controller: Controller<Actions, Initial> = create({
+export const controller: Controller<Actions, Initial> = create({
   prefix: 'root',
   actions: ['initialize', 'getSelf'],
   initial: {
@@ -107,5 +109,3 @@ function * getSelfExecutor () {
   const user: Me = yield call(instanceAPI, 'auth/users/me', { method: 'GET' });
   yield put(controller.action.updateCtrl({ user }));
 }
-
-export default controller;

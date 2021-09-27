@@ -1,11 +1,14 @@
 // outsource dependencies
 import { Action } from 'redux';
-import { put, call, takeEvery } from 'redux-saga/effects';
+import { toast } from 'react-toastify';
+import { put, call, takeEvery, select } from 'redux-saga/effects';
+import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 
 // local dependencies
 import * as ROUTES from 'constants/routes';
 import { instanceAPI, instancePUB } from 'services/api.service';
-import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
+import { showWelcomeToast, dismissToast } from 'components/toast';
+import { controller as rootController, Initial as RootInitial } from 'layouts/controller';
 
 // NOTE action shortcut
 interface Act<Payload> extends Action {
@@ -36,7 +39,7 @@ interface Actions extends ActionCreators<Initial> {
   signIn: ActionCreator<SignInPayload>;
 }
 
-const controller: Controller<Actions, Initial> = create({
+export const controller: Controller<Actions, Initial> = create({
   prefix: 'sign-in',
   actions: ['signIn', 'initialize'],
   initial: {
@@ -55,22 +58,25 @@ const controller: Controller<Actions, Initial> = create({
   }
 });
 
-export default controller;
-
-// sagas
 function * initializeSaga () {
+  const { user } : RootInitial = yield select(rootController.select);
+  if (user) {
+    yield call(showWelcomeToast, user);
+  }
   yield put(controller.action.updateCtrl({ initialized: true }));
 }
 
 function * signInSaga ({ payload }: Act<SignInPayload>) {
+  yield call(dismissToast);
   yield put(controller.action.updateCtrl({ disabled: true, errorMessage: null }));
   try {
     const session: TokenDto = yield call(instancePUB, '/auth/token', { method: 'POST', data: payload });
     yield call(instanceAPI.setupSession, session);
+    yield call(toast.success, 'Welcome! We are really glad to see you!');
     yield call(ROUTES.APP.PUSH);
   } catch ({ message }) {
-    yield put(controller.action.updateCtrl({ errorMessage: message }));
-    // TODO Implement toastr message
+    yield put(controller.action.updateCtrl({ errorMessage: String(message) }));
+    yield call(toast.error, String(message));
   }
   yield put(controller.action.updateCtrl({ disabled: false }));
 }

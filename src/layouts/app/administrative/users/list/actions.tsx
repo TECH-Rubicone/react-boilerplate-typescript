@@ -5,7 +5,7 @@ import { useControllerActions, useControllerData } from 'redux-saga-controller';
 import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap';
 
 // local dependencies
-import controller, { Filters } from './controller';
+import { controller, Filters } from './controller';
 
 // components
 import SearchInput from 'components/search-input';

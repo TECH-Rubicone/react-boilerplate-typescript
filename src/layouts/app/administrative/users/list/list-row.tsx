@@ -6,7 +6,7 @@ import { CustomInput, FormGroup, Label } from 'reactstrap';
 import { useControllerActions, useControllerData } from 'redux-saga-controller';
 
 // local dependencies
-import controller, { User, TRole } from './controller';
+import { controller, User, TRole } from './controller';
 
 const ListRow: React.FC<User> = ({ id, name, roles, createdDate }) => {
   const { disabled, selectedUsers, users } = useControllerData(controller);

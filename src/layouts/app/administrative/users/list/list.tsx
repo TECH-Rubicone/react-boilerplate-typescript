@@ -6,7 +6,7 @@ import { useControllerActions, useControllerData } from 'redux-saga-controller';
 
 // local dependencies
 import ListRow from './list-row';
-import controller, { Filters, User } from './controller';
+import { controller, Filters, User } from './controller';
 
 const List = () => {
   const { users, disabled, selectedUsers } = useControllerData(controller);

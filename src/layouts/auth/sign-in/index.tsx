@@ -1,26 +1,26 @@
 // outsource dependencies
 import * as yup from 'yup';
 import { Formik, Form } from 'formik';
-import React, { memo, useCallback, useMemo } from 'react';
 import { useController } from 'redux-saga-controller';
+import React, { memo, useEffect, useCallback, useMemo } from 'react';
 import { Button, Card, CardBody, CardFooter, CardHeader, Col, Container, Row, Spinner } from 'reactstrap';
 
 // components
 import FInput from 'components/input';
 
 // local dependencies
-import controller from './controller';
+import { controller } from './controller';
 
 // configure
-
 // TODO Add alert error for errorMessage
 // TODO Add i18next
+
 const SignIn = () => {
   const [
     { initialized, disabled, errorMessage, initialValues },
-    { signIn }
+    { signIn, initialize }
   ] = useController(controller);
-
+  useEffect(() => { initialize(); }, [initialize]);
   const validationSchema = useMemo(() => yup.object().shape({
     username: yup.string()
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
@@ -66,8 +66,8 @@ const SignIn = () => {
                   outline
                   type="submit"
                   color="primary"
-                  className="mb-3 w-100 d-flex align-items-center justify-content-center"
                   disabled={disabled}
+                  className="mb-3 w-100 d-flex align-items-center justify-content-center"
                 >
                   LOGIN
                   { disabled && <Spinner size="sm" className="ml-2" /> }

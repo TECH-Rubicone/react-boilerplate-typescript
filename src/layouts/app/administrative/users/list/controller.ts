@@ -7,8 +7,6 @@ import { AxiosPromise } from 'axios';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 
-// local dependencies
-
 // services
 import { instanceAPI } from 'services/api.service';
 
@@ -116,7 +114,6 @@ export const controller: Controller<Actions, Initial> = create({
     yield takeEvery(controller.action.updateFilters.TYPE, updateFiltersSaga);
   },
 });
-export default controller;
 
 // sagas
 function * initializeSaga () {

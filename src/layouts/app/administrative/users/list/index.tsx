@@ -6,7 +6,7 @@ import React, { memo, useCallback, useEffect } from 'react';
 // local dependencies
 import ItemList from './list';
 import Actions from './actions';
-import controller, { Filters } from './controller';
+import { controller, Filters } from './controller';
 
 // components
 import Pagination from 'components/pagination';
