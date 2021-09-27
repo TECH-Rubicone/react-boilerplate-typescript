@@ -1,15 +1,16 @@
 // outsource dependencies
 import { Link } from 'react-router-dom';
-import React, { useCallback, useMemo } from 'react';
+import React, { memo, useCallback, useMemo } from 'react';
 import { useControllerActions, useControllerData } from 'redux-saga-controller';
 import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap';
 
 // local dependencies
-import controller from './controller';
+import controller, { Filters } from './controller';
+
+// components
 import SearchInput from 'components/search-input';
 
 const Actions = () => {
-
   const { name, size, disabled, selectedUsers } = useControllerData(controller);
   const { updateFilters, updateCtrl } = useControllerActions(controller);
 
@@ -18,7 +19,7 @@ const Actions = () => {
   const handleInputApply = useCallback(() => updateFilters(), []);
 
   const SIZES = useMemo(
-    () => [10, 15, 30, 50].map(size => ({ item: size, onChangeSize: () => updateFilters({ size }) })),
+    () => [10, 15, 30, 50].map(size => ({ item: size, onChangeSize: () => updateFilters({ size } as Filters) })),
     [updateFilters]
   );
 
@@ -66,4 +67,4 @@ const Actions = () => {
   </div>;
 };
 
-export default Actions;
+export default memo(Actions);

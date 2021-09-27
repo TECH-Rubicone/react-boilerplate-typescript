@@ -2,19 +2,15 @@
 import { call, delay, put, takeEvery } from 'redux-saga/effects';
 import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 
-// services
-import { getAccessToken, instanceAPI, instancePUB } from 'services/api.service';
-
-export type CatchError = {
-  message: string
-}
+// local dependencies
+import { getAccessToken, instanceAPI, instancePUB } from '../services/api.service';
 
 type IPermission = {
   id: number;
   name: string;
 };
 
-type IRole = {
+type Role = {
   id: number;
   name: string;
 }
@@ -23,10 +19,10 @@ type Image = {
   url: string;
 }
 
-export type IUser = null | {
+export type Me = null | {
   id: number;
   name: string;
-  roles: IRole[];
+  roles: Role[];
   username: string;
   enabled: boolean;
   coverImage: Image;
@@ -36,22 +32,22 @@ export type IUser = null | {
   permissions: IPermission[];
 }
 
-export interface IInitial {
+interface Initial {
   health: boolean;
   disabled: boolean;
-  user: IUser | null;
+  user: Me | null;
   initialized: boolean;
   accessToken: string | null;
 }
 
 type InitializePayload = null;
 
-interface IActions extends ActionCreators<IInitial>{
+interface Actions extends ActionCreators<Initial>{
   // getSelf: ActionCreator<GetSelfPayload>,
   initialize: ActionCreator<InitializePayload>,
 }
 
-export const controller: Controller<IActions, IInitial> = create({
+const controller: Controller<Actions, Initial> = create({
   prefix: 'root',
   actions: ['initialize', 'getSelf'],
   initial: {
@@ -110,6 +106,6 @@ function * signOutSaga () {
 }
 
 function * getSelfExecutor () {
-  const user: IUser = yield call(instanceAPI, 'auth/users/me', { method: 'GET' });
+  const user: Me = yield call(instanceAPI, 'auth/users/me', { method: 'GET' });
   yield put(controller.action.updateCtrl({ user }));
 }

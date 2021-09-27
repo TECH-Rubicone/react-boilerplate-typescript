@@ -9,7 +9,7 @@ import React, { memo, useCallback } from 'react';
 import FieldWrap from './field-wrap';
 import SelectEntity from '../select-entity';
 
-interface IFSelectEntity {
+interface FSelectEntity {
   name?: string;
   onError?: any; // func
   onSuccess?: any; // func
@@ -26,7 +26,7 @@ interface IFSelectEntity {
   label?: React.ReactNode | React.ReactChild;
 }
 
-const FSelectEntity: React.FC<IFSelectEntity> = props => {
+const FSelectEntity: React.FC<FSelectEntity> = props => {
   const {
     description, explanation, classNameLabel, classNameFormGroup,
     label, skipTouch, success, disabled, name, onSuccess, onError, onFinally, ...attr

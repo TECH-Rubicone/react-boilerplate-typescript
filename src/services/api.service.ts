@@ -62,13 +62,13 @@ const getAuthHeader = (): string => AUTH_BEARER + getAccessToken();
  * @param {Object} options
  * @returns {String}
  */
-interface IParamsSerializer {
+interface ParamsSerializer {
   name: string;
   sort: string;
   page: string | number;
   size: string | number;
 }
-const paramsSerializer = (options: IParamsSerializer): string => qs.stringify(options, { arrayFormat: 'repeat', encode: false });
+const paramsSerializer = (options: ParamsSerializer): string => qs.stringify(options, { arrayFormat: 'repeat', encode: false });
 
 /**
  * prepare results. Solution to prepare success data
@@ -92,7 +92,7 @@ const prepareResponse = (response: IResponse): ITokenData => response.data;
  * @return {Promise}
  */
 
-interface IFormatAxiosError {
+interface FormatAxiosError {
   path: string;
   method: string;
   status: string;
@@ -102,8 +102,8 @@ interface IFormatAxiosError {
   response: AxiosResponse<any>;
 }
 
-const prepareError = (error: AxiosError): Promise<IFormatAxiosError> => {
-  const formattedError: IFormatAxiosError = formatAxiosError(error);
+const prepareError = (error: AxiosError): Promise<FormatAxiosError> => {
+  const formattedError: FormatAxiosError = formatAxiosError(error);
   if (config.DEBUG) {
     debugErrors.unshift(formattedError);
     console.warn('%c Interceptor: ', 'background: #EC1B24; color: #fff; font-size: 14px;', error);
@@ -112,7 +112,7 @@ const prepareError = (error: AxiosError): Promise<IFormatAxiosError> => {
   return Promise.reject({ ...formattedError.response, message });
 };
 
-const formatAxiosError = (error: AxiosError): IFormatAxiosError => ({
+const formatAxiosError = (error: AxiosError): FormatAxiosError => ({
   // axiosError: error,
   path: _.get(error, 'config.url', null),
   response: _.get(error, 'response.data', null),
@@ -155,7 +155,7 @@ PUB.interceptors.response.use(
  * contain logic for working with authorization and 401 interceptor
  */
 
-interface IAxiosInstance extends AxiosStatic {
+interface AxiosInstance extends AxiosStatic {
   restoreSessionFromStore: () => boolean,
   setupSession: (session: ITokenData) => void,
   onAuthFailApplicationAction: (error: AxiosError) => void,
@@ -169,7 +169,7 @@ const API = axios.create({
     'Cache-Control': 'no-cache',
     'Content-Type': 'application/json',
   },
-}) as IAxiosInstance;
+}) as AxiosInstance;
 
 /**
  * setup interceptors
@@ -190,7 +190,7 @@ API.interceptors.response.use(
 /**
  * local variables to correctness refreshing session process
  */
-interface IStuckRequest {
+interface StuckRequest {
   config: any;
   error: AxiosError;
   reject: (reason?: any) => void;
@@ -198,7 +198,7 @@ interface IStuckRequest {
 }
 
 let isRefreshing = false,
-  stuckRequests: IStuckRequest[] = [];
+  stuckRequests: StuckRequest[] = [];
 
 /**
  * store all requests with 401 refresh session and try send request again
@@ -206,12 +206,12 @@ let isRefreshing = false,
  * @param {Object} error
  * @return {Promise}
  */
-interface IConfig extends AxiosRequestConfig {
+interface Config extends AxiosRequestConfig {
   wasTryingToRestore: boolean;
 }
 
 const handleRefreshSession = (error: AxiosError) => {
-  const config = error.config as IConfig;
+  const config = error.config as Config;
   if (!isRefreshing) {
     isRefreshing = true;
     // NOTE PUB instance result does not match the AxiosRequest type
@@ -342,8 +342,8 @@ const MESSAGE: MessageType = {
   CANT_DELETE_ENTITY_IS_USED: 'Impossible to delete. Entity is in use',
 };
 
-const debugErrors: IFormatAxiosError[] = [];
-export const getDebugErrors = (): IFormatAxiosError[] => debugErrors;
+const debugErrors: FormatAxiosError[] = [];
+export const getDebugErrors = (): FormatAxiosError[] => debugErrors;
 // NOTE named export only after all prepare thing
 export const instanceAPI = API;
 export const instancePUB = PUB;
