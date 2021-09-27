@@ -8,11 +8,12 @@ import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from
 import { controller, Filters } from './controller';
 
 // components
+import { FasIcon } from 'components/fa-icon';
 import SearchInput from 'components/search-input';
 
 const Actions = () => {
-  const { name, size, disabled, selectedUsers } = useControllerData(controller);
-  const { updateFilters, updateCtrl } = useControllerActions(controller);
+  const { name, size, disabled, selected } = useControllerData(controller);
+  const { updateFilters, updateCtrl, deleteItems } = useControllerActions(controller);
 
   const handleInputClear = useCallback(() => updateCtrl({ name: '' }), [updateCtrl]);
   const handleInputChange = useCallback(name => updateCtrl({ name }), [updateCtrl]);
@@ -22,6 +23,8 @@ const Actions = () => {
     () => [10, 15, 30, 50].map(size => ({ item: size, onChangeSize: () => updateFilters({ size } as Filters) })),
     [updateFilters]
   );
+
+  const handleItemsDelete = useCallback(() => deleteItems({ selected }), [deleteItems, selected]);
 
   return <div className="d-flex justify-content-between">
     <SearchInput
@@ -55,13 +58,15 @@ const Actions = () => {
           List Actions
         </DropdownToggle>
         <DropdownMenu>
-          <DropdownItem disabled={!selectedUsers.length}>
+          <DropdownItem disabled={!selected.length} onClick={handleItemsDelete}>
             Remove
           </DropdownItem>
         </DropdownMenu>
       </UncontrolledDropdown>
     </div>
     <Link to={'#'} className="btn btn-success">
+      <FasIcon icon="plus" />
+      &nbsp;
       Create User
     </Link>
   </div>;
