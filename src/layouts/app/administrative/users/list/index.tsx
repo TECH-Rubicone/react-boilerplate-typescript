@@ -16,15 +16,12 @@ import './styles.css';
 
 const List = () => {
   const [
-    { initialized, page, totalPages, disabled },
+    { initialized, page, totalElements, disabled },
     { initialize, clearCtrl, updateFilters },
     isControllerSubscribed
   ] = useController(controller);
 
-  const handlePageChange = useCallback(
-    ({ selected }) => updateFilters({ page: selected } as Filters),
-    [updateFilters]
-  );
+  const handlePageChange = useCallback((page: number) => updateFilters({ page } as Filters), [updateFilters]);
 
   useEffect(() => {
     initialize();
@@ -51,7 +48,7 @@ const List = () => {
             <ItemList />
           </Col>
           <Col xs="12">
-            <Pagination disabled={disabled} forcePage={page} pageCount={totalPages} onPageChange={handlePageChange} />
+            <Pagination disabled={disabled} current={page} total={totalElements} onPageChange={handlePageChange} />
           </Col>
         </Row>
       </Col>

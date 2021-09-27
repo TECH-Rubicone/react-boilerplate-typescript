@@ -8,22 +8,25 @@ import { useControllerActions, useControllerData } from 'redux-saga-controller';
 import ListRow from './list-row';
 import { controller, Filters, User } from './controller';
 
+// components
+import { FasIcon } from 'components/fa-icon';
+
 const List = () => {
-  const { users, disabled, selectedUsers } = useControllerData(controller);
+  const { list, disabled, selected } = useControllerData(controller);
   const { updateCtrl } = useControllerActions(controller);
 
   const isEveryChecked = useMemo(
-    () => users.every((user: User) => _.find(selectedUsers, { id: user.id })),
-    [users, selectedUsers]
+    () => list.every((user: User) => _.find(selected, { id: user.id })),
+    [list, selected]
   );
 
   const toggleSelections = useCallback(event => {
-    let selected = [] as User[];
+    let newSelected: Array<User> = [];
     if (event.target.checked) {
-      selected = selectedUsers.concat(users);
+      newSelected = selected.concat(list);
     }
-    updateCtrl({ selectedUsers: selected });
-  }, [users, selectedUsers, updateCtrl]);
+    updateCtrl({ selected: newSelected });
+  }, [list, selected, updateCtrl]);
 
   return <div className="list mb-2">
     <Table striped>
@@ -39,7 +42,7 @@ const List = () => {
                     type="checkbox"
                     disabled={disabled}
                     onChange={toggleSelections}
-                    checked={Boolean(selectedUsers.length && isEveryChecked)}
+                    checked={Boolean(selected.length && isEveryChecked)}
                   />
                 </Label>
               </FormGroup>
@@ -71,11 +74,13 @@ const List = () => {
         </tr>
       </thead>
       <tbody>
-        {(users ?? []).map((user: User) => <ListRow key={user.id} {...user} />)}
+        {(list ?? []).map((user: User) => <ListRow key={user.id} {...user} />)}
       </tbody>
     </Table>
   </div>;
 };
+
+export default memo(List);
 
 interface SortByFieldProps {
   field: string;
@@ -98,14 +103,22 @@ const SortByField: React.FC<SortByFieldProps> = memo(({ disabled, children, fiel
 });
 
 interface SortIconProps {
-  status: boolean | null;
+  disabled?: boolean
+  status: boolean | null
 }
 
-const SortIcon: React.FC<SortIconProps> = memo(({ status }) => {
-  const statusMap = useMemo(() => _.isNull(status) ? ' * ' : status ? ' i ' : ' ! ', [status]);
-  return <span>
-    {statusMap}
-  </span>;
+const SortIcon: React.FC<SortIconProps> = memo(({ status, ...attr }) => {
+  const statusMap = useMemo(() => _.isNull(status) ? 'sort' : status ? 'sort-amount-up' : 'sort-amount-down', [status]);
+  const classMap = useMemo(() => {
+    switch (status) {
+      default: return `ml-1 mr-1 text-thin ${attr.disabled ? 'text-muted' : 'text-gray'}`;
+      case true: return `ml-1 mr-1 text-bold ${attr.disabled ? 'text-muted' : 'text-gray-d'}`;
+      case false: return `ml-1 mr-1 text-bold ${attr.disabled ? 'text-muted' : 'text-gray-d'}`;
+    }
+  }, [attr, status]);
+  return <FasIcon
+    {...attr}
+    icon={statusMap}
+    className={classMap}
+  />;
 });
-
-export default memo(List);
