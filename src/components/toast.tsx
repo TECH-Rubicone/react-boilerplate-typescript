@@ -10,10 +10,10 @@ import * as ROUTES from 'constants/routes';
 import _ from 'services/lodash.service';
 
 // local dependencies
-import { IUser } from '../layouts/controller';
+import { Me } from '../layouts/controller';
 
 interface WelcomeToastProps {
-    user: IUser
+    user: Me
 }
 
 const TOAST_ID = 'RESTORE_SESSION';
@@ -41,7 +41,7 @@ const toastOptions: ToastOptions = {
 
 export const dismissToast = () => toast.dismiss(TOAST_ID);
 
-export const showWelcomeToast = (user: IUser) => {
+export const showWelcomeToast = (user: Me) => {
   toast(<WelcomeToast user={user}/>, toastOptions);
 };
 

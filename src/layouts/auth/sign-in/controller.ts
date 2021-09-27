@@ -1,5 +1,4 @@
 // outsource dependencies
-import axios from 'axios';
 import { Action } from 'redux';
 import { toast } from 'react-toastify';
 import { put, call, takeEvery, select } from 'redux-saga/effects';
@@ -8,8 +7,8 @@ import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-co
 // local dependencies
 import * as ROUTES from 'constants/routes';
 import { instanceAPI, instancePUB } from 'services/api.service';
-import { showCustomToast, dismissToast } from 'components/toast';
-import { CatchError, controller as rootController, IInitial } from 'layouts/controller';
+import { showWelcomeToast, dismissToast } from 'components/toast';
+import { controller as rootController, Initial as RootInitial } from 'layouts/controller';
 
 // NOTE action shortcut
 interface Act<Payload> extends Action {
@@ -59,11 +58,10 @@ export const controller: Controller<Actions, Initial> = create({
   }
 });
 
-// sagas
 function * initializeSaga () {
-  const { user }: IInitial = yield select(rootController.select);
+  const { user } : RootInitial = yield select(rootController.select);
   if (user) {
-    yield call(showCustomToast, user);
+    yield call(showWelcomeToast, user);
   }
   yield put(controller.action.updateCtrl({ initialized: true }));
 }

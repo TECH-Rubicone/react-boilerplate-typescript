@@ -5,7 +5,7 @@ import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-co
 // local dependencies
 import { getAccessToken, instanceAPI, instancePUB } from '../services/api.service';
 
-type IPermission = {
+type Permission = {
   id: number;
   name: string;
 };
@@ -29,10 +29,10 @@ export type Me = null | {
   clinicRole: string;
   createdDate: string;
   hasDrChronoToken: boolean;
-  permissions: IPermission[];
+  permissions: Permission[];
 }
 
-interface Initial {
+export interface Initial {
   health: boolean;
   disabled: boolean;
   user: Me | null;
@@ -47,7 +47,7 @@ interface Actions extends ActionCreators<Initial>{
   initialize: ActionCreator<InitializePayload>,
 }
 
-const controller: Controller<Actions, Initial> = create({
+export const controller: Controller<Actions, Initial> = create({
   prefix: 'root',
   actions: ['initialize', 'getSelf'],
   initial: {
