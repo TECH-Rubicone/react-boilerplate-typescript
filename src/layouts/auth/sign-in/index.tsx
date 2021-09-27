@@ -9,7 +9,7 @@ import { Button, Card, CardBody, CardFooter, CardHeader, Col, Container, Row, Sp
 import FInput from 'components/input';
 
 // local dependencies
-import controller from './controller';
+import { controller } from './controller';
 
 // configure
 // TODO Add alert error for errorMessage

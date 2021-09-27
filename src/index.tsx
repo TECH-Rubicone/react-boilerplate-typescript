@@ -5,12 +5,13 @@ import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
+// services
+import { history } from 'services/route';
+
 // local dependencies
 import App from './layouts';
 import store from './store';
 import reportWebVitals from './reportWebVitals';
-
-import { history } from 'services/route';
 
 // styles
 import './styles';
@@ -20,7 +21,6 @@ ReactDOM.render(
     <Provider store={store}>
       <Router history={history}>
         <ToastContainer
-          rtl={false}
           closeOnClick
           pauseOnHover
           theme="colored"
@@ -28,7 +28,6 @@ ReactDOM.render(
           autoClose={5000}
           newestOnTop={false}
           position="top-right"
-          hideProgressBar={false}
         />
         <App />
       </Router>

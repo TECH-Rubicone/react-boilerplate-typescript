@@ -51,7 +51,6 @@ export const controller = create({
     yield takeEvery(controller.action.updateFilters.TYPE, updateFiltersSaga);
   },
 });
-export default controller;
 
 // sagas
 function * initializeSaga () {

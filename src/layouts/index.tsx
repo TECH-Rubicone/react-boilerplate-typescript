@@ -3,11 +3,13 @@ import React, { memo, useEffect } from 'react';
 import { useController } from 'redux-saga-controller';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
+// constants
+import * as ROUTES from 'constants/routes';
+
 // local dependencies
 import App from './app';
 import Auth from './auth';
-import controller from './controller';
-import * as ROUTES from 'constants/routes';
+import { controller } from './controller';
 
 const Layouts = () => {
   const [

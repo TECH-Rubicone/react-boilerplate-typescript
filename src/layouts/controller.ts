@@ -1,6 +1,13 @@
+// outsource dependencies
 import { call, delay, put, takeEvery } from 'redux-saga/effects';
-import { getAccessToken, instanceAPI, instancePUB } from '../services/api.service';
 import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
+
+// services
+import { getAccessToken, instanceAPI, instancePUB } from 'services/api.service';
+
+export type CatchError = {
+  message: string
+}
 
 type IPermission = {
   id: number;
@@ -106,5 +113,3 @@ function * getSelfExecutor () {
   const user: IUser = yield call(instanceAPI, 'auth/users/me', { method: 'GET' });
   yield put(controller.action.updateCtrl({ user }));
 }
-
-export default controller;
