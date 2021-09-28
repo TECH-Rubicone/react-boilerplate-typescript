@@ -1,27 +1,22 @@
 // outsource dependencies
-import { Col, Container, Row } from 'reactstrap';
+import React, { memo, useEffect } from 'react';
+import { Grid, Typography } from '@mui/material';
 import { useController } from 'redux-saga-controller';
-import React, { memo, useCallback, useEffect } from 'react';
 
 // local dependencies
 import ItemList from './list';
 import Actions from './actions';
-import { controller, Filters } from './controller';
-
-// components
-import Pagination from 'components/pagination';
+import { controller } from './controller';
 
 // styles
 import './styles.css';
 
 const List = () => {
   const [
-    { initialized, page, totalElements, disabled },
-    { initialize, clearCtrl, updateFilters },
+    { initialized },
+    { initialize, clearCtrl },
     isControllerSubscribed
   ] = useController(controller);
-
-  const handlePageChange = useCallback((page: number) => updateFilters({ page } as Filters), [updateFilters]);
 
   useEffect(() => {
     initialize();
@@ -34,26 +29,19 @@ const List = () => {
     return <span>Preloader</span>;
   }
 
-  return <Container fluid>
-    <Row>
-      <Col tag="h2">Users</Col>
-    </Row>
-    <Row>
-      <Col xs="12">
-        <Row>
-          <Col xs="12" className="mb-3">
-            <Actions />
-          </Col>
-          <Col xs="12">
-            <ItemList />
-          </Col>
-          <Col xs="12">
-            <Pagination disabled={disabled} current={page} total={totalElements} onPageChange={handlePageChange} />
-          </Col>
-        </Row>
-      </Col>
-    </Row>
-  </Container>;
+  return <Grid container>
+    <Grid item>
+      <Typography variant="h3">Users</Typography>
+    </Grid>
+    <Grid item container xs={12}>
+      <Grid item xs={12}>
+        <Actions />
+      </Grid>
+      <Grid item xs={12}>
+        <ItemList />
+      </Grid>
+    </Grid>
+  </Grid>;
 };
 
 export default memo(List);

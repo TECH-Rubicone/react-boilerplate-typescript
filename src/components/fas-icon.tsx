@@ -2,15 +2,7 @@
 import React, { memo, FC } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCog,
-  faHome, faPencilAlt,
-  faPlus,
-  faSort,
-  faSortAmountDown,
-  faSortAmountUp,
-  faTrashAlt
-} from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faCaretDown, faSearch, faCog, faHome, faPencilAlt, faPlus, faSort, faSortAmountDown, faSortAmountUp, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 // local dependencies
 import { IconProps } from 'components/fa-icon';
@@ -21,7 +13,10 @@ library.add(
   faHome,
   faSort,
   faPlus,
+  faTimes,
+  faSearch,
   faTrashAlt,
+  faCaretDown,
   faPencilAlt,
   faSortAmountUp,
   faSortAmountDown,

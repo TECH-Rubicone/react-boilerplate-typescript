@@ -8,7 +8,7 @@ import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-co
 import { instanceAPI } from 'services/api.service';
 
 // constants
-import { ADMINISTRATIVE_USERS_LIST } from 'constants/routes';
+import * as ROUTES from 'constants/routes';
 
 type Params = null | {
   page: number
@@ -135,7 +135,7 @@ export const controller: Controller<Actions, Initial> = create({
 function * initializeSaga () {
   yield put(controller.action.clearCtrl());
   try {
-    const query: Partial<Filters> = yield call(ADMINISTRATIVE_USERS_LIST.QUERY);
+    const query: Partial<Filters> = yield call(ROUTES.ADMINISTRATIVE_USERS_LIST.QUERY);
     yield put(controller.action.updateFilters(query));
   } catch ({ message }) {
     yield put(controller.action.updateCtrl({ errorMessage: String(message) }));
@@ -144,7 +144,7 @@ function * initializeSaga () {
 }
 
 function * updateFiltersSaga ({ payload }: Act<Partial<Filters>>) {
-  yield put(controller.action.updateCtrl({ disabled: true, errorMessage: null, ...payload }));
+  yield put(controller.action.updateCtrl({ disabled: true, errorMessage: null, page: 0, ...payload }));
   try {
     const reducer: Initial = yield select(controller.select);
     const { content, totalPages, totalElements, pageNumber }: UsersFilter = yield call(prepareGetUsers, reducer);
@@ -156,7 +156,7 @@ function * updateFiltersSaga ({ payload }: Act<Partial<Filters>>) {
       page: pageNumber
     }));
     yield call(
-      ADMINISTRATIVE_USERS_LIST.REPLACE,
+      ROUTES.ADMINISTRATIVE_USERS_LIST.REPLACE,
       {},
       { page: reducer.page, size: reducer.size, search: reducer.name }
     );

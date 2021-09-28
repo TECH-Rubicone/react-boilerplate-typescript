@@ -1,8 +1,11 @@
+// outsource dependencies
 import React from 'react';
-import { Button, Form, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { InputBase, IconButton, Paper } from '@mui/material';
+
+// local dependencies
+import { FasIcon } from './fas-icon';
 
 const SearchInput = ({ value, onInputChange, onInputClear, onInputApply, placeholder, disabled }) => {
-
   const handleInputChange = event => {
     event.preventDefault();
     const value = event.target.value;
@@ -20,7 +23,7 @@ const SearchInput = ({ value, onInputChange, onInputClear, onInputApply, placeho
     }
   };
 
-  const handleInputClear = event => {
+  const handleInputClear = () => {
     onInputClear();
     onInputApply(value);
   };
@@ -30,25 +33,30 @@ const SearchInput = ({ value, onInputChange, onInputClear, onInputApply, placeho
     onInputApply(value);
   };
 
-  return <Form onSubmit={onSubmit} className="d-flex flex-grow-1 mr-2">
-    <InputGroup>
-      {value && <InputGroupAddon addonType="prepend">
-        <Button color="danger" disabled={false} onClick={handleInputClear}>X</Button>
-      </InputGroupAddon>}
-      <Input
-        type="text"
-        name="search"
-        value={value}
-        disabled={disabled}
-        placeholder={placeholder}
-        onKeyDown={handleKeyDown}
-        onChange={handleInputChange}
-      />
-      {value && <InputGroupAddon addonType="append">
-        <Button type="submit" color="success" disabled={false}>S</Button>
-      </InputGroupAddon>}
-    </InputGroup>
-  </Form>;
+  return <Paper
+    onSubmit={onSubmit}
+    component="form"
+    sx={{ p: '4px 8px', display: 'flex', alignItems: 'center' }}
+  >
+    {value && <IconButton size="small" variant="outlined" disabled={disabled} onClick={handleInputClear}>
+      <FasIcon icon="times" />
+    </IconButton>}
+    <InputBase
+      type="text"
+      name="search"
+      value={value}
+      label="Search"
+      color="primary"
+      sx={{ ml: 1, flex: 1 }}
+      disabled={disabled}
+      placeholder={placeholder}
+      onKeyDown={handleKeyDown}
+      onChange={handleInputChange}
+    />
+    {value && <IconButton size="small" type="submit" variant="outlined" disabled={disabled}>
+      <FasIcon icon="search" />
+    </IconButton>}
+  </Paper>;
 };
 
 export default SearchInput;
