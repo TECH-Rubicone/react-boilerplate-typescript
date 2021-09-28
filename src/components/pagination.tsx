@@ -3,9 +3,6 @@ import _ from 'lodash';
 import React, { useCallback } from 'react';
 import { TablePagination } from '@mui/material';
 
-// styles
-import 'rc-pagination/assets/index.css';
-
 interface PaginationProps {
   page: number
   total: number
