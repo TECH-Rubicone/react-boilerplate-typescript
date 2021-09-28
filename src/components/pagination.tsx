@@ -1,25 +1,41 @@
 // outsource development
+import _ from 'lodash';
 import React, { useCallback } from 'react';
-import ReactPagination from 'rc-pagination';
+import { TablePagination } from '@mui/material';
 
 // styles
 import 'rc-pagination/assets/index.css';
 
 interface PaginationProps {
+  page: number
   total: number
-  current: number
   disabled?: boolean
+  totalPages: number
+  size: number | string
   onPageChange: (page: number) => void
+  onSizeChange: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
 }
 
-const Pagination: React.FC<PaginationProps> = ({ disabled, current, total, onPageChange }) => {
-  const handlePageChange = useCallback((page: number) => onPageChange(page - 1), [onPageChange]);
-  return <ReactPagination
-    total={total}
-    current={current + 1}
-    defaultCurrent={1}
-    disabled={disabled}
-    onChange={handlePageChange}
+const SIZES = [10, 15, 30, 50];
+
+const Pagination: React.FC<PaginationProps> = ({
+  size,
+  total,
+  page,
+  disabled,
+  totalPages,
+  onPageChange,
+  onSizeChange
+}) => {
+  const handlePageChange = useCallback((e, page: number) => onPageChange(page), [onPageChange]);
+  return <TablePagination
+    page={page}
+    count={total}
+    component="div"
+    rowsPerPageOptions={SIZES}
+    onPageChange={handlePageChange}
+    onRowsPerPageChange={onSizeChange}
+    rowsPerPage={_.isNumber(size) ? size : Number(size)}
   />;
 };
 
