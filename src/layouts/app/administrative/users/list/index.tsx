@@ -29,17 +29,15 @@ const List = () => {
     return <span>Preloader</span>;
   }
 
-  return <Grid container>
-    <Grid item>
+  return <Grid container sx={{ p: 1 }} spacing={2}>
+    <Grid item xs={12}>
       <Typography variant="h3">Users</Typography>
     </Grid>
-    <Grid item container xs={12}>
-      <Grid item xs={12}>
-        <Actions />
-      </Grid>
-      <Grid item xs={12}>
-        <ItemList />
-      </Grid>
+    <Grid item xs={12}>
+      <Actions />
+    </Grid>
+    <Grid item xs={12}>
+      <ItemList />
     </Grid>
   </Grid>;
 };
