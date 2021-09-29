@@ -62,7 +62,7 @@ const List = () => {
   );
 
   return <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-    <TableContainer sx={{ maxHeight: 440 }}>
+    <TableContainer sx={{ maxHeight: 600 }}>
       <Table stickyHeader aria-label="sticky table">
         <TableHead>
           <TableRow>
@@ -112,16 +112,13 @@ interface SortByFieldProps {
 const SortByField: React.FC<SortByFieldProps> = memo(({ disabled, children, field }) => {
   const { sortField, sortDirection } = useControllerData(controller);
   const { updateFilters } = useControllerActions(controller);
-  const isSameField = sortField === field ? !sortDirection : false;
+  const isActiveField = sortField === field;
+  const isSameField = isActiveField ? !sortDirection : false;
   const updateSort = useCallback(
     () => updateFilters({ sortField: field, sortDirection: isSameField }),
     [sortField, field, sortDirection, updateFilters]
   );
-  return <TableSortLabel
-    onClick={updateSort}
-    active={field === sortField}
-    direction={sortDirection ? 'asc' : 'desc'}
-  >
+  return <TableSortLabel onClick={updateSort} active={isActiveField} direction={sortDirection ? 'asc' : 'desc'}>
     {children}
   </TableSortLabel>;
 });

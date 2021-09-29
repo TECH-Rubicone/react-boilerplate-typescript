@@ -1,7 +1,7 @@
 // outsource dependencies
 import React, { memo, useEffect } from 'react';
-import { Grid, Typography } from '@mui/material';
 import { useController } from 'redux-saga-controller';
+import { Divider, Grid, Typography } from '@mui/material';
 
 // local dependencies
 import ItemList from './list';
@@ -29,9 +29,10 @@ const List = () => {
     return <span>Preloader</span>;
   }
 
-  return <Grid container sx={{ p: 1 }} spacing={2}>
+  return <Grid container spacing={2}>
     <Grid item xs={12}>
       <Typography variant="h3">Users</Typography>
+      <Divider />
     </Grid>
     <Grid item xs={12}>
       <Actions />
