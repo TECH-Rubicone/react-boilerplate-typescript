@@ -2,37 +2,51 @@
 import _ from 'lodash';
 import React, { memo, useCallback, useMemo } from 'react';
 import { useControllerActions, useControllerData } from 'redux-saga-controller';
-import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, } from '@mui/material';
+import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TableSortLabel, Checkbox, } from '@mui/material';
 
 // local dependencies
-import { controller, Filters, Role, User } from './controller';
+import ListRow from './list-row';
+import { controller, User } from './controller';
 
 // components
 import Pagination from 'components/pagination';
 
 interface Column {
   label: string
-  align?: 'right'
   minWidth?: number
-  id: 'name' | 'id' | 'createdDate' | 'roles'
+  align?: 'right' | 'left'
+  name: 'name' | 'id' | 'createdDate' | 'roles' | 'actions'
 }
 
 const columns: Array<Column> = [
-  { id: 'name', label: 'Name', minWidth: 170, align: 'right' },
-  { id: 'id', label: 'Id', minWidth: 100, align: 'right' },
-  { id: 'createdDate', label: 'Creation Date', minWidth: 170, align: 'right', },
-  { id: 'roles', label: 'Roles', minWidth: 170, align: 'right', },
+  { name: 'name', label: 'Name', minWidth: 170, align: 'right' },
+  { name: 'id', label: 'Id', minWidth: 100, align: 'right' },
+  { name: 'createdDate', label: 'Creation Date', minWidth: 170, align: 'right', },
+  { name: 'roles', label: 'Roles', minWidth: 170, align: 'right', },
+  { name: 'actions', label: 'Actions', minWidth: 60, align: 'left', },
 ];
 
 const List = () => {
-  const { list, disabled, selected, page, totalPages, totalElements, size } = useControllerData(controller);
+  const {
+    list,
+    size,
+    page,
+    disabled,
+    selected,
+    totalPages,
+    totalElements,
+  } = useControllerData(controller);
   const { updateCtrl, updateFilters } = useControllerActions(controller);
 
   const isEveryChecked = useMemo(
     () => list.every((user: User) => _.find(selected, { id: user.id })),
     [list, selected]
   );
-  const handlePageChange = useCallback((page: number) => updateFilters({ page } as Filters), [updateFilters]);
+  const isSomeChecked = useMemo(
+    () => list.some((user: User) => _.find(selected, { id: user.id })),
+    [list, selected]
+  );
+  const handlePageChange = useCallback((page: number) => updateFilters({ page }), [updateFilters]);
 
   const toggleSelections = useCallback(event => {
     let newSelected: Array<User> = [];
@@ -52,21 +66,26 @@ const List = () => {
       <Table stickyHeader aria-label="sticky table">
         <TableHead>
           <TableRow>
-            {columns.map((column: Column) => (
-              <TableCell key={column.id} style={{ minWidth: column.minWidth }} >
-                {column.label}
+            <TableCell padding="checkbox">
+              <Checkbox
+                color="primary"
+                onChange={toggleSelections}
+                checked={Boolean(selected.length && isEveryChecked)}
+                indeterminate={Boolean(isSomeChecked && !isEveryChecked)}
+                inputProps={{
+                  'aria-label': 'select all desserts'
+                }}
+              />
+            </TableCell>
+            {columns.map(({ name, minWidth, label }: Column) => (
+              <TableCell key={name} style={{ minWidth: minWidth }} >
+                <SortByField field={name}>{label}</SortByField>
               </TableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {list.map(({ name, id, createdDate, roles }: User) => <TableRow hover role="checkbox" tabIndex={-1}>
-            <TableCell>{name || 'Undefined Name'}</TableCell>
-            <TableCell>{id}</TableCell>
-            <TableCell>createdDate</TableCell>
-            <TableCell>{(roles ?? []).map((item: Role) => item?.name)}</TableCell>
-          </TableRow>
-          )}
+          {(list ?? []).map((item: User) => <ListRow {...item} />)}
         </TableBody>
       </Table>
     </TableContainer>
@@ -83,3 +102,26 @@ const List = () => {
 };
 
 export default memo(List);
+
+interface SortByFieldProps {
+  field: string;
+  disabled?: boolean;
+  children: React.ReactNode | React.ReactChild;
+}
+
+const SortByField: React.FC<SortByFieldProps> = memo(({ disabled, children, field }) => {
+  const { sortField, sortDirection } = useControllerData(controller);
+  const { updateFilters } = useControllerActions(controller);
+  const isSameField = sortField === field ? !sortDirection : false;
+  const updateSort = useCallback(
+    () => updateFilters({ sortField: field, sortDirection: isSameField }),
+    [sortField, field, sortDirection, updateFilters]
+  );
+  return <TableSortLabel
+    onClick={updateSort}
+    active={field === sortField}
+    direction={sortDirection ? 'asc' : 'desc'}
+  >
+    {children}
+  </TableSortLabel>;
+});

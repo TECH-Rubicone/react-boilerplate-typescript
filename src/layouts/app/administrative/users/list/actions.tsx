@@ -26,20 +26,18 @@ const Actions = () => {
 
   const handleItemsDelete = useCallback(() => deleteItems({ selected }), [deleteItems, selected]);
 
-  return <Grid container sx={{ p: 1 }}>
-    <Grid xs={5} item container>
-      <Grid xs={10} item>
-        <SearchInput
-          value={name}
-          disabled={disabled}
-          placeholder="Search"
-          onInputClear={handleInputClear}
-          onInputApply={handleInputApply}
-          onInputChange={handleInputChange}
-        />
-      </Grid>
+  return <Grid container>
+    <Grid xs={12} md={4} item>
+      <SearchInput
+        value={name}
+        disabled={disabled}
+        placeholder="Search"
+        onInputClear={handleInputClear}
+        onInputApply={handleInputApply}
+        onInputChange={handleInputChange}
+      />
     </Grid>
-    <Grid xs={7} item container alignItems="center" justifyContent="flex-end">
+    <Grid xs={12} md={8} item container alignItems="center" justifyContent="flex-end">
       <PopupState variant="popover" >
         {(popupState) => (
           <React.Fragment>
@@ -53,21 +51,23 @@ const Actions = () => {
               List Actions
             </Button>
             <Menu sx={{ mt: 1 }} {...bindMenu(popupState)}>
-              <MenuItem sx={{ width: 150 }} onClick={popupState.close} disabled={!selected.length || disabled}>
+              <MenuItem
+                sx={{ width: 150 }}
+                disabled={!selected.length || disabled}
+                onClick={() => { handleItemsDelete(); popupState.close(); }}
+              >
                 Remove
               </MenuItem>
             </Menu>
           </React.Fragment>
         )}
       </PopupState>
-      <Grid item>
-        <Link component="button" variant="body1" color="primary">
-          <RouterLink to={ROUTES.ADMINISTRATIVE_USERS_EDIT.LINK({})}>
-            <FasIcon icon="plus" className="mr-2" />
+      <Link component="button" variant="body1" color="primary">
+        <RouterLink to={ROUTES.ADMINISTRATIVE_USERS_EDIT.LINK({})}>
+          <FasIcon icon="plus" className="mr-2" />
             Create User
-          </RouterLink>
-        </Link>
-      </Grid>
+        </RouterLink>
+      </Link>
     </Grid>
   </Grid>;
 };
