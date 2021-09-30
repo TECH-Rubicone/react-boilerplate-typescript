@@ -1,14 +1,21 @@
 // outsource libraries
 import React, { memo } from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
 // local dependencies
-import Test from './test';
+import Welcome from './welcome';
+import Layout from './layout';
+import Administrative from './administrative';
 
-const App = () => {
-  return <div>
-    <h2>App</h2>
-    <Test />
-  </div>;
-};
+// constants
+import * as ROUTES from 'constants/routes';
+
+const App = () => <Layout>
+  <Switch>
+    <Route path={ROUTES.WELCOME.ROUTE} component={Welcome} />
+    <Route path={ROUTES.ADMINISTRATIVE.ROUTE} component={Administrative} />
+    <Redirect to={ROUTES.WELCOME.ROUTE} />
+  </Switch>
+</Layout>;
 
 export default memo(App);
