@@ -3,13 +3,14 @@ import React, { memo, useEffect } from 'react';
 import { useController } from 'redux-saga-controller';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
-// constants
-import * as ROUTES from 'constants/routes';
-
 // local dependencies
 import App from './app';
 import Auth from './auth';
 import { controller } from './controller';
+import Maintenance from './auth/maintenance';
+
+// constants
+import * as ROUTES from 'constants/routes';
 
 // components
 import Preloader from 'components/preloader';
@@ -27,7 +28,7 @@ const Layouts = () => {
   }, [initialize, clearCtrl]);
 
   if (!health) {
-    return <span>Site is under Maintenance</span>;
+    return <Maintenance />;
   }
 
   return <Preloader active={!initialized || !isControllerSubscribed}>
