@@ -11,11 +11,14 @@ import App from './app';
 import Auth from './auth';
 import { controller } from './controller';
 
+// components
+import Preloader from 'components/preloader';
+
 const Layouts = () => {
   const [
     { initialized, health },
     { initialize, clearCtrl },
-    isControllerConnected
+    isControllerSubscribed
   ] = useController(controller);
 
   useEffect(() => {
@@ -26,15 +29,14 @@ const Layouts = () => {
   if (!health) {
     return <span>Site is under Maintenance</span>;
   }
-  if (!initialized || !isControllerConnected) {
-    return <span>Preloader</span>;
-  }
 
-  return <Switch>
-    <Route path={ROUTES.APP.ROUTE} component={App} />
-    <Route path={ROUTES.AUTH.ROUTE} component={Auth} />
-    <Redirect to={ROUTES.SIGN_IN.ROUTE} />
-  </Switch>;
+  return <Preloader active={!initialized || !isControllerSubscribed}>
+    <Switch>
+      <Route path={ROUTES.APP.ROUTE} component={App} />
+      <Route path={ROUTES.AUTH.ROUTE} component={Auth} />
+      <Redirect to={ROUTES.SIGN_IN.ROUTE} />
+    </Switch>
+  </Preloader>;
 };
 
 export default memo(Layouts);

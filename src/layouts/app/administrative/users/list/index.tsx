@@ -11,6 +11,9 @@ import { controller } from './controller';
 // styles
 import './styles.css';
 
+// components
+import Preloader from 'components/preloader';
+
 const List = () => {
   const [
     { initialized },
@@ -25,22 +28,20 @@ const List = () => {
     };
   }, [initialized, clearCtrl]);
 
-  if (!isControllerSubscribed && !initialized) {
-    return <span>Preloader</span>;
-  }
-
-  return <Grid container spacing={2}>
-    <Grid item xs={12}>
-      <Typography variant="h3">Users</Typography>
-      <Divider />
+  return <Preloader active={!initialized || !isControllerSubscribed}>
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <Typography variant="h3">Users</Typography>
+        <Divider />
+      </Grid>
+      <Grid item xs={12}>
+        <Actions />
+      </Grid>
+      <Grid item xs={12}>
+        <ItemList />
+      </Grid>
     </Grid>
-    <Grid item xs={12}>
-      <Actions />
-    </Grid>
-    <Grid item xs={12}>
-      <ItemList />
-    </Grid>
-  </Grid>;
+  </Preloader>;
 };
 
 export default memo(List);
