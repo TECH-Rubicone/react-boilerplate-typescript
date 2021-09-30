@@ -1,5 +1,6 @@
 // outsource dependencies
-import { NavLink } from 'react-router-dom';
+import _ from 'lodash';
+import { NavLink, useLocation } from 'react-router-dom';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useControllerActions, useControllerData } from 'redux-saga-controller';
 import { Collapse, Divider, Drawer as MuiDrawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, ListSubheader, styled, useTheme } from '@mui/material';
@@ -55,6 +56,7 @@ const Drawer = styled(MuiDrawer, {
 const MENU_TYPES = {
   LINK: 'LINK',
   MENU: 'MENU',
+  ACTION: 'ACTION',
   HEADER: 'HEADER',
 };
 
@@ -67,12 +69,14 @@ const MENU = [
     type: MENU_TYPES.MENU,
     name: 'Auth',
     icon: VpnKeyOutlined,
+    isActive: location => ROUTES.SIGN_IN.REGEXP.test(location.pathname),
     list: [
       {
         type: MENU_TYPES.LINK,
         name: 'Sign in',
         icon: AssignmentIndOutlined,
         link: ROUTES.SIGN_IN.LINK(),
+        isActive: location => ROUTES.SIGN_IN.REGEXP.test(location.pathname),
       }
     ]
   },
@@ -80,18 +84,28 @@ const MENU = [
     type: MENU_TYPES.MENU,
     name: 'Administrative',
     icon: SupervisorAccountOutlined,
+    isActive: location => ROUTES.ADMINISTRATIVE.REGEXP.test(location.pathname),
     list: [
       {
         type: MENU_TYPES.LINK,
         name: 'Welcome',
         icon: StarBorderOutlined,
         link: ROUTES.WELCOME.LINK(),
+        isActive: location => ROUTES.WELCOME.REGEXP.test(location.pathname),
       },
       {
         type: MENU_TYPES.LINK,
         name: 'List',
         icon: FormatListBulletedOutlined,
         link: ROUTES.ADMINISTRATIVE_USERS_LIST.LINK(),
+        isActive: location => ROUTES.ADMINISTRATIVE_USERS_LIST.REGEXP.test(location.pathname),
+      },
+      {
+        type: MENU_TYPES.ACTION,
+        name: 'Action',
+        icon: FormatListBulletedOutlined,
+        action: () => console.log('I am an action'),
+        isActive: location => false,
       },
     ],
   },
@@ -117,15 +131,36 @@ const SideMenu = () => {
 
 export default SideMenu;
 
-const MenuLink = ({ name, link, icon: Icon }) => {
+const MenuLink = ({ name, link, icon: Icon, isActive, location, ...props }) => {
+  const selected = () => {
+    if (_.isFunction(isActive)) {
+      return isActive(location, link);
+    }
+  };
+
   return <NavLink to={link}>
-    <ListItemButton>
+    <ListItemButton {...props} selected={selected()}>
       <ListItemIcon>
         <Icon />
       </ListItemIcon>
       <ListItemText primary={name} />
     </ListItemButton>
   </NavLink>;
+};
+
+const MenuAction = ({ name, action, icon: Icon, isActive, location, ...props }) => {
+  const selected = () => {
+    if (_.isFunction(isActive)) {
+      return isActive(location, name);
+    }
+  };
+
+  return <ListItemButton onClick={action} {...props} selected={selected()}>
+    <ListItemIcon>
+      <Icon />
+    </ListItemIcon>
+    <ListItemText primary={name} />
+  </ListItemButton>;
 };
 
 const MenuHeader = ({ name }) => {
@@ -139,9 +174,10 @@ const MenuHeader = ({ name }) => {
   </ListSubheader>;
 };
 
-const Menu = ({ name, icon: Icon, list }) => {
+const Menu = ({ name, icon: Icon, list, isActive }) => {
   const { open } = useControllerData(controller);
   const { updateCtrl } = useControllerActions(controller);
+  const location = useLocation();
 
   const [opened, setOpened] = useState(false);
 
@@ -156,8 +192,14 @@ const Menu = ({ name, icon: Icon, list }) => {
     }
   }, [open]);
 
+  const selected = () => {
+    if (_.isFunction(isActive)) {
+      return isActive(location, name);
+    }
+  };
+
   return <>
-    <ListItemButton onClick={handleMenuToggle}>
+    <ListItemButton onClick={handleMenuToggle} selected={selected()}>
       <ListItemIcon>
         <Icon />
       </ListItemIcon>
@@ -165,8 +207,8 @@ const Menu = ({ name, icon: Icon, list }) => {
       {opened ? <ExpandLess /> : <ExpandMore />}
     </ListItemButton>
     <Collapse in={opened}>
-      <List disablePadding sx={{ pl: 4 }}>
-        {(list ?? []).map((props) => <MenuLink {...props} />)}
+      <List disablePadding>
+        {(list ?? []).map((props) => <ItemByType key={props.name} location={location} {...props} sx={{ pl: 4 }} />)}
       </List>
     </Collapse>
   </>;
@@ -184,6 +226,10 @@ const components = [
   {
     type: MENU_TYPES.MENU,
     component: Menu
+  },
+  {
+    type: MENU_TYPES.ACTION,
+    component: MenuAction
   },
 ];
 

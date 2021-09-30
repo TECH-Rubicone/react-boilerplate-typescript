@@ -1,6 +1,6 @@
 // outsource dependencies
 import React from 'react';
-import { Box, Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import { useController } from 'redux-saga-controller';
 
 // local dependencies
@@ -12,14 +12,14 @@ import DrawerHeader from './drawer-header';
 const Layout = ({ children }) => {
   const control = useController(controller);
 
-  return <Grid container>
+  return <Box sx={{ display: 'flex' }}>
     <Header />
     <SideMenu />
     <Box component="main" sx={{ flexGrow: 1, p: 2 }}>
       <DrawerHeader />
       {children}
     </Box>
-  </Grid>;
+  </Box>;
 };
 
 export default Layout;
