@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import { Formik, Form } from 'formik';
 import { useController } from 'redux-saga-controller';
 import React, { memo, useEffect, useCallback, useMemo } from 'react';
-import { Button, Card, CardBody, CardFooter, CardHeader, Col, Container, Row, Spinner } from 'reactstrap';
+import { Container, Box, Card, Button, CardContent, CardActions, CircularProgress, Typography, CardHeader } from '@mui/material';
 
 // components
 import FInput from 'components/input';
@@ -34,53 +34,55 @@ const SignIn = () => {
     signIn(values);
   }, [signIn, disabled]);
 
-  return <Container fluid className="h-100">
-    <Row className="d-flex justify-content-center align-items-center h-100">
-      <Col md={6} xs={12}>
-        <Card>
-          <CardHeader>
-            <h3 className="pt-1 text-center text-primary">
-              BOILERPLATE
-            </h3>
-          </CardHeader>
-          <CardBody>
-            <Formik
-              onSubmit={onSubmit}
-              initialValues={initialValues}
-              validationSchema={validationSchema}
-            >
-              <Form>
-                <FInput
-                  type="text"
-                  name="username"
-                  placeholder="Email Address"
-                  label={<strong className="required-asterisk"> Email Address </strong>}
-                />
-                <FInput
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  label={<strong className="required-asterisk"> Password </strong>}
-                />
-                <Button
-                  outline
-                  type="submit"
-                  color="primary"
-                  disabled={disabled}
-                  className="mb-3 w-100 d-flex align-items-center justify-content-center"
-                >
-                  LOGIN
-                  { disabled && <Spinner size="sm" className="ml-2" /> }
-                </Button>
-              </Form>
-            </Formik>
-          </CardBody>
-          <CardFooter>
-            Forgot password
-          </CardFooter>
-        </Card>
-      </Col>
-    </Row>
+  const login = 'LOGIN';
+
+  return <Container sx={{ height: '100%' }} maxWidth="sm">
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <Formik
+        onSubmit={onSubmit}
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+      >
+        <Form>
+          <Card>
+            <CardHeader
+              title="BOILERPLATE"
+              sx={{ color: '#29b6f6', textAlign: 'center', backgroundColor: '#eeeeee' }}
+            />
+            <CardContent sx={{ padding: '10px' }}>
+              <FInput
+                type="text"
+                name="username"
+                placeholder="Email Address"
+                label={<strong className="required-asterisk"> Email Address </strong>}
+              />
+              <FInput
+                type="password"
+                name="password"
+                placeholder="Password"
+                label={<strong className="required-asterisk"> Password </strong>}
+              />
+            </CardContent>
+            <CardActions sx={{ px: '10px', pb: '30px' }}>
+              <Button
+                type="submit"
+                color="primary"
+                variant="outlined"
+                disabled={disabled}
+                sx={{ width: '100%' }}
+              >
+                { disabled ? <CircularProgress size={20} sx={{ mr: '20px' }}/> : login }
+              </Button>
+            </CardActions>
+            <CardActions sx={{ py: '15px', px: '10px', backgroundColor: '#eeeeee' }}>
+              <Typography>
+                Forgot password
+              </Typography>
+            </CardActions>
+          </Card>
+        </Form>
+      </Formik>
+    </Box>
   </Container>;
 };
 
