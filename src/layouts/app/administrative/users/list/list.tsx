@@ -1,6 +1,6 @@
 // outsource dependencies
 import _ from 'lodash';
-import React, { memo, useCallback, useMemo } from 'react';
+import React, { memo, useCallback, useMemo, FC } from 'react';
 import { useControllerActions, useControllerData } from 'redux-saga-controller';
 import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TableSortLabel, Checkbox, } from '@mui/material';
 
@@ -87,7 +87,7 @@ const List = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          { (list ?? []).map((item) => <ListItem key={item.id} {...item} />) }
+          { (list ?? []).map(item => <ListItem key={item.id} {...item} />) }
         </TableBody>
       </Table>
     </TableContainer>
@@ -111,7 +111,7 @@ interface SortByFieldProps {
   children: React.ReactNode | React.ReactChild;
 }
 
-const SortByField: React.FC<SortByFieldProps> = memo(({ disabled, children, field }) => {
+const SortByField: FC<SortByFieldProps> = memo(({ disabled, children, field }) => {
   const { sortField, sortDirection } = useControllerData(controller);
   const { updateFilters } = useControllerActions(controller);
   const isActiveField = sortField === field;

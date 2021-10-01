@@ -1,23 +1,26 @@
 // outsource dependencies
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 import { Link } from 'react-router-dom';
-import React, { memo, useCallback, useMemo } from 'react';
+import React, { memo, useCallback, useMemo, FC } from 'react';
 import { Checkbox, TableCell, TableRow } from '@mui/material';
 import { useControllerActions, useControllerData } from 'redux-saga-controller';
-
-// local dependencies
-import { controller, User, Role } from './controller';
 
 // components
 import FasIcon from 'components/fas-icon';
 
+// services
 import _ from 'services/lodash.service';
 
 // constants
 import * as ROUTES from 'constants/routes';
-import config from '../../../../../configs';
 
-const ListItem: React.FC<User> = ({ id, name, roles, createdDate }) => {
+// configs
+import config from 'configs';
+
+// local dependencies
+import { controller, User, Role } from './controller';
+
+const ListItem: FC<User> = ({ id, name, roles, createdDate }) => {
   const { disabled, selected, list } = useControllerData(controller);
   const { updateCtrl, deleteItems } = useControllerActions(controller);
 
@@ -61,7 +64,7 @@ const ListItem: React.FC<User> = ({ id, name, roles, createdDate }) => {
       <Link to={ROUTES.ADMINISTRATIVE_USERS_EDIT.LINK({ id })} className="text-gray-d btn btn-sm pt-0 pb-0">
         <FasIcon icon="pencil-alt" />
       </Link>
-    /
+      /
       <button
         disabled={disabled}
         onClick={handleItemDelete}

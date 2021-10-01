@@ -46,8 +46,8 @@ export interface User {
   id: number
   name: string | null
   coverImage: Img |null
-  createdDate: string | null
   roles: Array<Role> | null
+  createdDate: string | null
 }
 
 export interface Filters {

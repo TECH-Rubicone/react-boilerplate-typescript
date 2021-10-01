@@ -39,8 +39,8 @@ const Actions = () => {
         value={name}
         disabled={disabled}
         placeholder="Search"
-        onInputClear={handleInputClear}
         onInputApply={updateFilters}
+        onInputClear={handleInputClear}
         onInputChange={handleInputChange}
       />
     </Grid>
