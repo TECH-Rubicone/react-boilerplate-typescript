@@ -44,9 +44,9 @@ interface Img {
 
 export interface User {
   id: number
-  name: string
-  coverImage: Img
-  createdDate: string
+  name: string | null
+  coverImage: Img |null
+  createdDate: string | null
   roles: Array<Role> | null
 }
 

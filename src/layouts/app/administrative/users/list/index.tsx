@@ -8,9 +8,6 @@ import ItemList from './list';
 import Actions from './actions';
 import { controller } from './controller';
 
-// styles
-import './styles.css';
-
 const List = () => {
   const [
     { initialized },
@@ -20,11 +17,10 @@ const List = () => {
 
   useEffect(() => {
     initialize();
-    return () => {
-      clearCtrl();
-    };
-  }, [initialized, clearCtrl]);
+    return () => { clearCtrl(); };
+  }, [initialized, clearCtrl, initialize]);
 
+  // TODO
   if (!isControllerSubscribed && !initialized) {
     return <span>Preloader</span>;
   }

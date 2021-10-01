@@ -1,5 +1,4 @@
 // outsource dependencies
-import _ from 'lodash';
 import moment, { Moment } from 'moment';
 import { Link } from 'react-router-dom';
 import React, { memo, useCallback, useMemo } from 'react';
@@ -12,18 +11,24 @@ import { controller, User, Role } from './controller';
 // components
 import FasIcon from 'components/fas-icon';
 
+import _ from 'services/lodash.service';
+
 // constants
 import * as ROUTES from 'constants/routes';
+import config from '../../../../../configs';
 
-const ListRow: React.FC<User> = ({ id, name, roles, createdDate }) => {
+const ListItem: React.FC<User> = ({ id, name, roles, createdDate }) => {
   const { disabled, selected, list } = useControllerData(controller);
   const { updateCtrl, deleteItems } = useControllerActions(controller);
 
-  const preparedDate: Moment | null = useMemo(() => moment(createdDate, 'YYYY-MM-DD').isValid() ? moment(createdDate) : null, [createdDate]);
+  const date = useMemo<string | null>(
+    () => moment(createdDate).isValid() ? moment(createdDate).format(config.CLIENT_TIME_FORMAT) : null,
+    [createdDate]
+  );
 
   const uid = `select${id}`;
 
-  const isChecked = useMemo(() => Boolean(_.find(selected, { id })), [selected]);
+  const isChecked = useMemo(() => Boolean(_.find(selected, { id })), [id, selected]);
 
   const toggleSelection = useCallback(event => {
     // NOTE a temporary variable to store selected
@@ -35,11 +40,11 @@ const ListRow: React.FC<User> = ({ id, name, roles, createdDate }) => {
       newSelected = selected.filter((user: User) => user.id !== id);
     }
     updateCtrl({ selected: newSelected });
-  }, [list, selected, updateCtrl]);
+  }, [id, list, selected, updateCtrl]);
 
-  const handleItemDelete = useCallback(() => deleteItems({ selected: [{ id }] }), [deleteItems],);
+  const handleItemDelete = useCallback(() => deleteItems({ selected: [{ id }] }), [deleteItems, id],);
 
-  return <TableRow hover role="checkbox" tabIndex={-1}>
+  return <TableRow hover role="checkbox">
     <TableCell padding="checkbox">
       <Checkbox
         color="primary"
@@ -48,10 +53,10 @@ const ListRow: React.FC<User> = ({ id, name, roles, createdDate }) => {
         checked={Boolean(selected.length && isChecked)}
       />
     </TableCell>
-    <TableCell>{name || 'Undefined Name'}</TableCell>
-    <TableCell>{id}</TableCell>
-    <TableCell>{preparedDate!.format('L')}</TableCell>
-    <TableCell>{(roles ?? []).map((item: Role) => item?.name)}</TableCell>
+    <TableCell>{ name || 'Undefined Name' }</TableCell>
+    <TableCell>{ id }</TableCell>
+    <TableCell>{ date }</TableCell>
+    <TableCell>{ (roles ?? []).map((item: Role) => item?.name) }</TableCell>
     <TableCell>
       <Link to={ROUTES.ADMINISTRATIVE_USERS_EDIT.LINK({ id })} className="text-gray-d btn btn-sm pt-0 pb-0">
         <FasIcon icon="pencil-alt" />
@@ -68,4 +73,4 @@ const ListRow: React.FC<User> = ({ id, name, roles, createdDate }) => {
   </TableRow>;
 };
 
-export default memo(ListRow);
+export default memo(ListItem);

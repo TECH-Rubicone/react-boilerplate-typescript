@@ -5,7 +5,7 @@ import { useControllerActions, useControllerData } from 'redux-saga-controller';
 import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TableSortLabel, Checkbox, } from '@mui/material';
 
 // local dependencies
-import ListRow from './list-row';
+import ListItem from './list-item';
 import { controller, User } from './controller';
 
 // components
@@ -39,11 +39,12 @@ const List = () => {
   const { updateCtrl, updateFilters } = useControllerActions(controller);
 
   const isEveryChecked = useMemo(
-    () => list.every((user: User) => _.find(selected, { id: user.id })),
+    () => list.every(item => _.find(selected, { id: item.id })),
     [list, selected]
   );
+
   const isSomeChecked = useMemo(
-    () => list.some((user: User) => _.find(selected, { id: user.id })),
+    () => list.some(item => _.find(selected, { id: item.id })),
     [list, selected]
   );
   const handlePageChange = useCallback((page: number) => updateFilters({ page }), [updateFilters]);
@@ -77,15 +78,16 @@ const List = () => {
                 }}
               />
             </TableCell>
-            {columns.map(({ name, minWidth, label }: Column) => (
-              <TableCell key={name} style={{ minWidth: minWidth }} >
-                <SortByField field={name}>{label}</SortByField>
-              </TableCell>
-            ))}
+            { columns.map(({ name, minWidth, label }) => <TableCell
+              key={name}
+              style={{ minWidth: minWidth }}
+            >
+              <SortByField field={name}>{ label }</SortByField>
+            </TableCell>) }
           </TableRow>
         </TableHead>
         <TableBody>
-          {(list ?? []).map((item: User) => <ListRow {...item} />)}
+          { (list ?? []).map((item) => <ListItem key={item.id} {...item} />) }
         </TableBody>
       </Table>
     </TableContainer>
@@ -116,9 +118,9 @@ const SortByField: React.FC<SortByFieldProps> = memo(({ disabled, children, fiel
   const isSameField = isActiveField ? !sortDirection : false;
   const updateSort = useCallback(
     () => updateFilters({ sortField: field, sortDirection: isSameField }),
-    [sortField, field, sortDirection, updateFilters]
+    [updateFilters, field, isSameField]
   );
   return <TableSortLabel onClick={updateSort} active={isActiveField} direction={sortDirection ? 'asc' : 'desc'}>
-    {children}
+    { children }
   </TableSortLabel>;
 });
