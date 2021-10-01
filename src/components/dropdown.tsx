@@ -1,11 +1,11 @@
 // outsource dependencies
-import React, { memo, useCallback, useState, useMemo, MouseEvent } from 'react';
 import { Button, MenuItem, ListItemIcon, ListItemText, Menu } from '@mui/material';
+import React, { memo, useCallback, useState, useMemo, FC, MouseEvent } from 'react';
 import { SvgIconComponent, KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material';
 
 export interface DropdownOption {
-  key: string | number,
   name: string
+  key: string | number
   Icon: SvgIconComponent
   handleClick: () => void
 }
@@ -16,7 +16,7 @@ interface DropdownProps {
   options: Array<DropdownOption>
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ title, disabled, options }) => {
+const Dropdown: FC<DropdownProps> = ({ title, disabled, options }) => {
   const [ref, setRef] = useState<null | HTMLElement>(null);
   const isOpen = Boolean(ref);
   const handleClick = useCallback((event: MouseEvent<HTMLElement>) => setRef(event.currentTarget), []);
