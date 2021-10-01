@@ -53,7 +53,7 @@ const WelcomeToast: FC<WelcomeToastProps> = ({ user }) => {
       </Col>
       <Col xs="7">
         <h5>Welcome</h5>
-        <p> {_.get(user, 'name')}</p>
+        <p> { user?.name }</p>
       </Col>
     </Row>
   </Container>;

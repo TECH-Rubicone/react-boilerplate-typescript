@@ -2,7 +2,7 @@
 import { useState, useCallback, useEffect } from 'react';
 
 export const MIN_HEIGHT = 500;
-export const HEADER_HEIGHT = 90;
+export const HEADER_HEIGHT = 64;
 
 const useFreeHeight = () => {
   const [height, setHeight] = useState(Math.max(window.innerHeight - HEADER_HEIGHT, MIN_HEIGHT));
