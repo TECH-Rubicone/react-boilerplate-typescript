@@ -1,7 +1,18 @@
 // outsource dependencies
 
-const config = {
-  ...process.env,
+interface Config {
+  DEBUG: boolean,
+  VERSION?: string,
+  BASE_URL?: string,
+  API_PATH?: string,
+  CLIENT_TIME_FORMAT?: string
+}
+
+const config: Config = {
+  VERSION: process.env.REACT_APP_VERSION,
+  BASE_URL: process.env.REACT_APP_BASE_URL,
+  API_PATH: process.env.REACT_APP_API_PATH,
+  CLIENT_TIME_FORMAT: process.env.REACT_APP_CLIENT_TIME_FORMAT,
   DEBUG: process.env.REACT_APP_DEBUG === String(true),
 };
 
