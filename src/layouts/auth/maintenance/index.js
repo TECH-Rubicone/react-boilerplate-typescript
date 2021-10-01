@@ -1,6 +1,5 @@
 // outsource dependencies
 import React from 'react';
-import ChromeDinoGame from 'react-chrome-dino';
 import { Alert, AlertTitle, Container, Grid } from '@mui/material';
 
 const Maintenance = () => <Container
@@ -9,9 +8,6 @@ const Maintenance = () => <Container
   sx={{ overflow: 'hidden', height: '100%', mt: -8 }}
 >
   <Grid container spacing={2} sx={{ height: '100%' }} alignContent="center">
-    <Grid item xs={12}>
-      <ChromeDinoGame />
-    </Grid>
     <Grid item xs={12}>
       <Alert severity="warning">
         <AlertTitle>Warning</AlertTitle>
