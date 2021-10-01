@@ -54,7 +54,7 @@ export default class Route {
 
   ROUTE = '';
 
-  REGEXP = new RegExp(String(this.ROUTE).replace(Route.regParam, '.*'), 'i');
+  REGEXP: RegExp;
 
   isActive: any = () => this.REGEXP.test(Route.getPathname());
 
@@ -112,6 +112,8 @@ export default class Route {
     this.ROUTE = String(url).replace(/\?.*/, '');
     if (_.isRegExp(options.REGEXP)) {
       this.REGEXP = options.REGEXP;
+    } else {
+      this.REGEXP = new RegExp(String(this.ROUTE).replace(Route.regParam, '.*'), 'i');
     }
     if (_.isFunction(options.isActive)) {
       this.isActive = options.isActive;
@@ -140,15 +142,15 @@ export default class Route {
     params = Object.assign({}, params);
     query = Object.assign({}, query);
     // const formatPath = this.formatPath;
-    console.log('%c LINK ', 'color: #156F93; font-weight: bolder; font-size: 12px;'
-      , '\n ROUTE:', this
-      , '\n params:', params
-      , '\n query:', query
-      , '\n ps:', this.params
-      , '\n qs:', this.query
-      , '\n formatPath(params):', this.formatPath(params)
-      , '\n formatQuery(query):', this.formatQuery(query)
-    );
+    // console.log('%c LINK ', 'color: #156F93; font-weight: bolder; font-size: 12px;'
+    //   , '\n ROUTE:', this
+    //   , '\n params:', params
+    //   , '\n query:', query
+    //   , '\n ps:', this.params
+    //   , '\n qs:', this.query
+    //   , '\n formatPath(params):', this.formatPath(params)
+    //   , '\n formatQuery(query):', this.formatQuery(query)
+    // );
     // ${formatPath(params)}
     return `${this.formatPath(params)}${this.formatQuery(query)}`;
   };

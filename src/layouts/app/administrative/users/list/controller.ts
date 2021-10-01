@@ -44,10 +44,10 @@ interface Img {
 
 export interface User {
   id: number
-  name: string
-  coverImage: Img
-  createdDate: string
+  name: string | null
+  coverImage: Img |null
   roles: Array<Role> | null
+  createdDate: string | null
 }
 
 export interface Filters {

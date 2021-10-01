@@ -11,7 +11,7 @@ import config from 'configs';
 import storage from './storage.service';
 
 // absolute path to API
-export const API_PATH = process.env.REACT_APP_SERVICE_URL as string + process.env.REACT_APP_API_PATH as string;
+export const API_PATH = process.env.SERVICE_URL as string + process.env.API_PATH as string;
 
 // private names
 const AUTH_STORE = 'sAuth';
