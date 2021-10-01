@@ -9,7 +9,7 @@ const initial = {
 };
 
 export const controller = create({
-  prefix: 'layout',
+  prefix: 'app',
   initial,
   actions: ['initialize'],
   subscriber: function * () {
