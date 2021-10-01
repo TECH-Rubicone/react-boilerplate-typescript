@@ -69,17 +69,14 @@ function * initializeSaga () {
     if (status !== 'UP') {
       throw new Error('API down for maintenance');
     }
-    yield delay(1000);
     yield put(controller.action.updateCtrl({ health: true }));
   } catch ({ message }) {
     yield put(controller.action.updateCtrl({ health: false }));
     // NOTE try again another time
-    yield delay(10000);
     yield put(controller.action.initialize());
     return;
   }
   // NOTE try to restore user auth
-  yield delay(1000);
   try {
     const hasSession: boolean = yield call(instanceAPI.restoreSessionFromStore);
     if (hasSession) {

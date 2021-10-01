@@ -38,9 +38,9 @@ const SearchInput = ({ value, onInputChange, onInputClear, onInputApply, placeho
     component="form"
     sx={{ p: '4px 8px', display: 'flex', alignItems: 'center' }}
   >
-    {value && <IconButton size="small" variant="outlined" disabled={disabled} onClick={handleInputClear}>
+    { value && <IconButton size="small" variant="outlined" disabled={disabled} onClick={handleInputClear}>
       <FasIcon icon="times" />
-    </IconButton>}
+    </IconButton> }
     <InputBase
       type="text"
       name="search"
@@ -53,9 +53,9 @@ const SearchInput = ({ value, onInputChange, onInputClear, onInputApply, placeho
       onKeyDown={handleKeyDown}
       onChange={handleInputChange}
     />
-    {value && <IconButton size="small" type="submit" variant="outlined" disabled={disabled}>
+    { value && <IconButton size="small" type="submit" variant="outlined" disabled={disabled}>
       <FasIcon icon="search" />
-    </IconButton>}
+    </IconButton> }
   </Paper>;
 };
 

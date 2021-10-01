@@ -32,7 +32,7 @@ const SignIn = () => {
 
   const onSubmit = useCallback(values => {
     signIn(values);
-  }, [signIn, disabled]);
+  }, [signIn]);
 
   return <Container fluid className="h-100">
     <Row className="d-flex justify-content-center align-items-center h-100">
