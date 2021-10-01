@@ -73,6 +73,7 @@ function * initializeSaga () {
   } catch ({ message }) {
     yield put(controller.action.updateCtrl({ health: false }));
     // NOTE try again another time
+    yield delay(10 * 1000);
     yield put(controller.action.initialize());
     return;
   }

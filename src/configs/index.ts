@@ -2,19 +2,19 @@
 
 interface Config {
   DEBUG: boolean,
-  VERSION?: string,
-  BASE_URL?: string,
-  API_PATH?: string,
-  SERVICE_URL?: string,
-  CLIENT_TIME_FORMAT?: string
+  VERSION: string,
+  BASE_URL: string,
+  API_PATH: string,
+  SERVICE_URL: string,
+  CLIENT_TIME_FORMAT: string
 }
 
 const config: Config = {
-  VERSION: process.env.REACT_APP_VERSION,
-  BASE_URL: process.env.REACT_APP_BASE_URL,
-  API_PATH: process.env.REACT_APP_API_PATH,
-  SERVICE_URL: process.env.REACT_APP_SERVICE_URL,
-  CLIENT_TIME_FORMAT: process.env.REACT_APP_CLIENT_TIME_FORMAT,
+  VERSION: process.env.REACT_APP_VERSION!,
+  BASE_URL: process.env.REACT_APP_BASE_URL!,
+  API_PATH: process.env.REACT_APP_API_PATH!,
+  SERVICE_URL: process.env.REACT_APP_SERVICE_URL!,
+  CLIENT_TIME_FORMAT: process.env.REACT_APP_CLIENT_TIME_FORMAT!,
   // complex properties
   DEBUG: process.env.REACT_APP_DEBUG === String(true),
 };
