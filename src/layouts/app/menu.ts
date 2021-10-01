@@ -1,6 +1,11 @@
-import * as ROUTES from 'constants/routes';
-import { MENU_TYPE } from './layout/side-menu';
+// outsource dependencies
 import { AssignmentIndOutlined, FormatListBulletedOutlined, StarBorderOutlined, SupervisorAccountOutlined, VpnKeyOutlined } from '@mui/icons-material';
+
+// constants
+import * as ROUTES from 'constants/routes';
+
+// local dependencies
+import { MENU_TYPE } from './layout/side-menu';
 
 const MENU = [
   {

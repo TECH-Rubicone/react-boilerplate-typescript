@@ -1,5 +1,4 @@
 // outsource dependencies
-import _ from 'lodash';
 import { Link, useLocation } from 'react-router-dom';
 import React, { useCallback, useMemo, useState } from 'react';
 import { ChevronLeft, ExpandLess, ExpandMore } from '@mui/icons-material';
@@ -9,8 +8,8 @@ import { Collapse, Divider, Drawer as MuiDrawer, IconButton, List, ListItemButto
 // local dependencies
 import { controller } from '../controller';
 
-// constants
-import { HEADER_HEIGHT } from '../../../hooks/use-free-height';
+// hooks
+import { HEADER_HEIGHT } from 'hooks/use-free-height';
 
 const DRAWER_WIDTH = 240;
 
@@ -23,7 +22,7 @@ const closedMixin = theme => ({
   width: `calc(${theme.spacing(7)} + 1px)`,
 });
 
-const openedMixin = (theme) => ({
+const openedMixin = theme => ({
   width: DRAWER_WIDTH,
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
@@ -33,7 +32,7 @@ const openedMixin = (theme) => ({
 });
 
 const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== 'open'
+  shouldForwardProp: prop => prop !== 'open'
 })(({ theme, open }) => ({
   width: DRAWER_WIDTH,
   flexShrink: 0,
