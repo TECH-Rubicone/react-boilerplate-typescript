@@ -1,28 +1,29 @@
 // outsource dependencies
 import { useField } from 'formik';
-import { Input } from 'reactstrap';
-import React, { memo } from 'react';
+import { Input, CSSModule } from 'reactstrap';
 import { InputType } from 'reactstrap/es/Input';
+import React, { memo, ReactChild, ReactNode, FC, InputHTMLAttributes } from 'react';
 
 // local dependencies
 import FieldWrap from './field-wrap';
 
-interface FInputProps {
+interface FInputProps extends InputHTMLAttributes<HTMLInputElement> {
+  id?: string,
   name: string,
   success?: string,
   type?: InputType,
   skipTouch?: boolean,
   explanation?: string,
   description?: string,
-  placeholder?: string,
+  cssModule?: CSSModule,
   classNameLabel?: string,
   classNameFormGroup?: string,
-  label?: React.ReactChild | React.ReactNode,
-  addonAppend?: React.ReactChild | React.ReactNode,
-  addonPrepend?: React.ReactChild | React.ReactNode,
+  label?: ReactChild | ReactNode,
+  addonAppend?: ReactChild | ReactNode,
+  addonPrepend?: ReactChild | ReactNode,
 }
 
-const FInput: React.FC<FInputProps> = props => {
+const FInput: FC<FInputProps> = props => {
   const {
     label, skipTouch, success, description, explanation, classNameLabel,
     classNameFormGroup, name, type, addonPrepend, addonAppend, ...attr
