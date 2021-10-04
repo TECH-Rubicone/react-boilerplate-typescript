@@ -2,17 +2,20 @@
 import { useField } from 'formik';
 import { Input, CSSModule } from 'reactstrap';
 import { InputType } from 'reactstrap/es/Input';
-import React, { memo, ReactChild, ReactNode, FC, InputHTMLAttributes } from 'react';
+import React, { memo, ReactChild, ReactNode, FC, ChangeEventHandler } from 'react';
 
 // local dependencies
 import FieldWrap from './field-wrap';
 
-interface FInputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface FInputProps {
   id?: string,
   name: string,
+  value?: string,
+  accept?: string,
   success?: string,
   type?: InputType,
   skipTouch?: boolean,
+  placeholder?: string,
   explanation?: string,
   description?: string,
   cssModule?: CSSModule,
@@ -21,6 +24,7 @@ interface FInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: ReactChild | ReactNode,
   addonAppend?: ReactChild | ReactNode,
   addonPrepend?: ReactChild | ReactNode,
+  onChange?: ChangeEventHandler<HTMLInputElement>,
 }
 
 const FInput: FC<FInputProps> = props => {
@@ -28,7 +32,8 @@ const FInput: FC<FInputProps> = props => {
     label, skipTouch, success, description, explanation, classNameLabel,
     classNameFormGroup, name, type, addonPrepend, addonAppend, ...attr
   } = props;
-  const [field, meta] = useField({ name, type, });
+  const [field, meta] = useField({ name, type });
+  console.log('Field:', field);
   const invalid = (skipTouch || meta.touched) && !!meta.error;
   const valid = (skipTouch || meta.touched) && !meta.error;
 

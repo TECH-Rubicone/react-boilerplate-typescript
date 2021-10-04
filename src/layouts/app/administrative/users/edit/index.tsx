@@ -1,23 +1,23 @@
 // outsource dependencies
+import { Formik, Form } from 'formik';
 import { useParams } from 'react-router-dom';
-import { AddAPhoto } from '@mui/icons-material';
 import { useController } from 'redux-saga-controller';
-import { Formik, Form, useField, FormikProps } from 'formik';
+import { AddAPhoto, PersonOutline } from '@mui/icons-material';
+import { Fab, Button, Typography, Grid, Paper } from '@mui/material';
 import React, { memo, useCallback, useEffect, useState } from 'react';
-import { Container, Box, Fab, Button, Typography, Grid, Card, CardActionArea, Avatar } from '@mui/material';
 
 // services
-import _ from 'services/lodash.service';
-// local dependencies
 import { NEW_ID } from 'services/route';
-import { controller, UserInfo } from './controller';
+
+// local dependencies
 import FInput from 'components/input';
+import { controller } from './controller';
 
 const UserEdit = () => {
   const { id }: {id: string} = useParams();
   const [
-    { initialized, errorMessage, disabled, initialValues },
-    { initialize, updateCtrl, clearCtrl, updateData },
+    { initialized, disabled, initialValues },
+    { initialize, clearCtrl, updateData },
     isControllerSubscribed
   ] = useController(controller);
 
@@ -37,47 +37,65 @@ const UserEdit = () => {
       setImgUrl(URL.createObjectURL(event.target.files[0]));
     }
   }, []);
+  console.log('Img:', imgUrl);
   if (!isControllerSubscribed && !initialized) {
     return <h1>Preloader</h1>;
   }
-  return <Container>
-    <Box sx={{ py: 3 }}>
-      <Grid>
-        <Typography variant="h3">{ id === NEW_ID ? 'Create' : 'Edit' } User</Typography>
-      </Grid>
-      <Grid item>
-        <Formik
-          onSubmit={onSubmit}
-          initialValues={initialValues}
-        >
-          <Form>
+  return <Formik
+    onSubmit={onSubmit}
+    initialValues={initialValues}
+  >
+    <Form>
+      <Grid container spacing={2} className="py-3">
+        <Grid item xs={12}>
+          <Typography variant="h3">{ id === NEW_ID ? 'Create' : 'Edit' } User</Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <Paper className="p-3" elevation={3}>
             <FInput
               type="text"
-              name="username"
-              placeholder="Email Address"
-              label={<strong className="required-asterisk"> Email Address </strong>}
+              name="firstName"
+              placeholder="First Name"
+              label={<strong className="required-asterisk"> First Name </strong>}
             />
             <FInput
+              type="text"
+              name="middleName"
+              placeholder="Middle Name"
+              label={<strong className="required-asterisk"> Middle Name </strong>}
+            />
+            <FInput
+              type="text"
+              name="lastName"
+              placeholder="Last Name"
+              label={<strong className="required-asterisk"> Last Name </strong>}
+            />
+          </Paper>
+        </Grid>
+        <Grid item xs={6}>
+          <Paper className="p-3" elevation={3}>
+            <FInput
               type="file"
+              value={imgUrl}
               accept="image/*"
               name="coverImage"
               id="contained-button-file"
               onChange={handleImageChange}
-              cssModule={{ 'form-control-file': 'd-none' }}
+              cssModule={{ 'form-control-file': 'invisible' }}
               label={<Fab component="span" color="primary">
                 <AddAPhoto />
               </Fab>}
             />
-            <Card>
-              <img src={imgUrl}/>
-            </Card>
-            <Button type="submit" variant="contained" color="primary">
-                Submit
-            </Button>
-          </Form>
-        </Formik>
+            { imgUrl
+              ? <img src={imgUrl} width={100}/>
+              : <PersonOutline/> }
+          </Paper>
+        </Grid>
       </Grid>
-    </Box>
-  </Container>;
+      <Button type="submit" variant="contained" color="primary" disabled={disabled}>
+        Submit
+      </Button>
+    </Form>
+  </Formik>;
 };
 export default memo(UserEdit);

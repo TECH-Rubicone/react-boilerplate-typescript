@@ -1,6 +1,6 @@
 // outsource dependencies
 import { Action } from 'redux';
-import { takeEvery, put, select, call } from 'redux-saga/effects';
+import { takeEvery, put, call } from 'redux-saga/effects';
 import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 
 // local dependencies
@@ -59,7 +59,7 @@ const initial = {
   errorMessage: null,
   initialized: false,
 
-  id: 160662, //NEW_ID,
+  id: NEW_ID,
   initialValues: {
     roles: [],
     name: '',
@@ -86,11 +86,9 @@ export const controller: Controller<Actions, Initial> = create({
 });
 export default controller;
 
-// { payload: { id }
-function * initializeSaga () {
-  // yield put(controller.action.updateCtrl({ id }));
-  const { id } = yield select(controller.select);
-  if (id) {
+function * initializeSaga ({ payload: { id } }: Act<InitializePayload>) {
+  yield put(controller.action.updateCtrl({ id }));
+  if (id !== NEW_ID) {
     const initialValues:UserInfo = yield call(instanceAPI, `admin-service/users/${id}`, { method: 'GET' });
     yield put(controller.action.updateCtrl({ initialValues }));
   }
