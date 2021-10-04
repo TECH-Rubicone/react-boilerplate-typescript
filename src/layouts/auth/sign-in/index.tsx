@@ -2,12 +2,12 @@
 import * as yup from 'yup';
 import { Formik, Form } from 'formik';
 import { useController } from 'redux-saga-controller';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import React, { memo, useEffect, useCallback, useMemo } from 'react';
-import { Container, Box, Card, Button, CardContent, CardActions, CircularProgress, Typography, CardHeader } from '@mui/material';
+import { HelpOutline as HelpOutlineIcon, LockOutlined as LockOutlinedIcon } from '@mui/icons-material';
+import { Container, Box, Avatar, Button, Checkbox, CircularProgress, FormControlLabel, Typography, Link, Grid } from '@mui/material';
 
 // components
-import FormInput from 'components/formInput';
+import FInput from 'components/input';
 
 // local dependencies
 import { controller } from './controller';
@@ -19,7 +19,7 @@ import { controller } from './controller';
 const SignIn = () => {
   const [
     { initialized, disabled, errorMessage, initialValues },
-    { signIn, initialize }
+    { signIn, initialize, updateCtrl }
   ] = useController(controller);
   useEffect(() => { initialize(); }, [initialize]);
   const validationSchema = useMemo(() => yup.object().shape({
@@ -30,59 +30,92 @@ const SignIn = () => {
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
       .min(8, 'VALIDATION_ERROR.MIN_LENGTH_CHARACTERS')
   }), []);
-
+  const [checked, setChecked] = React.useState(false);
   const onSubmit = useCallback(values => {
     signIn(values);
+    updateCtrl({ checked });
   }, [signIn, disabled]);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
 
   return <Container sx={{ height: '100%' }} maxWidth="sm">
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+    <Box sx={{
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center'
+    }}>
       <Formik
         onSubmit={onSubmit}
         initialValues={initialValues}
         validationSchema={validationSchema}
       >
         <Form>
-          <Card>
-            <CardHeader
-              title="BOILERPLATE"
-            />
-            <CardContent>
-              <FormInput
-                id="username"
+          <Grid
+            container
+            spacing={1}
+            direction="column"
+            justifyContent="center"
+          >
+            <Grid item >
+              <Avatar sx={{ mx: 'auto', mb: 2, bgcolor: 'info.main', textAlign: 'center' }}>
+                <LockOutlinedIcon/>
+              </Avatar>
+              <Typography variant="h5" gutterBottom component="div" textAlign="center">
+                BOILERPLATE
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <FInput
                 type="text"
+                id="username"
                 name="username"
                 label="Email Address"
-                classNameField="pb-3"
                 placeholder="Email Address"
               />
-              <FormInput
+            </Grid>
+            <Grid item xs={12}>
+              <FInput
                 id="password"
                 type="password"
                 name="password"
                 label="Password"
-                classNameField="pb-3"
                 placeholder="Password"
               />
-            </CardContent>
-            <CardActions className="mx-2">
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                name="checkbox"
+                label="Remember me"
+                control={
+                  <Checkbox
+                    checked={checked}
+                    onChange={handleChange}
+                  />
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
               <Button
                 type="submit"
                 color="primary"
-                variant="outlined"
+                variant="contained"
                 disabled={disabled}
                 sx={{ width: '100%' }}
               >
                 { disabled ? <CircularProgress size={20} sx={{ mr: '20px' }}/> : 'Login' }
               </Button>
-            </CardActions>
-            <CardActions className="mx-2">
-              <HelpOutlineIcon color="info"/>
-              <Typography variant="overline" className="pl-1" color="info.main">
-                Forgot password
-              </Typography>
-            </CardActions>
-          </Card>
+            </Grid>
+            <Grid item xs={6} textAlign="left">
+              <Link href="#" variant="body2">
+                <HelpOutlineIcon color="info"/>
+                <Typography variant="overline" pl={1} color="info.main">
+                  Forgot password
+                </Typography>
+              </Link>
+            </Grid>
+          </Grid>
         </Form>
       </Formik>
     </Box>

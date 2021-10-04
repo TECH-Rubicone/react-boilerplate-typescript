@@ -1,60 +1,40 @@
 // outsource dependencies
 import { useField } from 'formik';
-import { Input } from 'reactstrap';
-import React, { memo } from 'react';
-import { InputType } from 'reactstrap/es/Input';
-
-// local dependencies
-import FieldWrap from './field-wrap';
+import React, { memo, FC } from 'react';
+import { TextField } from '@mui/material';
 
 interface FInputProps {
+  id: string,
   name: string,
-  success?: string,
-  type?: InputType,
+  type: string,
+  label: string,
+  placeholder: string,
   skipTouch?: boolean,
-  explanation?: string,
-  description?: string,
-  placeholder?: string,
-  classNameLabel?: string,
-  classNameFormGroup?: string,
-  label?: React.ReactChild | React.ReactNode,
-  addonAppend?: React.ReactChild | React.ReactNode,
-  addonPrepend?: React.ReactChild | React.ReactNode,
+  classNameField?: string,
 }
 
-const FInput: React.FC<FInputProps> = props => {
-  const {
-    label, skipTouch, success, description, explanation, classNameLabel,
-    classNameFormGroup, name, type, addonPrepend, addonAppend, ...attr
-  } = props;
+const FInput: FC<FInputProps> = props => {
+  const { name, type, label, skipTouch, classNameField, placeholder } = props;
   const [field, meta] = useField({ name, type, });
-  const invalid = (skipTouch || meta.touched) && !!meta.error;
   const valid = (skipTouch || meta.touched) && !meta.error;
-
-  return <FieldWrap
+  const invalid = (skipTouch || meta.touched) && !!meta.error;
+  return <TextField
+    fullWidth
+    type={type}
     label={label}
-    valid={valid}
     id={field.name}
-    invalid={invalid}
-    success={success}
-    description={description}
-    explanation={explanation}
-    className={classNameFormGroup}
-    classNameLabel={classNameLabel}
-    error={skipTouch || meta.touched ? meta.error : null}
-  >
-    { addonPrepend }
-    <Input
-      {...field}
-      {...attr}
-      type={type}
-      valid={valid}
-      id={field.name}
-      invalid={invalid}
-      value={field.value ?? ''}
-    />
-    { addonAppend }
-  </FieldWrap>;
+    error={invalid}
+    margin="normal"
+    name={field.name}
+    value={field.value}
+    onBlur={field.onBlur}
+    onChange={field.onChange}
+    placeholder={placeholder}
+    className={classNameField}
+    autoComplete={field.value}
+    helperText={meta.touched && meta.error}
+    color={valid || !!field.value ? 'success' : invalid || !field.value ? 'error' : 'primary'}
+  />;
 };
 
 export default memo(FInput);

@@ -29,6 +29,7 @@ interface TokenDto {
 }
 
 interface Initial {
+  checked: boolean,
   disabled: boolean,
   initialized: boolean,
   initialValues: SignInPayload,
@@ -43,6 +44,7 @@ export const controller: Controller<Actions, Initial> = create({
   prefix: 'sign-in',
   actions: ['signIn', 'initialize'],
   initial: {
+    checked: false,
     disabled: false,
     errorMessage: null,
     initialized: false,
@@ -57,7 +59,6 @@ export const controller: Controller<Actions, Initial> = create({
     yield takeEvery(controller.action.initialize.TYPE, initializeSaga);
   }
 });
-
 function * initializeSaga () {
   const { user } : RootInitial = yield select(rootController.select);
   if (user) {
