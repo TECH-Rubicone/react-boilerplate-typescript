@@ -2,11 +2,12 @@
 import * as yup from 'yup';
 import { Formik, Form } from 'formik';
 import { useController } from 'redux-saga-controller';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import React, { memo, useEffect, useCallback, useMemo } from 'react';
 import { Container, Box, Card, Button, CardContent, CardActions, CircularProgress, Typography, CardHeader } from '@mui/material';
 
 // components
-import FInput from 'components/input';
+import FormInput from 'components/formInput';
 
 // local dependencies
 import { controller } from './controller';
@@ -47,23 +48,26 @@ const SignIn = () => {
           <Card>
             <CardHeader
               title="BOILERPLATE"
-              sx={{ color: '#29b6f6', textAlign: 'center', backgroundColor: '#eeeeee' }}
             />
-            <CardContent sx={{ padding: '10px' }}>
-              <FInput
+            <CardContent>
+              <FormInput
+                id="username"
                 type="text"
                 name="username"
+                label="Email Address"
+                classNameField="pb-3"
                 placeholder="Email Address"
-                label={<strong className="required-asterisk"> Email Address </strong>}
               />
-              <FInput
+              <FormInput
+                id="password"
                 type="password"
                 name="password"
+                label="Password"
+                classNameField="pb-3"
                 placeholder="Password"
-                label={<strong className="required-asterisk"> Password </strong>}
               />
             </CardContent>
-            <CardActions sx={{ px: '10px', pb: '30px' }}>
+            <CardActions className="mx-2">
               <Button
                 type="submit"
                 color="primary"
@@ -74,8 +78,9 @@ const SignIn = () => {
                 { disabled ? <CircularProgress size={20} sx={{ mr: '20px' }}/> : login }
               </Button>
             </CardActions>
-            <CardActions sx={{ py: '15px', px: '10px', backgroundColor: '#eeeeee' }}>
-              <Typography>
+            <CardActions className="mx-2">
+              <HelpOutlineIcon color="info"/>
+              <Typography variant="overline" className="pl-1" color="info.main">
                 Forgot password
               </Typography>
             </CardActions>
