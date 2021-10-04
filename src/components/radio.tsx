@@ -1,13 +1,9 @@
 // outsource dependencies
 import { useField } from 'formik';
-import React, { FC, memo, useCallback, useMemo } from 'react';
+import React, { FC, memo, useMemo } from 'react';
 import { FormControl, FormControlLabel, FormLabel, RadioGroup, Radio, FormHelperText } from '@mui/material';
 
 interface Property {
-  valid?: boolean
-  inline?: boolean
-  htmlFor?: string
-  invalid?: boolean
   id: string | number
   value: string | number
   label?: React.ReactNode
@@ -15,36 +11,42 @@ interface Property {
 
 interface FRadioProps {
   name: string
-  success?: string
-  skipTouch?: boolean
-  description?: string
-  classNameFormGroup?: string
-  options: Array<Partial<Property>>
-  label?: React.ReactNode | React.ReactChild
-  getOptionValue: (value: Partial<Property>) => string
-  getOptionLabel: (value: Partial<Property>) => string
-  explanation?: React.ReactNode | React.ReactChild | string
+  label?: React.ReactNode
+  options: Array<Property>
+  getValue: (value: string) => string
+  getOptionValue: (value: Property) => string
+  getOptionLabel: (value: Property) => string
+  prepareValue: (value: Property | string) => Property | string
 }
 
-const FRadio: FC<FRadioProps> = ({ options, label, getOptionValue, getOptionLabel, ...props }) => {
+const FRadio: FC<FRadioProps> = ({
+  options,
+  label,
+  getValue,
+  prepareValue,
+  getOptionValue,
+  getOptionLabel,
+  ...props
+}) => {
   const [field, meta, { setValue }] = useField(props);
-  const onChange = useCallback(event => setValue(event.target.value), [setValue]);
-
-  const list = useMemo(() => options.map(item => ({
-    ...props,
-    value: getOptionValue(item),
-    label: getOptionLabel(item),
-    id: `${props.name}-${getOptionValue(item)}`,
-    checked: getOptionValue(item) === field.value,
-  })), [props, field.value, getOptionLabel, getOptionValue, options]);
+  const list = useMemo(() => options.map((item: Property) => {
+    const value = getOptionValue(item);
+    const label = getOptionLabel(item);
+    const preparedValue = prepareValue(item);
+    const fieldValue = getValue(field.value);
+    return {
+      ...props,
+      value,
+      label,
+      id: `${props.name}-${value}`,
+      checked: value === fieldValue,
+      onChange: () => setValue(preparedValue),
+    };
+  }), [options, getOptionValue, getOptionLabel, prepareValue, props, getValue, field.value, setValue]);
 
   return <FormControl component="fieldset" error={meta.touched && Boolean(meta.error)}>
     <FormLabel component="legend">{ label }</FormLabel>
-    <RadioGroup
-      name={field.name}
-      value={meta.value}
-      onChange={onChange}
-    >
+    <RadioGroup name={field.name}>
       { (list ?? []).map(item => <FormControlLabel
         {...field}
         key={item.value}
