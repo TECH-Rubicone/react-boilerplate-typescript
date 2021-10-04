@@ -35,8 +35,6 @@ const SignIn = () => {
     signIn(values);
   }, [signIn, disabled]);
 
-  const login = 'LOGIN';
-
   return <Container sx={{ height: '100%' }} maxWidth="sm">
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
       <Formik
@@ -75,7 +73,7 @@ const SignIn = () => {
                 disabled={disabled}
                 sx={{ width: '100%' }}
               >
-                { disabled ? <CircularProgress size={20} sx={{ mr: '20px' }}/> : login }
+                { disabled ? <CircularProgress size={20} sx={{ mr: '20px' }}/> : 'Login' }
               </Button>
             </CardActions>
             <CardActions className="mx-2">
