@@ -1,78 +1,59 @@
 // outsource dependencies
 import { useField } from 'formik';
-import { CustomInput } from 'reactstrap';
-import React, { memo, useMemo } from 'react';
-import { CustomInputType } from 'reactstrap/es/CustomInput';
-
-// local dependencies
-import FieldWrap from './field-wrap';
-
-interface FRadio {
-  name: string;
-  options?: any;
-  success?: string;
-  skipTouch?: boolean;
-  description?: string;
-  getOptionLabel?: any; // func
-  getOptionValue?: any; // func
-  classNameFormGroup?: string;
-  label?: React.ReactNode | React.ReactChild;
-  explanation?: React.ReactNode | React.ReactChild | string;
-}
+import React, { FC, memo, useCallback, useMemo } from 'react';
+import { FormControl, FormControlLabel, FormLabel, RadioGroup, Radio, FormHelperText } from '@mui/material';
 
 interface Property {
-  id: string | number;
-  type: CustomInputType;
-  label?: React.ReactNode;
-  inline?: boolean;
-  valid?: boolean;
-  invalid?: boolean;
-  htmlFor?: string;
-  value: string | number;
+  valid?: boolean
+  inline?: boolean
+  htmlFor?: string
+  invalid?: boolean
+  id: string | number
+  value: string | number
+  label?: React.ReactNode
 }
 
-const FRadio: React.FC<FRadio> = props => {
-  const {
-    label, success, description, explanation,
-    classNameFormGroup, skipTouch, options, name,
-    getOptionLabel, getOptionValue, ...attr
-  } = props;
+interface FRadioProps {
+  name: string
+  success?: string
+  skipTouch?: boolean
+  description?: string
+  classNameFormGroup?: string
+  options: Array<Partial<Property>>
+  label?: React.ReactNode | React.ReactChild
+  getOptionValue: (value: Partial<Property>) => string
+  getOptionLabel: (value: Partial<Property>) => string
+  explanation?: React.ReactNode | React.ReactChild | string
+}
 
-  const [field, meta, { setValue }] = useField(name);
-  const invalid = (skipTouch || meta.touched) && !!meta.error;
-  const valid = (skipTouch || meta.touched) && !meta.error;
+const FRadio: FC<FRadioProps> = ({ options, label, getOptionValue, getOptionLabel, ...props }) => {
+  const [field, meta, { setValue }] = useField(props);
+  const onChange = useCallback(event => setValue(event.target.value), [setValue]);
 
-  const properties = useMemo(() => options.map((item: any) => ({
-    ...attr,
+  const list = useMemo(() => options.map(item => ({
+    ...props,
     value: getOptionValue(item),
     label: getOptionLabel(item),
-    onChange: () => setValue(item),
-    id: `${name}-${getOptionValue(item)}`,
-    checked: getOptionValue(item) === getOptionValue(field.value),
-  })), [attr, field.value, getOptionLabel, getOptionValue, name, options, setValue]);
+    id: `${props.name}-${getOptionValue(item)}`,
+    checked: getOptionValue(item) === field.value,
+  })), [props, field.value, getOptionLabel, getOptionValue, options]);
 
-  return <FieldWrap
-    label={label}
-    valid={valid}
-    id={field.name}
-    invalid={invalid}
-    success={success}
-    explanation={explanation}
-    description={description}
-    className={classNameFormGroup}
-    error={skipTouch || meta.touched ? meta.error : null}
-  >
-    { properties.map((item: Property) => <CustomInput
-      key={item.value}
-      // field
-      {...field}
-      // outer
-      valid={valid}
-      invalid={invalid}
-      // inner
-      {...item}
-    />) }
-  </FieldWrap>;
+  return <FormControl component="fieldset" error={meta.touched && Boolean(meta.error)}>
+    <FormLabel component="legend">{ label }</FormLabel>
+    <RadioGroup
+      name={field.name}
+      value={meta.value}
+      onChange={onChange}
+    >
+      { (list ?? []).map(item => <FormControlLabel
+        {...field}
+        key={item.value}
+        control={<Radio />}
+        {...item}
+      />) }
+    </RadioGroup>
+    { meta.error && <FormHelperText>{ meta.error }</FormHelperText> }
+  </FormControl>;
 };
 
 export default memo(FRadio);
