@@ -33,7 +33,6 @@ const FInput: FC<FInputProps> = props => {
     classNameFormGroup, name, type, addonPrepend, addonAppend, ...attr
   } = props;
   const [field, meta] = useField({ name, type });
-  console.log('Field:', field);
   const invalid = (skipTouch || meta.touched) && !!meta.error;
   const valid = (skipTouch || meta.touched) && !meta.error;
 
