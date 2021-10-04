@@ -2,12 +2,11 @@
 import * as yup from 'yup';
 import { Formik, Form } from 'formik';
 import { useController } from 'redux-saga-controller';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import React, { memo, useEffect, useCallback, useMemo } from 'react';
-import { Container, Box, Button, CircularProgress, Typography, CardHeader, Card, CardContent, CardActions } from '@mui/material';
+import { Container, Box, Card, Button, CardContent, CardActions, CircularProgress, Typography, CardHeader } from '@mui/material';
 
 // components
-import FormInput from 'components/formInput';
+import FInput from 'components/input';
 
 // local dependencies
 import { controller } from './controller';
@@ -35,6 +34,8 @@ const SignIn = () => {
     signIn(values);
   }, [signIn, disabled]);
 
+  const login = 'LOGIN';
+
   return <Container sx={{ height: '100%' }} maxWidth="sm">
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
       <Formik
@@ -46,27 +47,23 @@ const SignIn = () => {
           <Card>
             <CardHeader
               title="BOILERPLATE"
-              color="primary.main"
+              sx={{ color: '#29b6f6', textAlign: 'center', backgroundColor: '#eeeeee' }}
             />
-            <CardContent>
-              <FormInput
+            <CardContent sx={{ padding: '10px' }}>
+              <FInput
                 type="text"
                 name="username"
-                id={'username'}
-                label="Email Address"
-                classNameField="pb-4"
                 placeholder="Email Address"
+                label={<strong className="required-asterisk"> Email Address </strong>}
               />
-              <FormInput
-                id="password"
-                name="password"
+              <FInput
                 type="password"
-                label="Password"
-                classNameField="pb-4"
+                name="password"
                 placeholder="Password"
+                label={<strong className="required-asterisk"> Password </strong>}
               />
             </CardContent>
-            <CardActions className="mx-2">
+            <CardActions sx={{ px: '10px', pb: '30px' }}>
               <Button
                 type="submit"
                 color="primary"
@@ -74,12 +71,11 @@ const SignIn = () => {
                 disabled={disabled}
                 sx={{ width: '100%' }}
               >
-                { disabled ? <CircularProgress size={20} sx={{ mr: '20px' }}/> : 'LOGIN' }
+                { disabled ? <CircularProgress size={20} sx={{ mr: '20px' }}/> : login }
               </Button>
             </CardActions>
-            <CardActions className="mx-2">
-              <HelpOutlineIcon color="info"/>
-              <Typography variant="overline" className="pl-1" color="info.main">
+            <CardActions sx={{ py: '15px', px: '10px', backgroundColor: '#eeeeee' }}>
+              <Typography>
                 Forgot password
               </Typography>
             </CardActions>
