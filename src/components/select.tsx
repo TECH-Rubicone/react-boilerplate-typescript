@@ -1,70 +1,42 @@
 // outsource dependencies
-import React, { FC, useCallback, useMemo } from 'react';
-import { CircularProgress, Autocomplete, TextField, FormHelperText } from '@mui/material';
 import { useField } from 'formik';
-import { instanceAPI } from 'services/api.service';
-
-interface Property {
-  valid?: boolean
-  inline?: boolean
-  htmlFor?: string
-  invalid?: boolean
-  id: string | number
-  value: string | number
-  label?: React.ReactNode
-}
+import React, { FC, useCallback, useState } from 'react';
+import { CircularProgress, Autocomplete, TextField, FormHelperText } from '@mui/material';
 
 interface FSelectProps {
   name: string
   label?: React.ReactNode
+  loadOptions: () => Promise<any>
   size?: 'small' | 'medium' | undefined
-  getOptionValue: (value: Partial<Property>) => string
-  getOptionLabel: (value: Partial<Property>) => string
+  getOptionLabel: (value: any) => string,
 }
 
-function getRoles ({ data, params }: any) {
-  return instanceAPI({
-    method: 'POST',
-    url: 'admin-service/roles/filter',
-    data: data || {},
-    params: params || {},
-  });
-}
-
-interface SelectValue {
-  label: string
-  value: string
-}
-
-const AsyncSelect: FC<FSelectProps> = ({ label, size, getOptionLabel, getOptionValue, ...props }) => {
-  const [open, setOpen] = React.useState(false);
-  const [options, setOptions] = React.useState([]);
-  const loading = open && options.length === 0;
+export const FASelect: FC<FSelectProps> = ({ label, loadOptions, size = 'small', getOptionLabel, ...props }) => {
+  const [open, setOpen] = useState<boolean>(false);
+  const [list, setList] = useState([]);
+  const loading = open && list.length === 0;
 
   const [field, meta, { setValue }] = useField(props);
 
-  const onChange = useCallback((_, item: SelectValue) => item ? setValue(item.value) : setValue(null), [setValue]);
+  const onChange = useCallback(
+    (_, item) => item ? setValue(item) : setValue(null),
+    [setValue]
+  );
 
-  const list = useMemo(() => options.map(item => ({
-    label: getOptionLabel(item),
-    value: getOptionValue(item),
-  })), [getOptionLabel, getOptionValue, options]);
+  const load = useCallback(() => {
+    setOpen(true);
+    loadOptions().then(data => setList(data)).catch(({ message }) => console.error(message));
+  }, [loadOptions]);
 
+  const onClose = useCallback(() => setOpen(false), [setOpen]);
   return <>
     <Autocomplete
-      id="asynchronous-demo"
-      sx={{ width: 300 }}
       open={open}
-      onOpen={async () => {
-        setOpen(true);
-        const data: any = await getRoles({ data: null, params: { page: 0, size: 15 } });
-        setOptions(data.content);
-      }}
-      onClose={() => {
-        setOpen(false);
-      }}
+      onOpen={load}
       options={list}
+      onClose={onClose}
       loading={loading}
+      getOptionLabel={getOptionLabel}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -73,7 +45,10 @@ const AsyncSelect: FC<FSelectProps> = ({ label, size, getOptionLabel, getOptionV
           error={meta.touched && Boolean(meta.error)}
           InputProps={{
             ...params.InputProps,
-            endAdornment: <>{ loading ? <CircularProgress color="inherit" size={20} /> : null } { params.InputProps.endAdornment } </>
+            endAdornment: <>
+              { loading ? <CircularProgress color="inherit" size={20} /> : null }
+              { params.InputProps.endAdornment }
+            </>
           }}
         />
       )}
@@ -83,5 +58,3 @@ const AsyncSelect: FC<FSelectProps> = ({ label, size, getOptionLabel, getOptionV
     { meta.error && <FormHelperText>{ meta.error }</FormHelperText> }
   </>;
 };
-
-export default AsyncSelect;
