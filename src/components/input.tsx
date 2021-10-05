@@ -7,20 +7,20 @@ type FInputProps = TextFieldProps & {
   id: string,
   name: string,
   type: string,
-  label: string,
+  label?: string,
   skipTouch?: boolean,
-  placeholder: string,
+  placeholder?: string,
   classNameField?: string,
 }
 
 const FInput: React.FC<FInputProps> = props => {
-  const { name, type, label, skipTouch, ...rest } = props;
+  const { name, type, label, skipTouch, ...attr } = props;
   const [field, meta] = useField({ name, type });
   const valid = (skipTouch || meta.touched) && !meta.error;
   const invalid = (skipTouch || meta.touched) && !!meta.error;
   return <TextField
     fullWidth
-    {...rest}
+    {...attr}
     {...field}
     type={type}
     label={label}

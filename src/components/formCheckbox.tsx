@@ -1,19 +1,16 @@
 // outsource dependencies
+import { useField } from 'formik';
 import React, { memo } from 'react';
-import { Checkbox, CheckboxProps, FormControlLabel, FormGroup } from '@mui/material';
+import { Checkbox, CheckboxProps, FormControlLabel } from '@mui/material';
 
 interface FCheckboxProps extends CheckboxProps {
-  type: string,
   name: string,
-  label: string,
-  checked: boolean,
+  label?: string,
 }
 
-const FCheckbox: React.FC<FCheckboxProps> = (props) => {
-  const { label, ...rest } = props;
-  return <FormGroup>
-    <FormControlLabel control={<Checkbox {...rest}/>} label={label} />
-  </FormGroup>;
+const FCheckbox: React.FC<FCheckboxProps> = ({ label, name, ...attr }) => {
+  const [field, meta] = useField({ name });
+  return <FormControlLabel control={<Checkbox {...attr} {...field} onChange={field.onChange}/>} label={label} />;
 };
 
 export default memo(FCheckbox);

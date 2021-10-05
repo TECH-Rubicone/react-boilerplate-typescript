@@ -18,7 +18,7 @@ interface Act<Payload> extends Action {
 interface SignInPayload {
   username: string,
   password: string,
-  checked: false,
+  checked: boolean,
   client: string,
 }
 
