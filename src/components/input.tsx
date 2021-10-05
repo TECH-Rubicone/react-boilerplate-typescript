@@ -1,39 +1,35 @@
 // outsource dependencies
 import { useField } from 'formik';
-import React, { memo, FC } from 'react';
-import { TextField } from '@mui/material';
+import React, { memo } from 'react';
+import { TextField, TextFieldProps } from '@mui/material';
 
-interface FInputProps {
+type FInputProps = TextFieldProps & {
   id: string,
   name: string,
   type: string,
   label: string,
-  placeholder: string,
   skipTouch?: boolean,
+  placeholder: string,
   classNameField?: string,
 }
 
-const FInput: FC<FInputProps> = props => {
-  const { name, type, label, skipTouch, classNameField, placeholder } = props;
-  const [field, meta] = useField({ name, type, });
+const FInput: React.FC<FInputProps> = props => {
+  const { name, type, label, skipTouch, ...rest } = props;
+  const [field, meta] = useField({ name, type });
   const valid = (skipTouch || meta.touched) && !meta.error;
   const invalid = (skipTouch || meta.touched) && !!meta.error;
   return <TextField
     fullWidth
+    {...rest}
+    {...field}
     type={type}
     label={label}
+    margin="normal"
     id={field.name}
     error={invalid}
-    margin="normal"
-    name={field.name}
-    value={field.value}
-    onBlur={field.onBlur}
-    onChange={field.onChange}
-    placeholder={placeholder}
-    className={classNameField}
     autoComplete={field.value}
     helperText={meta.touched && meta.error}
-    color={valid || !!field.value ? 'success' : invalid || !field.value ? 'error' : 'primary'}
+    color={valid === invalid ? 'primary' : valid ? 'success' : 'error'}
   />;
 };
 

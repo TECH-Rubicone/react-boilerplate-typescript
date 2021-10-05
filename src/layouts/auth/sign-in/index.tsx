@@ -4,10 +4,11 @@ import { Formik, Form } from 'formik';
 import { useController } from 'redux-saga-controller';
 import React, { memo, useEffect, useCallback, useMemo } from 'react';
 import { HelpOutline as HelpOutlineIcon, LockOutlined as LockOutlinedIcon } from '@mui/icons-material';
-import { Container, Box, Avatar, Button, Checkbox, CircularProgress, FormControlLabel, Typography, Link, Grid } from '@mui/material';
+import { Container, Box, Avatar, Button, CircularProgress, Typography, Link, Grid } from '@mui/material';
 
 // components
 import FInput from 'components/input';
+import FCheckbox from 'components/formCheckbox';
 
 // local dependencies
 import { controller } from './controller';
@@ -19,22 +20,23 @@ import { controller } from './controller';
 const SignIn = () => {
   const [
     { initialized, disabled, errorMessage, initialValues },
-    { signIn, initialize, updateCtrl }
+    { signIn, initialize }
   ] = useController(controller);
   useEffect(() => { initialize(); }, [initialize]);
+  const [isChecked, setChecked] = React.useState(false);
   const validationSchema = useMemo(() => yup.object().shape({
     username: yup.string()
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
       .email('VALIDATION_ERROR.INVALID_EMAIL'),
     password: yup.string()
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
-      .min(8, 'VALIDATION_ERROR.MIN_LENGTH_CHARACTERS')
+      .min(8, 'VALIDATION_ERROR.MIN_LENGTH_CHARACTERS'),
   }), []);
-  const [checked, setChecked] = React.useState(false);
+
   const onSubmit = useCallback(values => {
     signIn(values);
-    updateCtrl({ checked });
   }, [signIn, disabled]);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
@@ -85,26 +87,24 @@ const SignIn = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <FormControlLabel
+              <FCheckbox
                 name="checkbox"
+                type="checkbox"
+                value={isChecked}
                 label="Remember me"
-                control={
-                  <Checkbox
-                    checked={checked}
-                    onChange={handleChange}
-                  />
-                }
+                checked={isChecked}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
               <Button
+                fullWidth
                 type="submit"
                 color="primary"
                 variant="contained"
                 disabled={disabled}
-                sx={{ width: '100%' }}
               >
-                { disabled ? <CircularProgress size={20} sx={{ mr: '20px' }}/> : 'Login' }
+                { disabled ? <CircularProgress size={20}/> : 'LOGIN' }
               </Button>
             </Grid>
             <Grid item xs={6} textAlign="left">

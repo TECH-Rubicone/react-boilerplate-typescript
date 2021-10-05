@@ -18,6 +18,7 @@ interface Act<Payload> extends Action {
 interface SignInPayload {
   username: string,
   password: string,
+  checked: false,
   client: string,
 }
 
@@ -29,7 +30,6 @@ interface TokenDto {
 }
 
 interface Initial {
-  checked: boolean,
   disabled: boolean,
   initialized: boolean,
   initialValues: SignInPayload,
@@ -44,13 +44,13 @@ export const controller: Controller<Actions, Initial> = create({
   prefix: 'sign-in',
   actions: ['signIn', 'initialize'],
   initial: {
-    checked: false,
     disabled: false,
     errorMessage: null,
     initialized: false,
     initialValues: {
       username: '',
       password: '',
+      checked: false,
       client: 'admin_application',
     },
   },
