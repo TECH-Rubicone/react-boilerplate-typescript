@@ -12,6 +12,17 @@ type FInputProps = TextFieldProps & {
   placeholder?: string,
   classNameField?: string,
 }
+const validationStyles = (valid: boolean, invalid: boolean) => {
+  const isValid = false;
+  const isInvalid = true;
+  switch (valid === invalid) {
+    case isInvalid:
+      return 'primary';
+    case isValid:
+      return 'success';
+    default: return 'primary';
+  }
+};
 
 const FInput: React.FC<FInputProps> = props => {
   const { name, type, label, skipTouch, ...attr } = props;
@@ -29,7 +40,7 @@ const FInput: React.FC<FInputProps> = props => {
     error={invalid}
     autoComplete={field.value}
     helperText={meta.touched && meta.error}
-    color={valid === invalid ? 'primary' : valid ? 'success' : 'error'}
+    color={validationStyles(valid, invalid)}
   />;
 };
 
