@@ -1,5 +1,5 @@
 // interfaces
-import { ApiNames, Message } from 'interfaces/api';
+import { StringObject } from 'interfaces/common';
 
 // configs
 import config from '../configs';
@@ -8,7 +8,7 @@ import config from '../configs';
 export const API_PATH = config.SERVICE_URL + config.API_PATH;
 
 // private names
-export const API_NAMES: ApiNames = {
+export const API_NAMES: StringObject = {
   AUTH_STORE: 'sAuth',
   AUTH_BEARER: 'Bearer ',
   AUTH_HEADER: 'Authorization',
@@ -16,7 +16,7 @@ export const API_NAMES: ApiNames = {
   REFRESH_TOKEN: 'refreshToken',
 };
 
-export const MESSAGE: Message = {
+export const MESSAGE: StringObject = {
   CODE_NULL: '', // errors which will be displayed as UNKNOWN_ERROR
   NESTED_EXCEPTION: '', // errors which will be displayed as UNKNOWN_ERROR
   FORBIDDEN: 'Access is denied.',
