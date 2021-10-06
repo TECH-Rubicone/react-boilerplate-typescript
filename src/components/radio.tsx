@@ -1,61 +1,55 @@
 // outsource dependencies
 import { useField } from 'formik';
 import React, { FC, memo, useMemo } from 'react';
-import { FormControl, FormControlLabel, FormLabel, RadioGroup, Radio, FormHelperText } from '@mui/material';
+import { FormControl, FormControlLabel, FormLabel, RadioGroup, Radio, FormHelperText, RadioGroupProps } from '@mui/material';
 
-interface Property {
-  id: string | number
-  value: string | number
-  label?: React.ReactNode
-}
+// local dependencies
+// interfaces
+import { AnyObject } from 'interfaces/common';
 
-interface FRadioProps {
+interface FRadioProps extends RadioGroupProps {
   name: string
+  required: boolean
   label?: React.ReactNode
-  options: Array<Property>
-  getValue: (value: string) => string
-  getOptionValue: (value: Property) => string
-  getOptionLabel: (value: Property) => string
-  prepareValue: (value: Property | string) => Property | string
+  options: Array<AnyObject>
+  parseValue: (value: AnyObject) => AnyObject | string
+  getOptionLabel: (value: AnyObject) => string | number
+  getOptionValue: (value: AnyObject) => string | number
+  prepareValue: (value: AnyObject) => AnyObject | string
 }
 
-const FRadio: FC<FRadioProps> = ({
-  options,
-  label,
-  getValue,
-  prepareValue,
-  getOptionValue,
-  getOptionLabel,
-  ...props
-}) => {
-  const [field, meta, { setValue }] = useField(props);
-  const list = useMemo(() => options.map((item: Property) => {
+const FRadio: FC<FRadioProps> = props => {
+  const { name, required, options, label, parseValue, prepareValue, getOptionValue, getOptionLabel } = props;
+  const [field, meta, { setValue }] = useField(name);
+  const list = useMemo(() => options.map(item => {
     const value = getOptionValue(item);
     const label = getOptionLabel(item);
     const preparedValue = prepareValue(item);
-    const fieldValue = getValue(field.value);
+    const parsedValue = parseValue(field.value);
     return {
-      ...props,
       value,
       label,
-      id: `${props.name}-${value}`,
-      checked: value === fieldValue,
+      id: `${name}-${value}`,
+      checked: value === parsedValue,
       onChange: () => setValue(preparedValue),
     };
-  }), [options, getOptionValue, getOptionLabel, prepareValue, props, getValue, field.value, setValue]);
+  }), [options, getOptionValue, getOptionLabel, prepareValue, props, parseValue, field.value, setValue]);
 
-  return <FormControl component="fieldset" error={meta.touched && Boolean(meta.error)}>
+  return <FormControl required={required} component="fieldset" error={meta.touched && Boolean(meta.error)}>
     <FormLabel component="legend">{ label }</FormLabel>
     <RadioGroup name={field.name}>
-      { (list ?? []).map(item => <FormControlLabel
-        {...field}
-        key={item.value}
-        control={<Radio />}
-        {...item}
-      />) }
+      { (list ?? []).map(item => <FormControlLabel {...field} key={item.id} control={<Radio />} {...item} />) }
     </RadioGroup>
     { meta.error && <FormHelperText>{ meta.error }</FormHelperText> }
   </FormControl>;
 };
 
 export default memo(FRadio);
+
+FRadio.defaultProps = {
+  required: false,
+  parseValue: value => value,
+  prepareValue: value => value,
+  getOptionValue: ({ value }) => value,
+  getOptionLabel: ({ value }) => value,
+};
