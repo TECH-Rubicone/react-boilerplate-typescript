@@ -16,24 +16,24 @@ interface Act<Payload> extends Action {
 }
 
 interface SignInPayload {
-  username: string,
-  password: string,
-  checked: boolean,
-  client: string,
+  username: string
+  password: string
+  checked: boolean
+  client: string
 }
 
 interface TokenDto {
-  accessToken: string,
-  refreshToken: string,
-  accessTokenValiditySeconds: number,
-  refreshTokenValiditySeconds: number,
+  accessToken: string
+  refreshToken: string
+  accessTokenValiditySeconds: number
+  refreshTokenValiditySeconds: number
 }
 
 interface Initial {
-  disabled: boolean,
-  initialized: boolean,
-  initialValues: SignInPayload,
-  errorMessage: string | null | unknown,
+  disabled: boolean
+  initialized: boolean
+  initialValues: SignInPayload
+  errorMessage: string | null | unknown
 }
 
 interface Actions extends ActionCreators<Initial> {

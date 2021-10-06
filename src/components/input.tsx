@@ -4,23 +4,21 @@ import React, { memo } from 'react';
 import { TextField, TextFieldProps } from '@mui/material';
 
 type FInputProps = TextFieldProps & {
-  id: string,
-  name: string,
-  type: string,
-  label?: string,
-  skipTouch?: boolean,
-  placeholder?: string,
-  classNameField?: string,
+  id: string
+  name: string
+  type: string
+  label?: string
+  skipTouch?: boolean
+  placeholder?: string
+  classNameField?: string
 }
 const validationStyles = (valid: boolean, invalid: boolean) => {
-  const isValid = false;
-  const isInvalid = true;
-  switch (valid === invalid) {
-    case isInvalid:
-      return 'primary';
-    case isValid:
-      return 'success';
-    default: return 'primary';
+  if (valid === invalid) {
+    return 'primary';
+  } else if (valid) {
+    return 'success';
+  } else if (invalid) {
+    return 'error';
   }
 };
 

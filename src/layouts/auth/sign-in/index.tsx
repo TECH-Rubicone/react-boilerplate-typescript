@@ -8,7 +8,7 @@ import { HelpOutline as HelpOutlineIcon, LockOutlined as LockOutlinedIcon } from
 
 // components
 import FInput from 'components/input';
-import FCheckbox from 'components/formCheckbox';
+import FCheckbox from 'components/form-checkbox';
 
 // local dependencies
 import { controller } from './controller';
@@ -30,6 +30,9 @@ const SignIn = () => {
     password: yup.string()
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
       .min(8, 'VALIDATION_ERROR.MIN_LENGTH_CHARACTERS'),
+    checked: yup.boolean()
+      .required('VALIDATION_ERROR.REQUIRED_FIELD')
+      .oneOf([true], 'VALIDATION_ERROR.SHOULD_BE_CHECKED'),
   }), []);
 
   const onSubmit = useCallback(values => {
