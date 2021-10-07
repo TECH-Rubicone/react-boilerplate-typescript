@@ -1,78 +1,55 @@
 // outsource dependencies
 import { useField } from 'formik';
-import { CustomInput } from 'reactstrap';
-import React, { memo, useMemo } from 'react';
-import { CustomInputType } from 'reactstrap/es/CustomInput';
+import React, { FC, memo, useMemo } from 'react';
+import { FormControl, FormControlLabel, FormLabel, RadioGroup, Radio, FormHelperText, RadioGroupProps } from '@mui/material';
 
 // local dependencies
-import FieldWrap from './field-wrap';
+// interfaces
+import { AnyObject } from 'interfaces/common';
 
-interface FRadio {
-  name: string;
-  options?: any;
-  success?: string;
-  skipTouch?: boolean;
-  description?: string;
-  getOptionLabel?: any; // func
-  getOptionValue?: any; // func
-  classNameFormGroup?: string;
-  label?: React.ReactNode | React.ReactChild;
-  explanation?: React.ReactNode | React.ReactChild | string;
+interface FRadioProps extends RadioGroupProps {
+  name: string
+  required: boolean
+  label?: React.ReactNode
+  options: Array<AnyObject>
+  getOptionLabel: (value: AnyObject) => string | number | null
+  getOptionValue: (value: AnyObject) => string | number | null
+  parseValue: (value: AnyObject) => AnyObject | string | null | boolean
+  prepareValue: (value: AnyObject) => AnyObject | string | number | boolean | null
 }
 
-interface Property {
-  id: string | number;
-  type: CustomInputType;
-  label?: React.ReactNode;
-  inline?: boolean;
-  valid?: boolean;
-  invalid?: boolean;
-  htmlFor?: string;
-  value: string | number;
-}
-
-const FRadio: React.FC<FRadio> = props => {
-  const {
-    label, success, description, explanation,
-    classNameFormGroup, skipTouch, options, name,
-    getOptionLabel, getOptionValue, ...attr
-  } = props;
-
+const FRadio: FC<FRadioProps> = props => {
+  const { name, required, options, label, parseValue, prepareValue, getOptionValue, getOptionLabel } = props;
   const [field, meta, { setValue }] = useField(name);
-  const invalid = (skipTouch || meta.touched) && !!meta.error;
-  const valid = (skipTouch || meta.touched) && !meta.error;
+  const list = useMemo(() => options.map(item => {
+    const value = getOptionValue(item);
+    const label = getOptionLabel(item);
+    const preparedValue = prepareValue(item);
+    const parsedValue = parseValue(field.value);
+    return {
+      value,
+      label,
+      id: `${name}-${value}`,
+      checked: value === parsedValue,
+      onChange: () => setValue(preparedValue),
+    };
+  }), [options, getOptionValue, getOptionLabel, prepareValue, name, parseValue, field.value, setValue]);
 
-  const properties = useMemo(() => options.map((item: any) => ({
-    ...attr,
-    value: getOptionValue(item),
-    label: getOptionLabel(item),
-    onChange: () => setValue(item),
-    id: `${name}-${getOptionValue(item)}`,
-    checked: getOptionValue(item) === getOptionValue(field.value),
-  })), [attr, field.value, getOptionLabel, getOptionValue, name, options, setValue]);
-
-  return <FieldWrap
-    label={label}
-    valid={valid}
-    id={field.name}
-    invalid={invalid}
-    success={success}
-    explanation={explanation}
-    description={description}
-    className={classNameFormGroup}
-    error={skipTouch || meta.touched ? meta.error : null}
-  >
-    { properties.map((item: Property) => <CustomInput
-      key={item.value}
-      // field
-      {...field}
-      // outer
-      valid={valid}
-      invalid={invalid}
-      // inner
-      {...item}
-    />) }
-  </FieldWrap>;
+  return <FormControl required={required} component="fieldset" error={meta.touched && Boolean(meta.error)}>
+    <FormLabel component="legend">{ label }</FormLabel>
+    <RadioGroup name={field.name}>
+      { (list ?? []).map(item => <FormControlLabel {...field} key={item.id} control={<Radio />} {...item} />) }
+    </RadioGroup>
+    { meta.error && <FormHelperText>{ meta.error }</FormHelperText> }
+  </FormControl>;
 };
 
 export default memo(FRadio);
+
+FRadio.defaultProps = {
+  required: false,
+  parseValue: value => value,
+  prepareValue: value => value,
+  getOptionValue: ({ value }) => value,
+  getOptionLabel: ({ label }) => label,
+};
