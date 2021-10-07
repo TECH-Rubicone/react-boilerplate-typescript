@@ -16,7 +16,7 @@ const FCheckbox: React.FC<FCheckboxProps> = ({ label, name, ...attr }) => {
       color="error"
       sx={{ color: 'error.main', m: 0, pb: 2 }}
     >
-      {meta.error}
+      { meta.error }
     </FormHelperText> }
   </>;
 };

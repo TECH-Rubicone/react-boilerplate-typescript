@@ -57,9 +57,9 @@ const FInput: React.FC<FInputProps> = props => {
             onClick={handleClickShowPassword}
             aria-label="toggle password visibility"
           >
-            {values.showPassword ? <VisibilityOff /> : <Visibility />}
+            { values.showPassword ? <VisibilityOff /> : <Visibility /> }
           </IconButton>
-        </InputAdornment> } }
+        </InputAdornment> }}
   />;
 };
 
