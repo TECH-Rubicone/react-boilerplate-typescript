@@ -8,7 +8,7 @@ type FInputProps = TextFieldProps & {
   id: string
   name: string
   type: string
-  label?: string
+  label: string
   skipTouch?: boolean
   placeholder?: string
 }
@@ -49,9 +49,9 @@ const FInput: React.FC<FInputProps> = props => {
         && <InputAdornment position="end" sx={{ position: 'absolute', right: 0, pr: 3 }}>
           <IconButton
             edge="end"
-            color="primary"
             onClick={handleClickShowPassword}
             aria-label="toggle password visibility"
+            color={validationStyles(valid, invalid)}
           >
             { showPassword ? <VisibilityOff /> : <Visibility /> }
           </IconButton>
