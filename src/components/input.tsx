@@ -13,14 +13,15 @@ type FInputProps = TextFieldProps & {
   placeholder?: string
 }
 
-const validationStyles = (valid: boolean, invalid: boolean) => {
-  if (valid === invalid) {
-    return 'primary';
-  } else if (valid) {
+type ValidationColor = 'primary' | 'error' | 'success'
+
+const validationStyles = (valid: boolean, invalid: boolean): ValidationColor => {
+  if (valid) {
     return 'success';
   } else if (invalid) {
     return 'error';
   }
+  return 'primary';
 };
 
 const FInput: React.FC<FInputProps> = props => {
@@ -54,7 +55,8 @@ const FInput: React.FC<FInputProps> = props => {
           >
             { showPassword ? <VisibilityOff /> : <Visibility /> }
           </IconButton>
-        </InputAdornment> }}
+        </InputAdornment>
+    }}
   />;
 };
 

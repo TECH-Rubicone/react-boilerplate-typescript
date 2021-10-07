@@ -14,9 +14,10 @@ interface FCheckboxProps extends CheckboxProps {
 
 const FCheckbox: React.FC<FCheckboxProps> = ({ label, skipTouch, name, ...attr }) => {
   const [field, meta] = useField({ name });
-  const valid = (skipTouch || meta.touched) && !meta.error;
+  // const valid = (skipTouch || meta.touched) && !meta.error;
   const invalid = (skipTouch || meta.touched) && !!meta.error;
-  return <><FormControlLabel label={label} control={<Checkbox {...attr} {...field} />}/>
+  return <>
+    <FormControlLabel label={label} control={<Checkbox {...attr} {...field} />}/>
     { invalid && <FormHelperText color="error" sx={{ color: 'error.main', m: 0, pb: 2 }}>
       { meta.error }
     </FormHelperText> }
