@@ -1,60 +1,63 @@
 // outsource dependencies
 import { useField } from 'formik';
-import { Input } from 'reactstrap';
-import React, { memo } from 'react';
-import { InputType } from 'reactstrap/es/Input';
+import React, { memo, useCallback, useState } from 'react';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { IconButton, InputAdornment, TextField, TextFieldProps } from '@mui/material';
 
-// local dependencies
-import FieldWrap from './field-wrap';
-
-interface FInputProps {
-  name: string,
-  success?: string,
-  type?: InputType,
-  skipTouch?: boolean,
-  explanation?: string,
-  description?: string,
-  placeholder?: string,
-  classNameLabel?: string,
-  classNameFormGroup?: string,
-  label?: React.ReactChild | React.ReactNode,
-  addonAppend?: React.ReactChild | React.ReactNode,
-  addonPrepend?: React.ReactChild | React.ReactNode,
+type FInputProps = TextFieldProps & {
+  id: string
+  name: string
+  type: string
+  label?: string
+  skipTouch?: boolean
+  placeholder?: string
 }
 
-const FInput: React.FC<FInputProps> = props => {
-  const {
-    label, skipTouch, success, description, explanation, classNameLabel,
-    classNameFormGroup, name, type, addonPrepend, addonAppend, ...attr
-  } = props;
-  const [field, meta] = useField({ name, type, });
-  const invalid = (skipTouch || meta.touched) && !!meta.error;
-  const valid = (skipTouch || meta.touched) && !meta.error;
+type ValidationColor = 'primary' | 'error' | 'success'
 
-  return <FieldWrap
+const validationStyles = (valid: boolean, invalid: boolean): ValidationColor => {
+  if (valid) {
+    return 'success';
+  } else if (invalid) {
+    return 'error';
+  }
+  return 'primary';
+};
+
+const FInput: React.FC<FInputProps> = props => {
+  const { name, type, label, skipTouch, ...attr } = props;
+  const [field, meta] = useField({ name, type });
+  const valid = (skipTouch || meta.touched) && !meta.error;
+  const invalid = (skipTouch || meta.touched) && !!meta.error;
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = useCallback(() => setShowPassword(!showPassword), [showPassword]);
+  return <TextField
+    {...attr}
+    {...field}
+    fullWidth
     label={label}
-    valid={valid}
+    margin="normal"
     id={field.name}
-    invalid={invalid}
-    success={success}
-    description={description}
-    explanation={explanation}
-    className={classNameFormGroup}
-    classNameLabel={classNameLabel}
-    error={skipTouch || meta.touched ? meta.error : null}
-  >
-    { addonPrepend }
-    <Input
-      {...field}
-      {...attr}
-      type={type}
-      valid={valid}
-      id={field.name}
-      invalid={invalid}
-      value={field.value ?? ''}
-    />
-    { addonAppend }
-  </FieldWrap>;
+    error={invalid}
+    autoComplete={field.value}
+    helperText={meta.touched && meta.error}
+    color={validationStyles(valid, invalid)}
+    type={type !== 'password' ? type : showPassword ? 'text' : 'password'}
+    InputProps={{
+      sx: { p: 0 },
+      endAdornment: field.name === 'password'
+        && <InputAdornment position="end" sx={{ position: 'absolute', right: 0, pr: 3 }}>
+          <IconButton
+            edge="end"
+            color="primary"
+            onClick={handleClickShowPassword}
+            aria-label="toggle password visibility"
+          >
+            { showPassword ? <VisibilityOff /> : <Visibility /> }
+          </IconButton>
+        </InputAdornment>
+    }}
+  />;
 };
 
 export default memo(FInput);

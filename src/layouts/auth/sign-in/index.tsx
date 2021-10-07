@@ -3,10 +3,12 @@ import * as yup from 'yup';
 import { Formik, Form } from 'formik';
 import { useController } from 'redux-saga-controller';
 import React, { memo, useEffect, useCallback, useMemo } from 'react';
-import { Button, Card, CardBody, CardFooter, CardHeader, Col, Container, Row, Spinner } from 'reactstrap';
+import { Paper, Avatar, Stack, Button, CircularProgress, Typography, Link, Grid } from '@mui/material';
+import { HelpOutline as HelpOutlineIcon, LockOutlined as LockOutlinedIcon } from '@mui/icons-material';
 
 // components
 import FInput from 'components/input';
+import FCheckbox from 'components/form-checkbox';
 
 // local dependencies
 import { controller } from './controller';
@@ -27,61 +29,93 @@ const SignIn = () => {
       .email('VALIDATION_ERROR.INVALID_EMAIL'),
     password: yup.string()
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
-      .min(8, 'VALIDATION_ERROR.MIN_LENGTH_CHARACTERS')
+      .min(8, 'VALIDATION_ERROR.MIN_LENGTH_CHARACTERS'),
+    checked: yup.boolean()
+      .required('VALIDATION_ERROR.REQUIRED_FIELD')
+      .oneOf([true], 'VALIDATION_ERROR.SHOULD_BE_CHECKED'),
   }), []);
 
   const onSubmit = useCallback(values => {
     signIn(values);
   }, [signIn]);
 
-  return <Container fluid className="h-100">
-    <Row className="d-flex justify-content-center align-items-center h-100">
-      <Col md={6} xs={12}>
-        <Card>
-          <CardHeader>
-            <h3 className="pt-1 text-center text-primary">
-              BOILERPLATE
-            </h3>
-          </CardHeader>
-          <CardBody>
-            <Formik
-              onSubmit={onSubmit}
-              initialValues={initialValues}
-              validationSchema={validationSchema}
-            >
-              <Form>
+  return <Grid
+    m="auto"
+    container
+    maxWidth="sm"
+    display="flex"
+    minHeight="100vh"
+    alignItems="center"
+    justifyContent="center"
+  >
+    <Grid item xs={12}>
+      <Paper elevation={3}>
+        <Grid item xs={12} p={4}>
+          <Formik
+            onSubmit={onSubmit}
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+          >
+            <Form>
+              <Grid item>
+                <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
+                  <Avatar sx={{ bgcolor: 'info.main' }}>
+                    <LockOutlinedIcon/>
+                  </Avatar>
+                </Stack>
+                <Typography variant="h5" gutterBottom component="div" textAlign="center" mt={1}>
+                    BOILERPLATE
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
                 <FInput
                   type="text"
+                  id="username"
                   name="username"
+                  label="Email Address"
                   placeholder="Email Address"
-                  label={<strong className="required-asterisk"> Email Address </strong>}
                 />
+              </Grid>
+              <Grid item xs={12}>
                 <FInput
+                  id="password"
                   type="password"
                   name="password"
+                  label="Password"
                   placeholder="Password"
-                  label={<strong className="required-asterisk"> Password </strong>}
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <FCheckbox
+                  name="checked"
+                  label="Remember me"
+                />
+              </Grid>
+              <Grid item xs={12}>
                 <Button
-                  outline
+                  fullWidth
                   type="submit"
                   color="primary"
+                  variant="contained"
                   disabled={disabled}
-                  className="mb-3 w-100 d-flex align-items-center justify-content-center"
                 >
-                  LOGIN
-                  { disabled && <Spinner size="sm" className="ml-2" /> }
+                  { disabled ? <CircularProgress size={20}/> : 'LOGIN' }
                 </Button>
-              </Form>
-            </Formik>
-          </CardBody>
-          <CardFooter>
-            Forgot password
-          </CardFooter>
-        </Card>
-      </Col>
-    </Row>
-  </Container>;
+              </Grid>
+              <Grid item xs={6} textAlign="left" pt={1}>
+                <Link href="#" variant="body2">
+                  <HelpOutlineIcon color="info"/>
+                  <Typography variant="overline" pl={1} color="info.main">
+                      Forgot password
+                  </Typography>
+                </Link>
+              </Grid>
+            </Form>
+          </Formik>
+        </Grid>
+      </Paper>
+    </Grid>
+  </Grid>;
 };
 
 export default memo(SignIn);

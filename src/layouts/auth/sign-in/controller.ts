@@ -28,6 +28,7 @@ interface Act<Payload> extends Action {
 interface SignInPayload {
   username: string,
   password: string,
+  checked: boolean,
   client: string,
 }
 
@@ -52,6 +53,7 @@ export const controller: Controller<Actions, Initial> = create({
     initialValues: {
       username: '',
       password: '',
+      checked: false,
       client: 'admin_application',
     },
   },
