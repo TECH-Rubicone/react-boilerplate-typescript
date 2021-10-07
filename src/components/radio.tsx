@@ -12,10 +12,10 @@ interface FRadioProps extends RadioGroupProps {
   required: boolean
   label?: React.ReactNode
   options: Array<AnyObject>
-  parseValue: (value: AnyObject) => AnyObject | string
-  getOptionLabel: (value: AnyObject) => string | number
-  getOptionValue: (value: AnyObject) => string | number
-  prepareValue: (value: AnyObject) => AnyObject | string
+  getOptionLabel: (value: AnyObject) => string | number | null
+  getOptionValue: (value: AnyObject) => string | number | null
+  parseValue: (value: AnyObject) => AnyObject | string | null | boolean
+  prepareValue: (value: AnyObject) => AnyObject | string | number | boolean | null
 }
 
 const FRadio: FC<FRadioProps> = props => {
@@ -33,7 +33,7 @@ const FRadio: FC<FRadioProps> = props => {
       checked: value === parsedValue,
       onChange: () => setValue(preparedValue),
     };
-  }), [options, getOptionValue, getOptionLabel, prepareValue, props, parseValue, field.value, setValue]);
+  }), [options, getOptionValue, getOptionLabel, prepareValue, name, parseValue, field.value, setValue]);
 
   return <FormControl required={required} component="fieldset" error={meta.touched && Boolean(meta.error)}>
     <FormLabel component="legend">{ label }</FormLabel>
@@ -51,5 +51,5 @@ FRadio.defaultProps = {
   parseValue: value => value,
   prepareValue: value => value,
   getOptionValue: ({ value }) => value,
-  getOptionLabel: ({ value }) => value,
+  getOptionLabel: ({ label }) => label,
 };
