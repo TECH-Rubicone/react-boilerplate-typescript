@@ -1,6 +1,6 @@
 // outsource dependencies
 import { useField } from 'formik';
-import React, { memo, useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { IconButton, InputAdornment, TextField, TextFieldProps } from '@mui/material';
 
@@ -11,11 +11,6 @@ type FInputProps = TextFieldProps & {
   label?: string
   skipTouch?: boolean
   placeholder?: string
-  classNameField?: string
-}
-
-interface State {
-  showPassword: boolean
 }
 
 const validationStyles = (valid: boolean, invalid: boolean) => {
@@ -33,12 +28,12 @@ const FInput: React.FC<FInputProps> = props => {
   const [field, meta] = useField({ name, type });
   const valid = (skipTouch || meta.touched) && !meta.error;
   const invalid = (skipTouch || meta.touched) && !!meta.error;
-  const [values, setValues] = useState<State>({ showPassword: false });
-  const handleClickShowPassword = () => setValues({ showPassword: !values.showPassword });
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = useCallback(() => setShowPassword(!showPassword), [showPassword]);
   return <TextField
-    fullWidth
     {...attr}
     {...field}
+    fullWidth
     label={label}
     margin="normal"
     id={field.name}
@@ -46,7 +41,7 @@ const FInput: React.FC<FInputProps> = props => {
     autoComplete={field.value}
     helperText={meta.touched && meta.error}
     color={validationStyles(valid, invalid)}
-    type={type !== 'password' ? type : values.showPassword ? 'text' : 'password'}
+    type={type !== 'password' ? type : showPassword ? 'text' : 'password'}
     InputProps={{
       sx: { p: 0 },
       endAdornment: field.name === 'password'
@@ -57,7 +52,7 @@ const FInput: React.FC<FInputProps> = props => {
             onClick={handleClickShowPassword}
             aria-label="toggle password visibility"
           >
-            { values.showPassword ? <VisibilityOff /> : <Visibility /> }
+            { showPassword ? <VisibilityOff /> : <Visibility /> }
           </IconButton>
         </InputAdornment> }}
   />;
