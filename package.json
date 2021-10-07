@@ -25,7 +25,6 @@
     "formik": "^2.2.9",
     "history": "^4.7.1",
     "lodash": "^4.17.21",
-    "material-ui-popup-state": "^1.9.3",
     "moment": "^2.29.1",
     "qs": "^6.10.1",
     "react": "^17.0.2",
@@ -91,6 +90,9 @@
     "editorconfig-checker": "^4.0.2",
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.26.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^7.0.2",
     "sass": "^1.39.0"
   }

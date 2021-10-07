@@ -37,7 +37,7 @@ const SignIn = () => {
 
   const onSubmit = useCallback(values => {
     signIn(values);
-  }, [signIn, disabled]);
+  }, [signIn]);
 
   return <Grid
     m="auto"
