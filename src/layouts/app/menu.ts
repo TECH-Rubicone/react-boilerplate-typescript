@@ -56,6 +56,28 @@ const MENU = [
       },
     ],
   },
+  {
+    type: MENU_TYPE.MENU,
+    name: 'Client',
+    icon: SupervisorAccountOutlined,
+    isActive: (location: Location) => ROUTES.CLIENT.REGEXP.test(location.pathname),
+    list: [
+      {
+        type: MENU_TYPE.LINK,
+        name: 'Supplements',
+        icon: StarBorderOutlined,
+        link: ROUTES.CLIENT_DSLD_SUPPLEMENTS.LINK(),
+        isActive: (location: Location) => ROUTES.CLIENT_DSLD_SUPPLEMENTS.REGEXP.test(location.pathname),
+      },
+      {
+        type: MENU_TYPE.LINK,
+        name: 'Ingredients',
+        icon: FormatListBulletedOutlined,
+        link: ROUTES.CLIENT_DSLD_INGREDIENTS.LINK(),
+        isActive: (location: Location) => ROUTES.CLIENT_DSLD_INGREDIENTS.REGEXP.test(location.pathname),
+      },
+    ],
+  },
 ];
 
 export default MENU;
