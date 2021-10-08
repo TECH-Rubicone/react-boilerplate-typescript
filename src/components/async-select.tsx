@@ -1,63 +1,33 @@
 // outsource dependencies
-import { useField } from 'formik';
-import React, { useCallback, useEffect, useState } from 'react';
-import { AutocompleteProps } from '@mui/material/Autocomplete';
-import { CircularProgress, Autocomplete, TextField, FormHelperText, FormGroup } from '@mui/material';
+import FSelect, { SelectProps } from './select';
+import React, { useEffect, useState } from 'react';
 
-// <type of option, multiple, DisableClearable, FreeSolo>
-interface FSelectProps extends AutocompleteProps<any, boolean, boolean, boolean> {
-  name: string
-  label?: React.ReactNode
-  getOptionLabel: (value: any) => string
-  onLoadOptions: () => Promise<Array<any>>
+// local dependencies
+// interfaces
+import { AnyObject } from '../interfaces/common';
+
+interface FASelectProps extends SelectProps {
+  loading?: boolean
+  loadingText?: React.ReactNode
+  onLoadOptions: () => Promise<Array<AnyObject>>
 }
 
-export const FASelect: React.FC<FSelectProps> = ({ label, onLoadOptions, size, getOptionLabel, ...attr }) => {
-  const [open, setOpen] = useState<boolean>(false);
-  const [list, setList] = useState<Array<any>>([]);
-
-  const loading = open && list.length === 0;
-  const [field, meta, { setValue }] = useField(attr.name);
-
-  const onOpen = useCallback(() => setOpen(true), [setOpen]);
-  const onClose = useCallback(() => setOpen(false), [setOpen]);
-  const onChange = useCallback((event, item) => { setValue(item); }, [setValue]);
+export const FASelect: React.FC<FASelectProps> = props => {
+  const { onLoadOptions, ...attr } = props;
+  const [list, setList] = useState<Array<AnyObject>>([]);
 
   useEffect(() => {
-    onLoadOptions().then(data => setList(data)).catch(({ message }) => console.error(message));
+    onLoadOptions().then(data => { setList(data); }).catch(({ message }) => console.error(message));
   }, [onLoadOptions]);
 
-  return <FormGroup>
-    <Autocomplete
-      {...attr}
-      open={open}
-      options={list}
-      onOpen={onOpen}
-      onClose={onClose}
-      loading={loading}
-      getOptionLabel={getOptionLabel}
-      {...field}
-      onChange={onChange}
-      renderInput={params => (
-        <TextField
-          {...params}
-          size={size}
-          label={label}
-          error={meta.touched && Boolean(meta.error)}
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: <>
-              { loading ? <CircularProgress color="inherit" size={20} /> : null }
-              { params.InputProps.endAdornment }
-            </>
-          }}
-        />
-      )}
-    />
-    { meta.error && <FormHelperText>{ meta.error }</FormHelperText> }
-  </FormGroup>;
+  return <FSelect
+    {...attr}
+    options={list}
+  />;
 };
 
 FASelect.defaultProps = {
   size: 'small',
+  prepareValue: value => value,
+  getOptionLabel: ({ label }) => label,
 };
