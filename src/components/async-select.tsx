@@ -8,7 +8,7 @@ import { AnyObject } from '../interfaces/common';
 
 interface FASelectProps extends SelectProps {
   loading?: boolean
-  loadingText?: React.ReactNode
+  loadingText: React.ReactNode
   onLoadOptions: () => Promise<Array<AnyObject>>
 }
 
@@ -27,7 +27,6 @@ export const FASelect: React.FC<FASelectProps> = props => {
 };
 
 FASelect.defaultProps = {
-  size: 'small',
+  loading: true,
   prepareValue: value => value,
-  getOptionLabel: ({ label }) => label,
 };
