@@ -13,6 +13,13 @@ const MENU = [
     name: 'Menu',
   },
   {
+    type: MENU_TYPE.LINK,
+    name: 'Test',
+    icon: VpnKeyOutlined,
+    link: ROUTES.TEST.LINK(),
+    isActive: (location: Location) => ROUTES.TEST.REGEXP.test(location?.pathname),
+  },
+  {
     type: MENU_TYPE.MENU,
     name: 'Auth',
     icon: VpnKeyOutlined,
