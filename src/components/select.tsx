@@ -1,44 +1,59 @@
 // outsource dependencies
 import { useField } from 'formik';
-import React, { memo, useCallback, useMemo } from 'react';
-import { AutocompleteProps } from '@mui/material/Autocomplete';
-import { Autocomplete, FormControl, FormHelperText } from '@mui/material';
+import React, { memo, useCallback } from 'react';
+import { Autocomplete, FormControl, FormHelperText, TextField } from '@mui/material';
 
 // local dependencies
+import { validationStyles } from './forms/helpers';
+
 // interfaces
 import { AnyObject } from 'interfaces/common';
 
-interface FSelect extends AutocompleteProps<any, boolean, boolean, boolean> {
+export interface SelectProps {
   name: string
-  prepareValue?: (value: AnyObject) => AnyObject | string | number | null
+  disabled?: boolean
+  required?: boolean
+  fullWidth?: boolean
+  skipTouch?: boolean
+  label: React.ReactNode
+  size?: 'small' | 'medium'
+  getOptionLabel?: (option: AnyObject) => string
+  prepareValue: (value: AnyObject) => AnyObject | string | number | null
 }
 
-const FSelect: React.FC<FSelect> = props => {
-  const {
-    name, getOptionLabel, prepareValue,
-    disabled, fullWidth, options, renderInput, ...attr
-  } = props;
-  const [field, meta, { setValue }] = useField(name);
-  const onChange = useCallback((event, value) => {
-    // NOTE check this condition
-    if (prepareValue) {
-      setValue(prepareValue(value));
-    }
-  }, [prepareValue, setValue]);
+interface FSelectProps extends SelectProps {
+  options: Array<AnyObject>
+}
 
-  const error = useMemo(() => meta.touched && Boolean(meta.error), [meta.error, meta.touched]);
-  return <FormControl fullWidth={fullWidth}>
+const FSelect: React.FC<FSelectProps> = props => {
+  const {
+    name, getOptionLabel, prepareValue, skipTouch,
+    disabled, fullWidth, required, size, options, label
+  } = props;
+
+  const [field, meta, { setValue }] = useField(name);
+  const valid = (skipTouch || meta.touched) && !meta.error;
+  const invalid = (skipTouch || meta.touched) && !!meta.error;
+  const onChange = useCallback((event, value) => { setValue(prepareValue(value)); }, [prepareValue, setValue]);
+
+  return <FormControl fullWidth={fullWidth} color={validationStyles(valid, invalid)}>
     <Autocomplete
       getOptionLabel={getOptionLabel}
       id={`select-${name}`}
       disabled={disabled}
       options={options}
-      {...attr}
+      size={size}
       {...field}
       onChange={onChange}
-      renderInput={renderInput}
+      renderInput={params => <TextField
+        {...params}
+        name={name}
+        label={label}
+        required={required}
+        color={validationStyles(valid, invalid)}
+      />}
     />
-    { error && <FormHelperText>{ meta.error }</FormHelperText> }
+    { invalid && <FormHelperText error>{ meta.error }</FormHelperText> }
   </FormControl>;
 };
 
@@ -46,8 +61,9 @@ export default memo(FSelect);
 
 FSelect.defaultProps = {
   size: 'small',
+  required: false,
   disabled: false,
   fullWidth: false,
-  prepareValue: value => value,
+  skipTouch: false,
   getOptionLabel: ({ label }) => label,
 };
