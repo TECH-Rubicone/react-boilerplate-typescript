@@ -76,6 +76,7 @@ export default SideMenu;
 
 const MenuLink = ({ name, link, icon: Icon, isActive, location, ...props }) => {
   const selected = useMemo(() => isActive(location), [isActive, location]);
+  console.log(selected);
   return <ListItemButton {...props} selected={selected} component={Link} to={link}>
     <ListItemIcon>
       <Icon />
