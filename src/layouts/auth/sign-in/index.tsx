@@ -7,8 +7,7 @@ import { Paper, Avatar, Stack, Button, CircularProgress, Typography, Link, Grid 
 import { HelpOutline as HelpOutlineIcon, LockOutlined as LockOutlinedIcon } from '@mui/icons-material';
 
 // components
-import FInput from 'components/input';
-import FCheckbox from 'components/form-checkbox';
+import FInput from 'components/forms/input';
 
 // local dependencies
 import { controller } from './controller';
@@ -83,12 +82,6 @@ const SignIn = () => {
                   name="password"
                   label="Password"
                   placeholder="Password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FCheckbox
-                  name="checked"
-                  label="Remember me"
                 />
               </Grid>
               <Grid item xs={12}>

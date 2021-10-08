@@ -4,25 +4,16 @@ import React, { memo, useCallback, useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { IconButton, InputAdornment, TextField, TextFieldProps } from '@mui/material';
 
+// local dependencies
+import { validationStyles } from './helpers';
+
 type FInputProps = TextFieldProps & {
-  id: string
   name: string
   type: string
   label?: string
   skipTouch?: boolean
   placeholder?: string
 }
-
-type ValidationColor = 'primary' | 'error' | 'success'
-
-const validationStyles = (valid: boolean, invalid: boolean): ValidationColor => {
-  if (valid) {
-    return 'success';
-  } else if (invalid) {
-    return 'error';
-  }
-  return 'primary';
-};
 
 const FInput: React.FC<FInputProps> = props => {
   const { name, type, label, skipTouch, ...attr } = props;

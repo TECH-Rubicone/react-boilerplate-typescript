@@ -1,112 +1,77 @@
 // outsource dependencies
 import { Action } from 'redux';
-import { takeEvery, put, select, delay } from 'redux-saga/effects';
-import { Controller, ActionCreators, ActionCreator, create } from 'redux-saga-controller';
-// import createController, { Controller, ActionCreators, ActionCreator } from 'redux-saga-controller';
+import { toast } from 'react-toastify';
+import { put, call, takeEvery, select } from 'redux-saga/effects';
+import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
+
+// local dependencies
+import { controller as rootController, Initial as RootInitial } from 'layouts/controller';
+
+// components
+import { showWelcomeToast, dismissToast } from 'components/toast';
+
+// constants
+import * as ROUTES from 'constants/routes';
+
+// interfaces
+import { OAuth2AccessTokenDto } from 'interfaces/api';
+
+// services
+import { instancePUB } from 'services/api-public.service';
+import { setupSession } from 'services/api-private.service';
 
 // NOTE action shortcut
 interface Act<Payload> extends Action {
   payload: Payload
 }
 
-// NOTE IMPORTANT!
-// You should add interface only of you will use select effect from redux-saga
-// In all cases except select effect you don't need it
-// It because redux-saga effect select return "any" in all cases
-type UserData = {
-  name: string;
-  age: number;
-  [key: string]: unknown
+interface SignInPayload {
+  username: string,
+  password: string,
+  client: string,
 }
+
 interface Initial {
-  initialized: boolean;
-  disabled: boolean;
-  data: UserData | null
+  disabled: boolean,
+  initialized: boolean,
+  initialValues: SignInPayload,
+  errorMessage: string | null | unknown,
 }
-// NOTE action payloads
-interface InitializePayload {
-  some: string;
-}
-interface SomePayload {
-  id: number | string;
-  name?: string;
-}
-type GetSelfPayload = { id: string | number };
-// You should add interface for actions its only one way to define payload annotation
+
 interface Actions extends ActionCreators<Initial> {
-  initialize: ActionCreator<InitializePayload>;
-  someAction: ActionCreator<SomePayload>;
-  getSelf: ActionCreator<GetSelfPayload>;
+  updateData: ActionCreator<SignInPayload>;
 }
 
-// export const controller:Controller<IActions, IInitial> = createController(
-//   {
-//     initialize: 'init',
-//     getSelf: 'test',
-//     someAction: 'test',
-//   },
-//   function * () {
-//     yield takeEvery(controller.action.initialize.TYPE, initializeSaga);
-//     yield takeEvery(controller.action.getSelf.TYPE, getSelfSaga);
-//   },
-//   {
-//     initialized: false,
-//     disabled: true,
-//     data: null
-//   },
-//   '¯\\_(ツ)_/¯'
-// );
-
-export const controller:Controller<Actions, Initial> = create({
-  prefix: '¯\\_(ツ)_/¯',
-  actions: ['initialize', 'getSelf'],
+export const controller: Controller<Actions, Initial> = create({
+  prefix: 'sign-in',
+  actions: ['updateData', 'initialize'],
   initial: {
+    disabled: false,
+    errorMessage: null,
     initialized: false,
-    disabled: true,
-    data: null
+    initialValues: {
+      username: '',
+      password: '',
+      client: 'admin_application',
+      radio1: 1
+    },
   },
   subscriber: function * () {
+    yield takeEvery(controller.action.updateData.TYPE, updateDataSaga);
     yield takeEvery(controller.action.initialize.TYPE, initializeSaga);
-    yield takeEvery(controller.action.getSelf.TYPE, getSelfSaga);
-  },
+  }
 });
 
-// NOTE Example of usage redux sagas
-function * initializeSaga ({ type, payload } : Act<InitializePayload>) {
-  // NOTE bring reducer to initial state before start initialization
-  yield put(controller.action.clearCtrl());
-  const { initialized }: Initial = yield select(controller.select);
-  console.info(`%c ${type} `, 'color: #FF6766; font-weight: bolder; font-size: 12px;'
-    , '\n let assume it`s initial request ;):', payload
-    , '\n initialized:', initialized
-  );
-  // NOTE emulate request
-  yield delay(3e3);
-  const data = {
-    age: 30,
-    name: '',
-    the: 'initail',
-    request: 'data',
-  };
-  yield put(controller.action.updateCtrl({ data }));
-  // NOTE emulate request
-  yield delay(3e3);
-  // NOTE update any property of entire controller reducer "IInitial"
-  yield put(controller.action.updateCtrl({ initialized: true, disabled: false }));
+function * initializeSaga () {
+  const { user } : RootInitial = yield select(rootController.select);
+  if (user) {
+    yield call(showWelcomeToast, user);
+  }
+  yield put(controller.action.updateCtrl({ initialized: true }));
 }
 
-function * getSelfSaga ({ type, payload } : Act<GetSelfPayload>) {
+function * updateDataSaga ({ payload }: Act<SignInPayload>) {
   yield put(controller.action.updateCtrl({ disabled: true }));
-  console.info(`%c ${type} `, 'color: #FF6766; font-weight: bolder; font-size: 12px;'
-    , '\n let assume it`s getSlef request ;):', payload
-  );
-  // NOTE emulate request
-  yield delay(3e3);
-  const data = {
-    id: payload.id,
-    name: 'John',
-    age: 30,
-  };
-  // NOTE update any property of entire controller reducer
-  yield put(controller.action.updateCtrl({ data, disabled: false }));
+  console.log(payload);
+  yield put(controller.action.updateCtrl({ disabled: false }));
 }
