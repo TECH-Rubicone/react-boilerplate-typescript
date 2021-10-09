@@ -1,14 +1,15 @@
 // services
 import { defineRoute, ANNOTATION } from 'services/route';
 
-
 export const APP = defineRoute('/app', {});
 export const AUTH = defineRoute('/auth', {});
 
 export const ADMINISTRATIVE = defineRoute(`${APP.ROUTE}/administrative`, {});
+export const CLIENT = defineRoute(`${APP.ROUTE}/client`, {});
 
 export const SIGN_IN = defineRoute(`${AUTH.ROUTE}/sign-in`, {});
 export const WELCOME = defineRoute(`${APP.ROUTE}/welcome`, {});
+export const TEST = defineRoute(`${APP.ROUTE}/test`, {});
 
 // NOTE ADMINISTRATIVE
 export const ADMINISTRATIVE_HOME = defineRoute(`${ADMINISTRATIVE.ROUTE}/home`, {});
@@ -23,3 +24,8 @@ export const ADMINISTRATIVE_USERS_LIST = defineRoute(`${ADMINISTRATIVE.ROUTE}/us
 export const ADMINISTRATIVE_USERS_EDIT = defineRoute(`${ADMINISTRATIVE.ROUTE}/users/edit/:id`, {
   params: [ANNOTATION.ID({})]
 });
+
+// NOTE CLIENT
+export const CLIENT_DSLD = defineRoute(`${CLIENT.ROUTE}/dsld`, {});
+export const CLIENT_DSLD_SUPPLEMENTS = defineRoute(`${CLIENT_DSLD.ROUTE}/supplements`, {});
+export const CLIENT_DSLD_INGREDIENTS = defineRoute(`${CLIENT_DSLD.ROUTE}/ingredients`, {});

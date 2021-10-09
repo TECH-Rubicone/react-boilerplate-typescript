@@ -3,7 +3,9 @@ import { call, delay, put, takeEvery } from 'redux-saga/effects';
 import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 
 // local dependencies
-import { getAccessToken, instanceAPI, instancePUB } from '../services/api.service';
+// services
+import { instancePUB } from 'services/api-public.service';
+import { getAccessToken, instanceAPI, restoreSessionFromStore, setupSession } from 'services/api-private.service';
 
 type Permission = {
   id: number;
@@ -79,7 +81,7 @@ function * initializeSaga () {
   }
   // NOTE try to restore user auth
   try {
-    const hasSession: boolean = yield call(instanceAPI.restoreSessionFromStore);
+    const hasSession: boolean = yield call(restoreSessionFromStore);
     if (hasSession) {
       yield call(getSelfExecutor);
       yield put(controller.action.updateCtrl({ accessToken: getAccessToken() }));
@@ -99,7 +101,7 @@ function * signOutSaga () {
     console.error('SIGN_OUT', message);
   }
   // NOTE clear client side session from store
-  yield call(instanceAPI.setupSession, null);
+  yield call(setupSession, null);
   yield put(controller.action.updateCtrl({ user: null })); // redirect to signIn
 }
 

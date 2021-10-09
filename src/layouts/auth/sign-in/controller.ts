@@ -5,10 +5,20 @@ import { put, call, takeEvery, select } from 'redux-saga/effects';
 import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 
 // local dependencies
-import * as ROUTES from 'constants/routes';
-import { instanceAPI, instancePUB } from 'services/api.service';
-import { showWelcomeToast, dismissToast } from 'components/toast';
 import { controller as rootController, Initial as RootInitial } from 'layouts/controller';
+
+// components
+import { showWelcomeToast, dismissToast } from 'components/toast';
+
+// constants
+import * as ROUTES from 'constants/routes';
+
+// interfaces
+import { OAuth2AccessTokenDto } from 'interfaces/api';
+
+// services
+import { instancePUB } from 'services/api-public.service';
+import { setupSession } from 'services/api-private.service';
 
 // NOTE action shortcut
 interface Act<Payload> extends Action {
@@ -18,14 +28,8 @@ interface Act<Payload> extends Action {
 interface SignInPayload {
   username: string,
   password: string,
+  checked: boolean,
   client: string,
-}
-
-interface TokenDto {
-  accessToken: string,
-  refreshToken: string,
-  accessTokenValiditySeconds: number,
-  refreshTokenValiditySeconds: number,
 }
 
 interface Initial {
@@ -49,6 +53,7 @@ export const controller: Controller<Actions, Initial> = create({
     initialValues: {
       username: '',
       password: '',
+      checked: false,
       client: 'admin_application',
     },
   },
@@ -70,8 +75,8 @@ function * signInSaga ({ payload }: Act<SignInPayload>) {
   yield call(dismissToast);
   yield put(controller.action.updateCtrl({ disabled: true, errorMessage: null }));
   try {
-    const session: TokenDto = yield call(instancePUB, '/auth/token', { method: 'POST', data: payload });
-    yield call(instanceAPI.setupSession, session);
+    const session: OAuth2AccessTokenDto = yield call(instancePUB, '/auth/token', { method: 'POST', data: payload });
+    yield call(setupSession, session);
     yield call(toast.success, 'Welcome! We are really glad to see you!');
     yield call(ROUTES.APP.PUSH);
   } catch ({ message }) {
