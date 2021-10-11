@@ -20,23 +20,39 @@ export interface SelectProps {
   size?: 'small' | 'medium'
   loadingText?: React.ReactNode
   getOptionLabel?: (option: AnyObject) => string
-  prepareValue: (value: AnyObject) => AnyObject | string | number | null
+  prepareValue: (value: AnyObject | string | number) => AnyObject | null
+  getFieldValue: (value: AnyObject) => AnyObject | string | number | null
 }
 
 interface FSelectProps extends SelectProps {
   options: Array<AnyObject>
 }
 
+type PrepareValue = (value: AnyObject | string | number) => AnyObject | null;
+
+const getValue = (value: AnyObject, prepareValue: PrepareValue) => {
+  if (typeof value === 'undefined' || value === null) {
+    return value;
+  }
+  return prepareValue(value);
+};
+
 const FSelect: React.FC<FSelectProps> = props => {
   const {
     name, getOptionLabel, prepareValue, skipTouch, loading, loadingText,
-    disabled, fullWidth, required, size, options, label
+    disabled, fullWidth, required, size, options, label, getFieldValue,
   } = props;
 
   const [field, meta, { setValue }] = useField(name);
   const valid = (skipTouch || meta.touched) && !meta.error;
   const invalid = (skipTouch || meta.touched) && !!meta.error;
-  const onChange = useCallback((event, value) => { setValue(prepareValue(value)); }, [prepareValue, setValue]);
+  const onChange = useCallback((event, value) => {
+    if (value) {
+      setValue(getFieldValue(value));
+    } else {
+      setValue(value);
+    }
+  }, [getFieldValue, setValue]);
 
   return <FormControl fullWidth={fullWidth} color={validationStyles(valid, invalid)}>
     <Autocomplete
@@ -47,8 +63,8 @@ const FSelect: React.FC<FSelectProps> = props => {
       loading={loading}
       options={options}
       size={size}
-      {...field}
       onChange={onChange}
+      value={getValue(field.value, prepareValue)}
       renderInput={params => <TextField
         {...params}
         name={name}
@@ -69,5 +85,6 @@ FSelect.defaultProps = {
   disabled: false,
   fullWidth: false,
   skipTouch: false,
+  getFieldValue: ({ value }) => value,
   getOptionLabel: ({ label }) => label,
 };

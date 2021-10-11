@@ -28,5 +28,5 @@ export const FASelect: React.FC<FASelectProps> = props => {
 
 FASelect.defaultProps = {
   loading: true,
-  prepareValue: value => value,
+  getFieldValue: value => value,
 };
