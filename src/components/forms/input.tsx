@@ -27,7 +27,6 @@ const FInput: React.FC<FInputProps> = props => {
     margin="normal"
     id={field.name}
     error={invalid}
-    autoFocus={valid}
     focused={meta.touched}
     autoComplete={field.value}
     helperText={meta.touched && meta.error}
