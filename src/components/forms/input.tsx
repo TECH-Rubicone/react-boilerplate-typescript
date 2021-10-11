@@ -9,10 +9,7 @@ import { validationStyles } from './helpers';
 
 type FInputProps = TextFieldProps & {
   name: string
-  type: string
-  label?: string
   skipTouch?: boolean
-  placeholder?: string
 }
 
 const FInput: React.FC<FInputProps> = props => {
@@ -30,6 +27,7 @@ const FInput: React.FC<FInputProps> = props => {
     margin="normal"
     id={field.name}
     error={invalid}
+    focused={meta.touched}
     autoComplete={field.value}
     helperText={meta.touched && meta.error}
     color={validationStyles(valid, invalid)}
@@ -40,9 +38,9 @@ const FInput: React.FC<FInputProps> = props => {
         && <InputAdornment position="end" sx={{ position: 'absolute', right: 0, pr: 3 }}>
           <IconButton
             edge="end"
-            color="primary"
             onClick={handleClickShowPassword}
             aria-label="toggle password visibility"
+            color={validationStyles(valid, invalid)}
           >
             { showPassword ? <VisibilityOff /> : <Visibility /> }
           </IconButton>
