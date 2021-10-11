@@ -3,11 +3,11 @@ import { useField } from 'formik';
 import React, { memo, useCallback } from 'react';
 import { Autocomplete, FormControl, FormHelperText, TextField } from '@mui/material';
 
-// local dependencies
-import { validationStyles } from './forms/helpers';
-
 // interfaces
 import { AnyObject } from 'interfaces/common';
+
+// local dependencies
+import { validationStyles } from './forms/helpers';
 
 export interface SelectProps {
   name: string
@@ -20,7 +20,7 @@ export interface SelectProps {
   size?: 'small' | 'medium'
   loadingText?: React.ReactNode
   getOptionLabel?: (option: AnyObject) => string
-  prepareValue: (value: AnyObject | string | number) => AnyObject | null
+  prepareValue?: (value: AnyObject | string | number) => AnyObject | null
   getFieldValue: (value: AnyObject) => AnyObject | string | number | null
 }
 
@@ -56,15 +56,15 @@ const FSelect: React.FC<FSelectProps> = props => {
 
   return <FormControl fullWidth={fullWidth} color={validationStyles(valid, invalid)}>
     <Autocomplete
-      getOptionLabel={getOptionLabel}
-      loadingText={loadingText}
-      id={`select-${name}`}
-      disabled={disabled}
+      size={size}
       loading={loading}
       options={options}
-      size={size}
       onChange={onChange}
-      value={getValue(field.value, prepareValue)}
+      disabled={disabled}
+      id={`select-${name}`}
+      loadingText={loadingText}
+      getOptionLabel={getOptionLabel}
+      value={getValue(field.value, prepareValue!)}
       renderInput={params => <TextField
         {...params}
         name={name}
@@ -87,4 +87,5 @@ FSelect.defaultProps = {
   skipTouch: false,
   getFieldValue: ({ value }) => value,
   getOptionLabel: ({ label }) => label,
+  prepareValue: value => ({ value, label: value }),
 };

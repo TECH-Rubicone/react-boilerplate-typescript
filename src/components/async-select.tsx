@@ -1,38 +1,44 @@
 // outsource dependencies
-import FSelect, { SelectProps } from './select';
+import { toast } from 'react-toastify';
 import React, { useCallback, useEffect, useState } from 'react';
 
-// local dependencies
 // interfaces
-import { AnyObject } from '../interfaces/common';
+import { AnyObject } from 'interfaces/common';
 
-interface FASelectProps extends SelectProps {
-  loading?: boolean
+// local dependencies
+import FSelect, { SelectProps } from './select';
+
+interface FAsyncSelectProps extends SelectProps {
   loadingText: React.ReactNode
-  onLoadOptions: () => Promise<Array<AnyObject>>
+  loadOptions: () => Promise<Array<AnyObject>>
 }
 
-export const FASelect: React.FC<FASelectProps> = props => {
-  const { onLoadOptions, ...attr } = props;
+export const FAsyncSelect: React.FC<FAsyncSelectProps> = props => {
+  const { loadOptions, ...attr } = props;
   const [list, setList] = useState<Array<AnyObject>>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const loadOptions = useCallback(async () => {
+  const handleLoadOptions = useCallback(async () => {
     try {
-      const data = await onLoadOptions();
-      setList(data);
+      const data = await loadOptions();
+      if (loading) {
+        setList(data);
+        setLoading(false);
+      }
     } catch ({ message }) {
-      console.error(message);
+      toast(String(message), { delay: 500, theme: 'light', toastId: 'ERROR', closeOnClick: true, });
     }
-  }, [onLoadOptions]);
+  }, [loadOptions, loading]);
 
   useEffect(() => {
-    loadOptions();
-  }, [loadOptions]);
+    handleLoadOptions();
+    return () => { setLoading(false); };
+  }, [handleLoadOptions]);
 
-  return <FSelect {...attr} options={list} />;
+  return <FSelect {...attr} options={list} loading={loading} />;
 };
 
-FASelect.defaultProps = {
+FAsyncSelect.defaultProps = {
   loading: true,
   getFieldValue: value => value,
 };
