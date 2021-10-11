@@ -1,6 +1,6 @@
 // outsource dependencies
 import FSelect, { SelectProps } from './select';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 // local dependencies
 // interfaces
@@ -16,14 +16,20 @@ export const FASelect: React.FC<FASelectProps> = props => {
   const { onLoadOptions, ...attr } = props;
   const [list, setList] = useState<Array<AnyObject>>([]);
 
-  useEffect(() => {
-    onLoadOptions().then(data => { setList(data); }).catch(({ message }) => console.error(message));
+  const loadOptions = useCallback(async () => {
+    try {
+      const data = await onLoadOptions();
+      setList(data);
+    } catch ({ message }) {
+      console.error(message);
+    }
   }, [onLoadOptions]);
 
-  return <FSelect
-    {...attr}
-    options={list}
-  />;
+  useEffect(() => {
+    loadOptions();
+  }, [loadOptions]);
+
+  return <FSelect {...attr} options={list} />;
 };
 
 FASelect.defaultProps = {
