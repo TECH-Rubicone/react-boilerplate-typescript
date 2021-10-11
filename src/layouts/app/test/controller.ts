@@ -43,7 +43,7 @@ interface Actions extends ActionCreators<Initial> {
 }
 
 export const controller: Controller<Actions, Initial> = create({
-  prefix: 'sign-in',
+  prefix: 'test',
   actions: ['updateData', 'initialize'],
   initial: {
     disabled: false,
