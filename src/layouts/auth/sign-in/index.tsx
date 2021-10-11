@@ -1,29 +1,30 @@
 // outsource dependencies
 import * as yup from 'yup';
 import { Formik, Form } from 'formik';
+import { Link as RouterLink } from 'react-router-dom';
 import { useController } from 'redux-saga-controller';
 import React, { memo, useEffect, useCallback, useMemo } from 'react';
-import { Paper, Avatar, Stack, Button, CircularProgress, Typography, Link, Grid } from '@mui/material';
-import { HelpOutline as HelpOutlineIcon, LockOutlined as LockOutlinedIcon } from '@mui/icons-material';
+import { Paper, Button, CircularProgress, Typography, Link, Grid } from '@mui/material';
 
 // components
-import FInput from 'components/input';
-import FCheckbox from 'components/form-checkbox';
-import FDatePicker from '../../../components/form-date-picker';
+import FInput from 'components/forms/input';
+import AlertError from 'components/alert-error';
+
+// constants
+import * as ROUTES from 'constants/routes';
 
 // local dependencies
 import { controller } from './controller';
 
-// configure
-// TODO Add alert error for errorMessage
-// TODO Add i18next
-
 const SignIn = () => {
   const [
     { initialized, disabled, errorMessage, initialValues },
-    { signIn, initialize }
+    { updateCtrl, clearCtrl, signIn, initialize }
   ] = useController(controller);
-  useEffect(() => { initialize(); }, [initialize]);
+  useEffect(() => {
+    initialize();
+    return () => { clearCtrl(); };
+  }, [clearCtrl, initialize]);
   const validationSchema = useMemo(() => yup.object().shape({
     username: yup.string()
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
@@ -31,19 +32,11 @@ const SignIn = () => {
     password: yup.string()
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
       .min(8, 'VALIDATION_ERROR.MIN_LENGTH_CHARACTERS'),
-    checked: yup.boolean()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD')
-      .oneOf([true], 'VALIDATION_ERROR.SHOULD_BE_CHECKED'),
-    userDate: yup.date()
-      .nullable()
-      .max(new Date())
-      .typeError('Invalid Date')
-      .required('VALIDATION_ERROR.REQUIRED_FIELD')
   }), []);
 
-  const onSubmit = useCallback(values => {
-    signIn(values);
-  }, [signIn]);
+  const onSubmit = useCallback(values => { signIn(values); }, [signIn]);
+  const clearError = useCallback(() => { updateCtrl({ errorMessage: '' }); }, [updateCtrl]);
+
   return <Grid
     m="auto"
     container
@@ -62,14 +55,9 @@ const SignIn = () => {
             validationSchema={validationSchema}
           >
             <Form>
-              <Grid item>
-                <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
-                  <Avatar sx={{ bgcolor: 'info.main' }}>
-                    <LockOutlinedIcon/>
-                  </Avatar>
-                </Stack>
-                <Typography variant="h5" gutterBottom component="div" textAlign="center" mt={1}>
-                    BOILERPLATE
+              <Grid item xs={12} mb={1}>
+                <Typography variant="h5" textAlign="center">
+                  Boilerplate
                 </Typography>
               </Grid>
               <Grid item xs={12}>
@@ -81,7 +69,7 @@ const SignIn = () => {
                   placeholder="Email Address"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} mb={1}>
                 <FInput
                   id="password"
                   type="password"
@@ -90,35 +78,29 @@ const SignIn = () => {
                   placeholder="Password"
                 />
               </Grid>
-              <Grid item xs={12} mt={2}>
-                <FDatePicker
-                  name="userDate"
-                  inputFormat="MM/dd/yyyy"
-                  label="Add your birthday"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FCheckbox
-                  name="checked"
-                  label="Remember me"
-                />
-              </Grid>
-              <Grid item xs={12}>
+              { errorMessage && <Grid item xs={12} mb={1}>
+                <AlertError title="Error" onClose={clearError}>
+                  { errorMessage }
+                </AlertError>
+              </Grid> }
+              <Grid item xs={12} mb={2}>
                 <Button
                   fullWidth
                   type="submit"
                   color="primary"
                   variant="contained"
-                  disabled={disabled}
+                  disabled={disabled || !initialized}
                 >
-                  { disabled ? <CircularProgress size={20}/> : 'LOGIN' }
+                  <Typography variant="body1" mr={1}>
+                    Login
+                  </Typography>
+                  { disabled && <CircularProgress color="info" size={20} /> }
                 </Button>
               </Grid>
-              <Grid item xs={6} textAlign="left" pt={1}>
-                <Link href="#" variant="body2">
-                  <HelpOutlineIcon color="info"/>
-                  <Typography variant="overline" pl={1} color="info.main">
-                      Forgot password
+              <Grid item xs={12}>
+                <Link component={RouterLink} to={ROUTES.FORGOT_PASSWORD.LINK()} variant="body2">
+                  <Typography variant="body1" align="center" pl={1}>
+                      Forgot password?
                   </Typography>
                 </Link>
               </Grid>
