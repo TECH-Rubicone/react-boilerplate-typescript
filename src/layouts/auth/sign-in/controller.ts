@@ -29,6 +29,7 @@ interface SignInPayload {
   username: string,
   password: string,
   checked: boolean,
+  userDate: Date,
   client: string,
 }
 
@@ -54,6 +55,7 @@ export const controller: Controller<Actions, Initial> = create({
       username: '',
       password: '',
       checked: false,
+      userDate: new Date(),
       client: 'admin_application',
     },
   },

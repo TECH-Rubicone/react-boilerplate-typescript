@@ -9,6 +9,7 @@ import { HelpOutline as HelpOutlineIcon, LockOutlined as LockOutlinedIcon } from
 // components
 import FInput from 'components/input';
 import FCheckbox from 'components/form-checkbox';
+import FDatePicker from '../../../components/form-date-picker';
 
 // local dependencies
 import { controller } from './controller';
@@ -33,12 +34,16 @@ const SignIn = () => {
     checked: yup.boolean()
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
       .oneOf([true], 'VALIDATION_ERROR.SHOULD_BE_CHECKED'),
+    userDate: yup.date()
+      .nullable()
+      .max(new Date())
+      .typeError('Invalid Date')
+      .required('VALIDATION_ERROR.REQUIRED_FIELD')
   }), []);
 
   const onSubmit = useCallback(values => {
     signIn(values);
   }, [signIn]);
-
   return <Grid
     m="auto"
     container
@@ -83,6 +88,13 @@ const SignIn = () => {
                   name="password"
                   label="Password"
                   placeholder="Password"
+                />
+              </Grid>
+              <Grid item xs={12} mt={2}>
+                <FDatePicker
+                  name="userDate"
+                  inputFormat="MM/dd/yyyy"
+                  label="Add your birthday"
                 />
               </Grid>
               <Grid item xs={12}>
