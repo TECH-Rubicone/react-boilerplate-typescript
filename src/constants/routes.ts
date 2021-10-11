@@ -8,7 +8,9 @@ export const ADMINISTRATIVE = defineRoute(`${APP.ROUTE}/administrative`, {});
 export const CLIENT = defineRoute(`${APP.ROUTE}/client`, {});
 
 export const SIGN_IN = defineRoute(`${AUTH.ROUTE}/sign-in`, {});
+export const FORGOT_PASSWORD = defineRoute(`${AUTH.ROUTE}/forgot-password`, {});
 export const WELCOME = defineRoute(`${APP.ROUTE}/welcome`, {});
+export const TEST = defineRoute(`${APP.ROUTE}/test`, {});
 
 // NOTE ADMINISTRATIVE
 export const ADMINISTRATIVE_HOME = defineRoute(`${ADMINISTRATIVE.ROUTE}/home`, {});
