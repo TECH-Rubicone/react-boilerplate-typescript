@@ -1,8 +1,7 @@
 // outsource dependencies
 import { toast } from 'react-toastify';
 import React, { memo, useCallback, useEffect, useState } from 'react';
-import { Autocomplete, CircularProgress, FormControl, FormHelperText, TextField } from '@mui/material';
-import { AutocompleteProps } from '@mui/material/Autocomplete';
+import { Autocomplete, CircularProgress, FormControl, FormHelperText, Grid, TextField, Typography } from '@mui/material';
 
 // interfaces
 import { AnyObject } from 'interfaces/common';
@@ -10,22 +9,44 @@ import { AnyObject } from 'interfaces/common';
 // local dependencies
 import { ValidationColor } from './forms/helpers';
 
-interface SelectProps extends AutocompleteProps<any, any, any, any> {
+interface DefaultSelectProps {
   name: string
+  loading?: boolean
   required?: boolean
+  disabled?: boolean
   skipTouch?: boolean
+  fullWidth?: boolean
+  label: React.ReactNode
   color?: ValidationColor
-  options: Array<AnyObject>
+  size?: 'small' | 'medium'
+  loadingText?: React.ReactNode
   error?: boolean | string | undefined
+  value?: AnyObject | null | undefined
+  getOptionLabel: (option: AnyObject) => string
+  onChange?: (event: React.SyntheticEvent, value: AnyObject | null | undefined) => void
 }
 
-const Select: React.FC<SelectProps> = props => {
-  const { name, fullWidth, color, error, ...attr } = props;
+interface SyncProps {
+  options: Array<AnyObject>
+}
 
+interface AsyncProps {
+  loadOptions: () => Promise<Array<AnyObject>>
+}
+
+type SelectProps = DefaultSelectProps & SyncProps;
+type AsyncSelectProps = DefaultSelectProps & AsyncProps;
+
+const Select: React.FC<SelectProps> = ({ name, fullWidth, color, error, label, ...attr }) => {
   return <FormControl fullWidth={fullWidth} color={color}>
     <Autocomplete
       {...attr}
       id={`select-${name}`}
+      renderInput={params => <TextField
+        {...params}
+        name={name}
+        label={label}
+      />}
     />
     { error && <FormHelperText error>{ error }</FormHelperText> }
   </FormControl>;
@@ -33,58 +54,36 @@ const Select: React.FC<SelectProps> = props => {
 
 export default memo(Select);
 
-export interface CustomSelectProps {
-  name: string
-  loading?: boolean
-  disabled?: boolean
-  required?: boolean
-  fullWidth?: boolean
-  skipTouch?: boolean
-  label: React.ReactNode
-  size?: 'small' | 'medium'
-  loadingText?: React.ReactNode
-  value?: AnyObject | string | number | null
-  getOptionLabel: (option: AnyObject) => string
-}
-
-export interface AsyncSelectProps extends CustomSelectProps {
-  loadingText: React.ReactNode
-  error?: boolean | string | undefined
-  loadOptions: () => Promise<Array<AnyObject>>
-  onChange: (event: React.SyntheticEvent, value: AnyObject) => void
-}
-
-export const AsyncSelect: React.FC<AsyncSelectProps> = props => {
-  const { loadOptions, loadingText, label, name, ...attr } = props;
+export const AsyncSelect: React.FC<AsyncSelectProps> = ({ loadOptions, loadingText, label, name, ...attr }) => {
   const [list, setList] = useState<Array<AnyObject>>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [isSubscribed, setIsSubscribed] = useState<boolean>(true);
   const handleLoadOptions = useCallback(async () => {
     try {
       const data = await loadOptions();
-      if (loading) {
+      if (isSubscribed) {
         setList(data);
-        setLoading(false);
+        setIsSubscribed(false);
       }
     } catch ({ message }) {
       toast(String(message), { delay: 500, theme: 'light', toastId: 'ERROR', closeOnClick: true, });
     }
-  }, [loadOptions, loading]);
+  }, [loadOptions, isSubscribed, setIsSubscribed]);
 
   useEffect(() => {
     handleLoadOptions();
-    return () => { setLoading(false); };
+    return () => { setIsSubscribed(false); };
   }, [handleLoadOptions]);
 
   return <Select
     {...attr}
     name={name}
+    label={label}
     options={list}
-    loading={loading}
-    loadingText={<><CircularProgress color="inherit" size={20} />{ loadingText }</>}
-    renderInput={params => <TextField
-      {...params}
-      label={label}
-      name={name}
-    />}
+    loadingText={<Grid container>
+      <CircularProgress color="inherit" size={20} />
+      <Typography component="span" sx={{ ml: 1 }}>
+        { loadingText }
+      </Typography>
+    </Grid>}
   />;
 };
