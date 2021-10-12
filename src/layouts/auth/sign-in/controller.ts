@@ -26,17 +26,16 @@ interface Act<Payload> extends Action {
 }
 
 interface SignInPayload {
-  username: string,
-  password: string,
-  checked: boolean,
   client: string,
+  password: string,
+  username: string,
 }
 
 interface Initial {
   disabled: boolean,
   initialized: boolean,
+  errorMessage: string,
   initialValues: SignInPayload,
-  errorMessage: string | null | unknown,
 }
 
 interface Actions extends ActionCreators<Initial> {
@@ -48,12 +47,11 @@ export const controller: Controller<Actions, Initial> = create({
   actions: ['signIn', 'initialize'],
   initial: {
     disabled: false,
-    errorMessage: null,
+    errorMessage: '',
     initialized: false,
     initialValues: {
       username: '',
       password: '',
-      checked: false,
       client: 'admin_application',
     },
   },
@@ -72,10 +70,10 @@ function * initializeSaga () {
 }
 
 function * signInSaga ({ payload }: Act<SignInPayload>) {
-  yield call(dismissToast);
-  yield put(controller.action.updateCtrl({ disabled: true, errorMessage: null }));
+  yield put(controller.action.updateCtrl({ disabled: true, errorMessage: '' }));
   try {
     const session: OAuth2AccessTokenDto = yield call(instancePUB, '/auth/token', { method: 'POST', data: payload });
+    yield call(dismissToast);
     yield call(setupSession, session);
     yield call(toast.success, 'Welcome! We are really glad to see you!');
     yield call(ROUTES.APP.PUSH);
