@@ -1,5 +1,6 @@
 // outsource dependencies
 import * as yup from 'yup';
+import moment from 'moment';
 import { Formik, Form } from 'formik';
 import { Link as RouterLink } from 'react-router-dom';
 import { useController } from 'redux-saga-controller';
@@ -12,11 +13,10 @@ import AlertError from 'components/alert-error';
 import FDatePicker from '../../../components/form-date-picker';
 
 // constants
-
 import * as ROUTES from 'constants/routes';
+
 // local dependencies
 import { controller } from './controller';
-import moment from 'moment';
 
 const SignIn = () => {
   const [
