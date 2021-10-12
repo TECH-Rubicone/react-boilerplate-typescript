@@ -11,6 +11,7 @@ import { ValidationColor } from './forms/helpers';
 
 interface DefaultSelectProps {
   name: string
+  focused?: boolean
   loading?: boolean
   required?: boolean
   disabled?: boolean
@@ -23,6 +24,7 @@ interface DefaultSelectProps {
   error?: boolean | string | undefined
   value?: AnyObject | null | undefined
   getOptionLabel: (option: AnyObject) => string
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
   onChange?: (event: React.SyntheticEvent, value: AnyObject | null | undefined) => void
 }
 
@@ -34,10 +36,10 @@ interface AsyncProps {
   loadOptions: () => Promise<Array<AnyObject>>
 }
 
-type SelectProps = DefaultSelectProps & SyncProps;
-type AsyncSelectProps = DefaultSelectProps & AsyncProps;
+export type SelectProps = DefaultSelectProps & SyncProps;
+export type AsyncSelectProps = DefaultSelectProps & AsyncProps;
 
-const Select: React.FC<SelectProps> = ({ name, fullWidth, color, error, label, ...attr }) => {
+const Select: React.FC<SelectProps> = ({ name, focused, fullWidth, color, error, label, ...attr }) => {
   return <FormControl fullWidth={fullWidth} color={color}>
     <Autocomplete
       {...attr}
@@ -46,6 +48,8 @@ const Select: React.FC<SelectProps> = ({ name, fullWidth, color, error, label, .
         {...params}
         name={name}
         label={label}
+        color={color}
+        focused={focused}
       />}
     />
     { error && <FormHelperText error>{ error }</FormHelperText> }
@@ -55,10 +59,12 @@ const Select: React.FC<SelectProps> = ({ name, fullWidth, color, error, label, .
 export default memo(Select);
 
 export const AsyncSelect: React.FC<AsyncSelectProps> = ({ loadOptions, loadingText, label, name, ...attr }) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [list, setList] = useState<Array<AnyObject>>([]);
   const [isSubscribed, setIsSubscribed] = useState<boolean>(true);
   const handleLoadOptions = useCallback(async () => {
     try {
+      setLoading(true);
       const data = await loadOptions();
       if (isSubscribed) {
         setList(data);
@@ -67,6 +73,7 @@ export const AsyncSelect: React.FC<AsyncSelectProps> = ({ loadOptions, loadingTe
     } catch ({ message }) {
       toast(String(message), { delay: 500, theme: 'light', toastId: 'ERROR', closeOnClick: true, });
     }
+    setLoading(false);
   }, [loadOptions, isSubscribed, setIsSubscribed]);
 
   useEffect(() => {
@@ -79,6 +86,7 @@ export const AsyncSelect: React.FC<AsyncSelectProps> = ({ loadOptions, loadingTe
     name={name}
     label={label}
     options={list}
+    loading={loading}
     loadingText={<Grid container>
       <CircularProgress color="inherit" size={20} />
       <Typography component="span" sx={{ ml: 1 }}>

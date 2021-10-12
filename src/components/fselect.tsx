@@ -1,39 +1,28 @@
 // outsource dependencies
 import { useField } from 'formik';
-import { TextField } from '@mui/material';
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, useMemo } from 'react';
 
 // interfaces
 import { AnyObject } from 'interfaces/common';
 
 // local dependencies
 import { validationStyles } from './forms/helpers';
-import Select, { AsyncSelect, CustomSelectProps } from './select';
+import Select, { AsyncSelect, AsyncSelectProps, SelectProps } from './select';
 
-interface FSelectProps extends CustomSelectProps {
-  options: Array<AnyObject>
-
+interface FSelectProps extends SelectProps {
   prepareValue: (value: AnyObject | string | number) => AnyObject | null
   getFieldValue: (value: AnyObject) => AnyObject | string | number | null
 }
 
 type PrepareValue = (value: AnyObject | string | number) => AnyObject | null;
 
-const getValue = (value: AnyObject, prepareValue: PrepareValue) => {
-  if (typeof value === 'undefined' || value === null) {
-    return value;
-  }
-  return prepareValue(value);
-};
+const getValue = (value: AnyObject, prepareValue: PrepareValue) => value ? prepareValue(value) : value;
 
-const FSelect: React.FC<FSelectProps> = props => {
-  const {
-    name, prepareValue, skipTouch, required, label, getFieldValue, ...attr
-  } = props;
-
+const FSelect: React.FC<FSelectProps> = ({ name, prepareValue, skipTouch, getFieldValue, ...attr }) => {
   const [field, meta, { setValue }] = useField(name);
   const valid = (skipTouch || meta.touched) && !meta.error;
   const invalid = (skipTouch || meta.touched) && !!meta.error;
+  const color = useMemo(() => validationStyles(valid, invalid), [valid, invalid]);
   const onChange = useCallback((event, value) => {
     if (value) {
       setValue(getFieldValue(value));
@@ -45,18 +34,12 @@ const FSelect: React.FC<FSelectProps> = props => {
   return <Select
     {...attr}
     name={name}
+    color={color}
     onChange={onChange}
     onBlur={field.onBlur}
-    id={`select-${name}`}
+    focused={meta.touched}
     error={invalid && meta.error}
     value={getValue(field.value, prepareValue!)}
-    renderInput={params => <TextField
-      {...params}
-      name={name}
-      label={label}
-      required={required}
-      color={validationStyles(valid!, invalid!)}
-    />}
   />;
 };
 
@@ -72,19 +55,17 @@ FSelect.defaultProps = {
 
 export default memo(FSelect);
 
-interface FAsyncSelectProps extends CustomSelectProps {
-  loadingText: React.ReactNode
-  loadOptions: () => Promise<Array<AnyObject>>
-
+interface FAsyncSelectProps extends AsyncSelectProps {
   prepareValue: (value: AnyObject | string | number) => AnyObject | null
   getFieldValue: (value: AnyObject) => AnyObject | string | number | null
 }
 
-export const FAsyncSelect: React.FC<FAsyncSelectProps> = props => {
+export const FAsyncSelect: React.FC<FAsyncSelectProps> = memo(props => {
   const { name, prepareValue, getFieldValue, skipTouch, ...attr } = props;
   const [field, meta, { setValue }] = useField(name);
-
+  const valid = (skipTouch || meta.touched) && !meta.error;
   const invalid = (skipTouch || meta.touched) && !!meta.error;
+  const color = useMemo(() => validationStyles(valid, invalid), [valid, invalid]);
   const onChange = useCallback((event, value) => {
     if (value) {
       setValue(getFieldValue(value));
@@ -92,11 +73,14 @@ export const FAsyncSelect: React.FC<FAsyncSelectProps> = props => {
       setValue(value);
     }
   }, [getFieldValue, setValue]);
+
   return <AsyncSelect
     {...attr}
     {...field}
+    color={color}
+    onChange={onChange}
+    focused={meta.touched}
     error={invalid && meta.error}
     value={getValue(field.value, prepareValue!)}
-    onChange={onChange}
   />;
-};
+});
