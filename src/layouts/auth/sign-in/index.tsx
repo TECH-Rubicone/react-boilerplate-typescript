@@ -9,16 +9,18 @@ import { Paper, Button, CircularProgress, Typography, Link, Grid } from '@mui/ma
 // components
 import FInput from 'components/forms/input';
 import AlertError from 'components/alert-error';
+import FDatePicker from '../../../components/form-date-picker';
 
 // constants
-import * as ROUTES from 'constants/routes';
 
+import * as ROUTES from 'constants/routes';
 // local dependencies
 import { controller } from './controller';
+import moment from 'moment';
 
 const SignIn = () => {
   const [
-    { initialized, disabled, errorMessage, initialValues },
+    { initialized, disabled, errorMessage, initialValues, outputFormat },
     { updateCtrl, clearCtrl, signIn, initialize }
   ] = useController(controller);
   useEffect(() => {
@@ -32,9 +34,15 @@ const SignIn = () => {
     password: yup.string()
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
       .min(8, 'VALIDATION_ERROR.MIN_LENGTH_CHARACTERS'),
+    userDate: yup.date()
+      .nullable()
+      .typeError('Invalid Date')
+      .required('VALIDATION_ERROR.REQUIRED_FIELD')
   }), []);
-
-  const onSubmit = useCallback(values => { signIn(values); }, [signIn]);
+  const onSubmit = useCallback(values => {
+    const userDate = moment(values.userDate).format(outputFormat);
+    signIn({ ...values, userDate });
+  }, [outputFormat, signIn]);
   const clearError = useCallback(() => { updateCtrl({ errorMessage: '' }); }, [updateCtrl]);
 
   return <Grid
@@ -76,6 +84,14 @@ const SignIn = () => {
                   name="password"
                   label="Password"
                   placeholder="Password"
+                />
+              </Grid>
+              <Grid item xs={12} mb={1}>
+                <FDatePicker
+                  name="userDate"
+                  inputFormat="MM/DD/YYYY"
+                  outputFormat="YYYY-MM-DD"
+                  label="Add your birthday"
                 />
               </Grid>
               { errorMessage && <Grid item xs={12} mb={1}>

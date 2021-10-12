@@ -27,6 +27,7 @@ interface Act<Payload> extends Action {
 
 interface SignInPayload {
   client: string,
+  userDate: Date,
   password: string,
   username: string,
 }
@@ -35,6 +36,7 @@ interface Initial {
   disabled: boolean,
   initialized: boolean,
   errorMessage: string,
+  outputFormat: string,
   initialValues: SignInPayload,
 }
 
@@ -48,10 +50,12 @@ export const controller: Controller<Actions, Initial> = create({
   initial: {
     disabled: false,
     errorMessage: '',
+    outputFormat: '',
     initialized: false,
     initialValues: {
       username: '',
       password: '',
+      userDate: new Date(),
       client: 'admin_application',
     },
   },
