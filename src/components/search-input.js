@@ -2,9 +2,6 @@
 import React from 'react';
 import { InputBase, IconButton, Paper } from '@mui/material';
 
-// local dependencies
-import { FasIcon } from './fas-icon';
-
 const SearchInput = ({ value, onInputChange, onInputClear, onInputApply, placeholder, disabled }) => {
   const handleInputChange = event => {
     event.preventDefault();
@@ -39,7 +36,7 @@ const SearchInput = ({ value, onInputChange, onInputClear, onInputApply, placeho
     sx={{ p: '4px 8px', display: 'flex', alignItems: 'center' }}
   >
     { value && <IconButton size="small" variant="outlined" disabled={disabled} onClick={handleInputClear}>
-      <FasIcon icon="times" />
+      x
     </IconButton> }
     <InputBase
       type="text"
@@ -54,7 +51,7 @@ const SearchInput = ({ value, onInputChange, onInputClear, onInputApply, placeho
       onChange={handleInputChange}
     />
     { value && <IconButton size="small" type="submit" variant="outlined" disabled={disabled}>
-      <FasIcon icon="search" />
+      search
     </IconButton> }
   </Paper>;
 };
