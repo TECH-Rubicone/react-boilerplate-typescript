@@ -33,7 +33,6 @@ const SignIn = () => {
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
       .min(8, 'VALIDATION_ERROR.MIN_LENGTH_CHARACTERS'),
   }), []);
-
   const onSubmit = useCallback(values => { signIn(values); }, [signIn]);
   const clearError = useCallback(() => { updateCtrl({ errorMessage: '' }); }, [updateCtrl]);
 
