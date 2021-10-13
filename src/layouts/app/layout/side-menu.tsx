@@ -29,13 +29,13 @@ const openedMixin = (theme: Theme) => ({
   }),
 });
 
-interface MuiDrawerProps extends DrawerProps {
+type StyledDrawerProps = DrawerProps & {
   open?: boolean;
 }
 
 const StyledDrawer = styled(Drawer, {
   shouldForwardProp: prop => prop !== 'open'
-})<MuiDrawerProps>(({ theme, open }) => ({
+})<StyledDrawerProps>(({ theme, open }) => ({
   flexShrink: 0,
   whiteSpace: 'nowrap',
   boxSizing: 'border-box',

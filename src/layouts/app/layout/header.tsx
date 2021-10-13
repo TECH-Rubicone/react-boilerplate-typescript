@@ -8,7 +8,7 @@ import { AppBarProps, AppBar, IconButton, styled, Toolbar, Typography } from '@m
 import { DRAWER_WIDTH } from './index';
 import { controller } from '../controller';
 
-interface StyledAppBarProps extends AppBarProps {
+type StyledAppBarProps = AppBarProps & {
   open?: boolean;
 }
 
