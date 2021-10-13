@@ -4,13 +4,12 @@ import { useField } from 'formik';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import React, { memo, useCallback } from 'react';
 import { Stack, TextField } from '@mui/material';
-import { LocalizationProvider, DesktopDatePicker } from '@mui/lab';
+import { LocalizationProvider, DesktopDatePicker, DesktopDatePickerProps } from '@mui/lab';
 
 // local dependencies
 import { validationStyles } from './forms/helpers';
-import { DesktopDatePickerProps } from '@mui/lab/DesktopDatePicker/DesktopDatePicker';
 
-interface FDatePickerProps extends DesktopDatePickerProps {
+interface FDatePicker extends DesktopDatePickerProps {
   name: string
   label: string
   skipTouch?: boolean
@@ -18,9 +17,9 @@ interface FDatePickerProps extends DesktopDatePickerProps {
   toolbarFormat?: string
 }
 
-type FDP = Omit<FDatePickerProps, 'onChange' | 'value' | 'renderInput'>;
+type FDatePickerProps = Omit<FDatePicker, 'onChange' | 'value' | 'renderInput'>;
 
-const FDatePicker: React.FC<FDP> = props => {
+const FDatePicker: React.FC<FDatePickerProps> = props => {
   const { label, name, inputFormat, skipTouch } = props;
   const [field, meta, { setValue }] = useField({ name });
   const valid = (skipTouch || meta.touched) && !meta.error;
