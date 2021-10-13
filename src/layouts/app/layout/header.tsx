@@ -2,24 +2,27 @@
 import React, { useCallback } from 'react';
 import { Menu } from '@mui/icons-material';
 import { useControllerActions, useControllerData } from 'redux-saga-controller';
-import { AppBar, IconButton, styled, Toolbar, Typography } from '@mui/material';
+import { AppBarProps, AppBar, IconButton, styled, Toolbar, Typography } from '@mui/material';
 
 // local dependencies
+import { DRAWER_WIDTH } from './index';
 import { controller } from '../controller';
 
-const drawerWidth = 240;
+type StyledAppBarProps = AppBarProps & {
+  open?: boolean;
+}
 
 const StyledAppBar = styled(AppBar, {
-  shouldForwardProp: (prop) => prop !== 'open'
-})(({ theme, open }) => ({
+  shouldForwardProp: prop => prop !== 'open'
+})<StyledAppBarProps>(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen
   }),
   ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: DRAWER_WIDTH,
+    width: `calc(100% - ${DRAWER_WIDTH}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -42,7 +45,7 @@ const Header = () => {
       >
         <Menu />
       </IconButton> }
-      <Typography variant="h5" noWrap component="div" className="ml" sx={{ m: 2 }}>
+      <Typography variant="h5" noWrap component="div" className="ml" m={2}>
         React boilerplate typescript
       </Typography>
     </Toolbar>
