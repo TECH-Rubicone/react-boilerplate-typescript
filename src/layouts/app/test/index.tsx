@@ -81,6 +81,11 @@ const Test = () => {
     updateData(values);
   }, [updateData]);
 
+  const getRolesMemo = useCallback(
+    () => getRoles({ data: null, params: { size: 15, page: 0 } }).then(({ content }) => content),
+    []
+  );
+
   return <div style={{ marginTop: 40 }}>
     <Formik
       onSubmit={onSubmit}
@@ -166,11 +171,8 @@ const Test = () => {
           name="async-select"
           loadingText="LOADing"
           label={<div>Async</div>}
+          loadOptions={getRolesMemo}
           getOptionLabel={({ name }) => name}
-          loadOptions={
-            () => getRoles({ data: null, params: { size: 15, page: 0 } })
-              .then(({ content }) => content)
-          }
         />
         <FSelect
           fullWidth
@@ -195,13 +197,10 @@ const Test = () => {
           label="Async"
           fullWidth
           loadingText="LOADING"
+          loadOptions={getRolesMemo}
           getFieldValue={({ name }) => name}
           prepareValue={value => ({ name: value, label: value })}
           getOptionLabel={option => option.name ? option.name : option}
-          loadOptions={
-            () => getRoles({ data: null, params: { size: 15, page: 0 } })
-              .then(({ content }) => content)
-          }
         />
         <pre>
           { JSON.stringify(values, null, 2) }
