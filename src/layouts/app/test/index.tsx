@@ -180,11 +180,11 @@ const Test = () => {
           fullWidth
           name="fsync"
           label="FSync"
+          filterSelectedOptions
+          getOptionLabel={({ label }) => label}
           getFieldValue={({ value }: AnyObject) => value}
           prepareValue={(value: AnyObject) => ({ value, label: value })}
-          getOptionLabel={({ label }) => label}
           options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
-          filterSelectedOptions
           isOptionEqualToValue={(option, value) => option.value === value.value}
         />
         <FSelect
@@ -203,8 +203,8 @@ const Test = () => {
           fullWidth
           name="FSyncObj"
           label="FSyncObj"
-          getFieldValue={({ value }: AnyObject) => value}
           getOptionLabel={({ label }) => label}
+          getFieldValue={({ value }: AnyObject) => value}
           prepareValue={(value: AnyObject) => ({ value, label: value })}
           options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
           isOptionEqualToValue={(option, value) => option.value === value.value}
@@ -217,21 +217,21 @@ const Test = () => {
           filterSelectedOptions
           loadOptions={getRolesMemo}
           getFieldValue={({ name }: AnyObject) => name}
-          prepareValue={(value: AnyObject) => ({ name: value, label: value })}
           getOptionLabel={option => option.name ? option.name : option}
+          prepareValue={(value: AnyObject) => ({ name: value, label: value })}
           isOptionEqualToValue={(option, value) => option.name === value.name}
         />
         <FAsyncSelect
-          fullWidth
           multiple
+          fullWidth
+          loadingText="LOADING"
           name="fAsyncMultiple"
           label="Async multiple"
-          loadingText="LOADING"
           filterSelectedOptions
           loadOptions={getRolesMemo}
-          getFieldValue={(value) => value}
-          getOptionLabel={option => option.name ? option.name : option}
+          getOptionLabel={option => option.name}
           prepareValue={(value: AnyObject) => value}
+          getFieldValue={(value) => value}
           isOptionEqualToValue={(option, value) => option.name === value.name}
         />
         <pre>
