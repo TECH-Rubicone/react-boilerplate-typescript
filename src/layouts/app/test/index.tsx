@@ -7,12 +7,51 @@ import React, { memo, useEffect, useCallback, useMemo } from 'react';
 // components
 import FRadio from 'components/forms/radio';
 import FInput from 'components/forms/input';
+import FCheckbox from 'components/forms/checkbox';
+import Select, { AsyncSelect } from 'components/select';
+import FSelect, { FAsyncSelect } from 'components/fselect';
+
+// interfaces
+import { AnyObject } from 'interfaces/common';
+
+// services
+import { instanceAPI } from 'services/api-private.service';
 
 // local dependencies
 import { controller } from './controller';
-import FCheckbox from '../../../components/forms/checkbox';
 
-// configure
+
+// interfaces for async response to get Users
+interface PageFullRoleDto {
+  content: Array<FullRoleDto>
+  size: number
+  offset: number
+  pageNumber: number
+  totalPages: number
+  totalElements: number
+}
+
+type FullRoleDto = {
+  id: number
+  name: string
+  permissions: Array<EntityContentDto>
+}
+
+type EntityContentDto = {
+  id: number
+  name: string
+}
+
+function getRoles ({ data, params }: AnyObject) {
+  return instanceAPI.post<PageFullRoleDto, PageFullRoleDto>(
+    'admin-service/roles/filter',
+    {
+      method: 'POST',
+      data: data || {},
+      params: params || {},
+    }
+  );
+}
 
 const Test = () => {
   const [
@@ -112,6 +151,57 @@ const Test = () => {
           getOptionValue={item => item?.id}
           getOptionLabel={item => item?.label}
           options={[{ id: 1, label: 'First' }, { id: '2', label: 'Second' }]}
+        />
+        <Select
+          fullWidth
+          size="small"
+          name="select"
+          label="Select"
+          getOptionLabel={({ label }) => label}
+          options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
+        />
+        <AsyncSelect
+          fullWidth
+          loading
+          name="async-select"
+          loadingText="LOADing"
+          label={<div>Async</div>}
+          getOptionLabel={({ name }) => name}
+          loadOptions={
+            () => getRoles({ data: null, params: { size: 15, page: 0 } })
+              .then(({ content }) => content)
+          }
+        />
+        <FSelect
+          fullWidth
+          name="fsync"
+          label="FSync"
+          getFieldValue={({ value }) => value}
+          prepareValue={value => ({ value, label: value })}
+          getOptionLabel={({ label }) => label}
+          options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
+        />
+        <FSelect
+          fullWidth
+          name="FSyncObj"
+          label="FSyncObj"
+          getFieldValue={value => value}
+          getOptionLabel={({ label }) => label}
+          prepareValue={value => { return value as AnyObject; }}
+          options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
+        />
+        <FAsyncSelect
+          name="async"
+          label="Async"
+          fullWidth
+          loadingText="LOADING"
+          getFieldValue={({ name }) => name}
+          prepareValue={value => ({ name: value, label: value })}
+          getOptionLabel={option => option.name ? option.name : option}
+          loadOptions={
+            () => getRoles({ data: null, params: { size: 15, page: 0 } })
+              .then(({ content }) => content)
+          }
         />
         <pre>
           { JSON.stringify(values, null, 2) }

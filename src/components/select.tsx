@@ -1,5 +1,6 @@
 // outsource dependencies
 import { toast } from 'react-toastify';
+import { AutocompleteProps } from '@mui/material/Autocomplete';
 import React, { memo, useCallback, useEffect, useState } from 'react';
 import { Autocomplete, CircularProgress, FormControl, FormHelperText, Grid, TextField, Typography } from '@mui/material';
 
@@ -9,30 +10,21 @@ import { AnyObject } from 'interfaces/common';
 // local dependencies
 import { ValidationColor } from './forms/helpers';
 
-interface DefaultSelectProps {
+interface DefaultSelectProps extends Omit<AutocompleteProps<AnyObject, boolean, boolean, boolean>, 'renderInput' | 'options'> {
   name: string
   focused?: boolean
-  loading?: boolean
   required?: boolean
-  disabled?: boolean
   skipTouch?: boolean
-  fullWidth?: boolean
   label: React.ReactNode
   color?: ValidationColor
-  size?: 'small' | 'medium'
-  loadingText?: React.ReactNode
   error?: boolean | string | undefined
-  value?: AnyObject | null | undefined
-  getOptionLabel: (option: AnyObject) => string
-  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
-  onChange?: (event: React.SyntheticEvent, value: AnyObject | null | undefined) => void
 }
 
-interface SyncProps {
+type SyncProps = {
   options: Array<AnyObject>
 }
 
-interface AsyncProps {
+type AsyncProps = {
   loadOptions: () => Promise<Array<AnyObject>>
 }
 
@@ -63,8 +55,8 @@ export const AsyncSelect: React.FC<AsyncSelectProps> = ({ loadOptions, loadingTe
   const [list, setList] = useState<Array<AnyObject>>([]);
   const [isSubscribed, setIsSubscribed] = useState<boolean>(true);
   const handleLoadOptions = useCallback(async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       const data = await loadOptions();
       if (isSubscribed) {
         setList(data);
