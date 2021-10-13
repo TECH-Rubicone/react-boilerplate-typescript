@@ -1,5 +1,4 @@
 // outsource development
-import _ from 'lodash';
 import React, { useCallback } from 'react';
 import { TablePagination } from '@mui/material';
 
@@ -15,24 +14,17 @@ interface PaginationProps {
 
 const SIZES = [10, 15, 30, 50];
 
-const Pagination: React.FC<PaginationProps> = ({
-  size,
-  total,
-  page,
-  disabled,
-  totalPages,
-  onPageChange,
-  onSizeChange
-}) => {
-  const handlePageChange = useCallback((e, page: number) => onPageChange(page), [onPageChange]);
+const Pagination: React.FC<PaginationProps> = props => {
+  const { size, total, page, disabled, totalPages, onPageChange, onSizeChange } = props;
+  const handlePageChange = useCallback((event, page: number) => onPageChange(page), [onPageChange]);
   return <TablePagination
     page={page}
     count={total}
     component="div"
+    rowsPerPage={Number(size)}
     rowsPerPageOptions={SIZES}
     onPageChange={handlePageChange}
     onRowsPerPageChange={onSizeChange}
-    rowsPerPage={_.isNumber(size) ? size : Number(size)}
   />;
 };
 

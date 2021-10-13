@@ -1,6 +1,5 @@
 // outsource dependencies
 import React, { FC } from 'react';
-import { Col, Container, Row } from 'reactstrap';
 import { toast, ToastOptions, UpdateOptions } from 'react-toastify';
 
 // constants
@@ -46,16 +45,10 @@ export const showWelcomeToast = (user: Me) => {
 };
 
 const WelcomeToast: FC<WelcomeToastProps> = ({ user }) => {
-  return <Container fluid className="rotateY">
-    <Row>
-      <Col xs="5">
-        <img className="img-fluid" src={_.get(user, 'coverImage.url')} alt={_.get(user, 'name')}/>
-      </Col>
-      <Col xs="7">
-        <h5>Welcome</h5>
-        <p> { user?.name }</p>
-      </Col>
-    </Row>
-  </Container>;
+  return <div className="rotateY">
+    <img className="img-fluid" src={_.get(user, 'coverImage.url')} alt={_.get(user, 'name')}/>
+    <h5>Welcome</h5>
+    <p> { user?.name }</p>
+  </div>;
 };
 

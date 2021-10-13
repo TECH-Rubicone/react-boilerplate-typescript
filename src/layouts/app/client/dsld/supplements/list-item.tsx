@@ -5,9 +5,6 @@ import React, { memo, useCallback, useMemo, FC } from 'react';
 import { Checkbox, TableCell, TableRow } from '@mui/material';
 import { useControllerActions, useControllerData } from 'redux-saga-controller';
 
-// components
-import FasIcon from 'components/fas-icon';
-
 // services
 import _ from 'services/lodash.service';
 
@@ -62,7 +59,7 @@ const ListItem: FC<User> = ({ id, name, roles, createdDate }) => {
     <TableCell>{ (roles ?? []).map((item: Role) => item?.name) }</TableCell>
     <TableCell>
       <Link to={ROUTES.ADMINISTRATIVE_USERS_EDIT.LINK({ id })} className="text-gray-d btn btn-sm pt-0 pb-0">
-        <FasIcon icon="pencil-alt" />
+        pencil
       </Link>
       /
       <button
@@ -70,7 +67,7 @@ const ListItem: FC<User> = ({ id, name, roles, createdDate }) => {
         onClick={handleItemDelete}
         className="text-gray-d btn btn-sm pt-0 pb-0"
       >
-        <FasIcon icon="trash-alt" className="text-gray-d" />
+        trash
       </button>
     </TableCell>
   </TableRow>;
