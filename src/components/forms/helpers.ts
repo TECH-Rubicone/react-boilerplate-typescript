@@ -1,5 +1,5 @@
 
-type ValidationColor = 'primary' | 'error' | 'success'
+export type ValidationColor = 'primary' | 'error' | 'success'
 
 export const validationStyles = (valid: boolean, invalid: boolean): ValidationColor => {
   if (valid) {
