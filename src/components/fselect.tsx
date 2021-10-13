@@ -9,9 +9,12 @@ import { AnyObject } from 'interfaces/common';
 import { validationStyles } from './forms/helpers';
 import Select, { AsyncSelect, AsyncSelectProps, SelectProps } from './select';
 
+type prepareObject = (value: AnyObject) => AnyObject | null;
+type preparePrimitive = (value: string | number) => AnyObject | null;
+
 type ValueMethods = {
-  prepareValue: (value: AnyObject | string | number) => AnyObject | null
-  getFieldValue: (value: AnyObject) => AnyObject | string | number | null
+  prepareValue: preparePrimitive | prepareObject
+  getFieldValue: (value: AnyObject | Array<AnyObject>) => AnyObject | Array<AnyObject> | string | number | null
 }
 
 type FSelectProps = SelectProps & ValueMethods;

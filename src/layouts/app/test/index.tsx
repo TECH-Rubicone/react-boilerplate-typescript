@@ -159,6 +159,7 @@ const Test = () => {
         />
         <Select
           fullWidth
+          multiple
           size="small"
           name="select"
           label="Select"
@@ -166,11 +167,12 @@ const Test = () => {
           options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
         />
         <AsyncSelect
-          fullWidth
           loading
+          multiple
+          fullWidth
           name="async-select"
-          loadingText="LOADing"
-          label={<div>Async</div>}
+          loadingText="LOADING"
+          label="Async multiple"
           loadOptions={getRolesMemo}
           getOptionLabel={({ name }) => name}
         />
@@ -178,29 +180,59 @@ const Test = () => {
           fullWidth
           name="fsync"
           label="FSync"
-          getFieldValue={({ value }) => value}
-          prepareValue={value => ({ value, label: value })}
+          getFieldValue={({ value }: AnyObject) => value}
+          prepareValue={(value: AnyObject) => ({ value, label: value })}
           getOptionLabel={({ label }) => label}
           options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
+          filterSelectedOptions
+          isOptionEqualToValue={(option, value) => option.value === value.value}
+        />
+        <FSelect
+          fullWidth
+          multiple
+          label="FSync multiple"
+          name="fsyncMultiple"
+          filterSelectedOptions
+          getFieldValue={value => value}
+          getOptionLabel={({ label }) => label}
+          prepareValue={(value: AnyObject) => value}
+          options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
+          isOptionEqualToValue={(option, value) => option.value === value.value}
         />
         <FSelect
           fullWidth
           name="FSyncObj"
           label="FSyncObj"
-          getFieldValue={value => value}
+          getFieldValue={({ value }: AnyObject) => value}
           getOptionLabel={({ label }) => label}
-          prepareValue={value => { return value as AnyObject; }}
+          prepareValue={(value: AnyObject) => ({ value, label: value })}
           options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
+          isOptionEqualToValue={(option, value) => option.value === value.value}
         />
         <FAsyncSelect
+          fullWidth
           name="async"
           label="Async"
-          fullWidth
           loadingText="LOADING"
+          filterSelectedOptions
           loadOptions={getRolesMemo}
-          getFieldValue={({ name }) => name}
-          prepareValue={value => ({ name: value, label: value })}
+          getFieldValue={({ name }: AnyObject) => name}
+          prepareValue={(value: AnyObject) => ({ name: value, label: value })}
           getOptionLabel={option => option.name ? option.name : option}
+          isOptionEqualToValue={(option, value) => option.name === value.name}
+        />
+        <FAsyncSelect
+          fullWidth
+          multiple
+          name="fAsyncMultiple"
+          label="Async multiple"
+          loadingText="LOADING"
+          filterSelectedOptions
+          loadOptions={getRolesMemo}
+          getFieldValue={(value) => value}
+          getOptionLabel={option => option.name ? option.name : option}
+          prepareValue={(value: AnyObject) => value}
+          isOptionEqualToValue={(option, value) => option.name === value.name}
         />
         <pre>
           { JSON.stringify(values, null, 2) }

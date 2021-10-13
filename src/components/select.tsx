@@ -59,13 +59,12 @@ export const AsyncSelect: React.FC<AsyncSelectProps> = ({ loadOptions, loadingTe
       const data = await loadOptions();
       if (isSubscribed) {
         setList(data);
-        setIsSubscribed(false);
       }
     } catch ({ message }) {
       toast(String(message), { delay: 500, theme: 'light', toastId: 'ERROR', closeOnClick: true, });
     }
     setLoading(false);
-  }, [loadOptions, isSubscribed, setIsSubscribed]);
+  }, [loadOptions, isSubscribed]);
 
   useEffect(() => {
     handleLoadOptions();
@@ -80,7 +79,7 @@ export const AsyncSelect: React.FC<AsyncSelectProps> = ({ loadOptions, loadingTe
     loading={loading}
     loadingText={<Grid container>
       <CircularProgress color="inherit" size={20} />
-      <Typography component="span" sx={{ ml: 1 }}>
+      <Typography component="span" ml={1}>
         { loadingText }
       </Typography>
     </Grid>}
