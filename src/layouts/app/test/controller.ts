@@ -36,7 +36,9 @@ export const controller: Controller<Actions, Initial> = create({
       username: '',
       password: '',
       client: 'admin_application',
-      radio1: 1
+      radio1: 1,
+      fsyncMultiple: [],
+      fAsyncMultiple: [],
     },
   },
   subscriber: function * () {

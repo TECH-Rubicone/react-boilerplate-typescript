@@ -7,12 +7,51 @@ import React, { memo, useEffect, useCallback, useMemo } from 'react';
 // components
 import FRadio from 'components/forms/radio';
 import FInput from 'components/forms/input';
+import FCheckbox from 'components/forms/checkbox';
+import Select, { AsyncSelect } from 'components/select';
+import FSelect, { FAsyncSelect } from 'components/fselect';
+
+// interfaces
+import { AnyObject } from 'interfaces/common';
+
+// services
+import { instanceAPI } from 'services/api-private.service';
 
 // local dependencies
 import { controller } from './controller';
-import FCheckbox from '../../../components/forms/checkbox';
 
-// configure
+
+// interfaces for async response to get Users
+interface PageFullRoleDto {
+  content: Array<FullRoleDto>
+  size: number
+  offset: number
+  pageNumber: number
+  totalPages: number
+  totalElements: number
+}
+
+type FullRoleDto = {
+  id: number
+  name: string
+  permissions: Array<EntityContentDto>
+}
+
+type EntityContentDto = {
+  id: number
+  name: string
+}
+
+function getRoles ({ data, params }: AnyObject) {
+  return instanceAPI.post<PageFullRoleDto, PageFullRoleDto>(
+    'admin-service/roles/filter',
+    {
+      method: 'POST',
+      data: data || {},
+      params: params || {},
+    }
+  );
+}
 
 const Test = () => {
   const [
@@ -41,6 +80,11 @@ const Test = () => {
   const onSubmit = useCallback(values => {
     updateData(values);
   }, [updateData]);
+
+  const getRolesMemo = useCallback(
+    () => getRoles({ data: null, params: { size: 15, page: 0 } }).then(({ content }) => content),
+    []
+  );
 
   return <div style={{ marginTop: 40 }}>
     <Formik
@@ -112,6 +156,83 @@ const Test = () => {
           getOptionValue={item => item?.id}
           getOptionLabel={item => item?.label}
           options={[{ id: 1, label: 'First' }, { id: '2', label: 'Second' }]}
+        />
+        <Select
+          fullWidth
+          multiple
+          size="small"
+          name="select"
+          label="Select"
+          getOptionLabel={({ label }) => label}
+          options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
+        />
+        <AsyncSelect
+          loading
+          multiple
+          fullWidth
+          name="async-select"
+          loadingText="LOADING"
+          label="Async multiple"
+          loadOptions={getRolesMemo}
+          getOptionLabel={({ name }) => name}
+        />
+        <FSelect
+          fullWidth
+          name="fsync"
+          label="FSync"
+          filterSelectedOptions
+          getOptionLabel={({ label }) => label}
+          getFieldValue={({ value }: AnyObject) => value}
+          prepareValue={(value: AnyObject) => ({ value, label: value })}
+          options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
+          isOptionEqualToValue={(option, value) => option.value === value.value}
+        />
+        <FSelect
+          fullWidth
+          multiple
+          label="FSync multiple"
+          name="fsyncMultiple"
+          filterSelectedOptions
+          getFieldValue={value => value}
+          getOptionLabel={({ label }) => label}
+          prepareValue={(value: AnyObject) => value}
+          options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
+          isOptionEqualToValue={(option, value) => option.value === value.value}
+        />
+        <FSelect
+          fullWidth
+          name="FSyncObj"
+          label="FSyncObj"
+          getOptionLabel={({ label }) => label}
+          getFieldValue={({ value }: AnyObject) => value}
+          prepareValue={(value: AnyObject) => ({ value, label: value })}
+          options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
+          isOptionEqualToValue={(option, value) => option.value === value.value}
+        />
+        <FAsyncSelect
+          fullWidth
+          name="async"
+          label="Async"
+          loadingText="LOADING"
+          filterSelectedOptions
+          loadOptions={getRolesMemo}
+          getFieldValue={({ name }: AnyObject) => name}
+          getOptionLabel={option => option.name ? option.name : option}
+          prepareValue={(value: AnyObject) => ({ name: value, label: value })}
+          isOptionEqualToValue={(option, value) => option.name === value.name}
+        />
+        <FAsyncSelect
+          multiple
+          fullWidth
+          loadingText="LOADING"
+          name="fAsyncMultiple"
+          label="Async multiple"
+          filterSelectedOptions
+          loadOptions={getRolesMemo}
+          getOptionLabel={option => option.name}
+          prepareValue={(value: AnyObject) => value}
+          getFieldValue={(value) => value}
+          isOptionEqualToValue={(option, value) => option.name === value.name}
         />
         <pre>
           { JSON.stringify(values, null, 2) }
