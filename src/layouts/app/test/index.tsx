@@ -7,6 +7,7 @@ import React, { memo, useEffect, useCallback, useMemo } from 'react';
 // components
 import FRadio from 'components/forms/radio';
 import FInput from 'components/forms/input';
+import FDatePicker from '../../../components/form-date-picker';
 
 // local dependencies
 import { controller } from './controller';
@@ -36,6 +37,9 @@ const Test = () => {
     checked: yup.bool()
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
       .oneOf([true], 'Field must be checked'),
+    userDate: yup.string()
+      .nullable()
+      .required('REQUIRED_FIELD')
   }), []);
 
   const onSubmit = useCallback(values => {
@@ -59,6 +63,11 @@ const Test = () => {
           type="password"
           name="password"
           label="Password"
+        />
+        <FDatePicker
+          name="userDate"
+          inputFormat="MM/DD/YYYY"
+          label="Add your birthday"
         />
         <FRadio
           required
