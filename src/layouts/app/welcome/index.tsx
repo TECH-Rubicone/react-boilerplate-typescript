@@ -1,12 +1,11 @@
 // outside dependencies
 import React from 'react';
-import { Container } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 
 // local dependencies
 import * as ROUTES from 'constants/routes';
 
-const Welcome = () => <Container className="d-flex h-100 p-3 mx-auto flex-column">
+const Welcome = () => <div className="d-flex h-100 p-3 mx-auto flex-column">
   <header className="masthead mb-auto">
     <nav className="nav nav-masthead">
       <NavLink to={ROUTES.SIGN_IN.LINK()} className="nav-link">SignIn</NavLink>
@@ -23,6 +22,6 @@ const Welcome = () => <Container className="d-flex h-100 p-3 mx-auto flex-column
       Welcome footer
     </div>
   </footer>
-</Container>;
+</div>;
 
 export default Welcome;
