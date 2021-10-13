@@ -1,8 +1,7 @@
 // outsource dependencies
 import { toast } from 'react-toastify';
-import { AutocompleteProps } from '@mui/material/Autocomplete';
 import React, { memo, useCallback, useEffect, useState } from 'react';
-import { Autocomplete, CircularProgress, FormControl, FormHelperText, Grid, TextField, Typography } from '@mui/material';
+import { Autocomplete, CircularProgress, FormControl, FormHelperText, Grid, TextField, Typography, AutocompleteProps } from '@mui/material';
 
 // interfaces
 import { AnyObject } from 'interfaces/common';
