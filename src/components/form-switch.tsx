@@ -22,7 +22,7 @@ const FSwitch: React.FC<FSwitchProps> = props => {
       label={label}
       control={<Switch {...attr} {...field} color={validationStyles(valid, invalid)}/>}
     />
-    { invalid && <FormHelperText color="error" sx={{ color: 'error.main', m: 0, pb: 2 }}>
+    { invalid && <FormHelperText sx={{ color: 'error.main', m: 0, pb: 2 }}>
       { meta.error }
     </FormHelperText> }
   </>;
