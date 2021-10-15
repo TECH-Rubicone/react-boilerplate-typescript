@@ -92,7 +92,7 @@ const List = () => {
               <SortByField field={name}>{ label }</SortByField>
             </TableCell>) }
             <TableCell style={{ minWidth: 60 }}>
-             Actions
+              Actions
             </TableCell>
           </TableRow>
         </TableHead>
