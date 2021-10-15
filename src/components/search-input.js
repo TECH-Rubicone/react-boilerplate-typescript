@@ -1,6 +1,7 @@
 // outsource dependencies
 import React from 'react';
 import { InputBase, IconButton, Paper } from '@mui/material';
+import { Close as CloseIcon, Search as SearchIcon } from '@mui/icons-material';
 
 const SearchInput = ({ value, onInputChange, onInputClear, onInputApply, placeholder, disabled }) => {
   const handleInputChange = event => {
@@ -35,8 +36,13 @@ const SearchInput = ({ value, onInputChange, onInputClear, onInputApply, placeho
     component="form"
     sx={{ p: '4px 8px', display: 'flex', alignItems: 'center' }}
   >
-    { value && <IconButton size="small" variant="outlined" disabled={disabled} onClick={handleInputClear}>
-      x
+    { value && <IconButton
+      size="small"
+      variant="outlined"
+      disabled={disabled}
+      onClick={handleInputClear}
+    >
+      <CloseIcon fontSize="small" />
     </IconButton> }
     <InputBase
       type="text"
@@ -44,14 +50,19 @@ const SearchInput = ({ value, onInputChange, onInputClear, onInputApply, placeho
       value={value}
       label="Search"
       color="primary"
-      sx={{ ml: 1, flex: 1 }}
       disabled={disabled}
+      sx={{ ml: 1, flex: 1 }}
       placeholder={placeholder}
       onKeyDown={handleKeyDown}
       onChange={handleInputChange}
     />
-    { value && <IconButton size="small" type="submit" variant="outlined" disabled={disabled}>
-      search
+    { value && <IconButton
+      size="small"
+      type="submit"
+      variant="outlined"
+      disabled={disabled}
+    >
+      <SearchIcon fontSize="small" />
     </IconButton> }
   </Paper>;
 };

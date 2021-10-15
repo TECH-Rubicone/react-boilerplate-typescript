@@ -3,6 +3,12 @@ import React, { memo, useEffect } from 'react';
 import { useController } from 'redux-saga-controller';
 import { Divider, Grid, Typography } from '@mui/material';
 
+// components
+import Preloader from 'components/preloader';
+
+// hooks
+import useFreeHeight from 'hooks/use-free-height';
+
 // local dependencies
 import ItemList from './list';
 import Actions from './actions';
@@ -15,28 +21,30 @@ const List = () => {
     isControllerSubscribed
   ] = useController(controller);
 
+  const freeHeight = useFreeHeight();
+
   useEffect(() => {
     initialize();
     return () => { clearCtrl(); };
   }, [initialized, clearCtrl, initialize]);
 
-  // TODO
-  if (!isControllerSubscribed && !initialized) {
-    return <span>Preloader</span>;
-  }
-
-  return <Grid container spacing={2}>
-    <Grid item xs={12}>
-      <Typography variant="h3">Users</Typography>
-      <Divider />
+  return <Preloader
+    sx={{ height: freeHeight }}
+    active={!isControllerSubscribed && !initialized}
+  >
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <Typography variant="h3">Users</Typography>
+        <Divider />
+      </Grid>
+      <Grid item xs={12}>
+        <Actions />
+      </Grid>
+      <Grid item xs={12}>
+        <ItemList />
+      </Grid>
     </Grid>
-    <Grid item xs={12}>
-      <Actions />
-    </Grid>
-    <Grid item xs={12}>
-      <ItemList />
-    </Grid>
-  </Grid>;
+  </Preloader>;
 };
 
 export default memo(List);
