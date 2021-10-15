@@ -2,12 +2,15 @@
 import * as yup from 'yup';
 import { Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
+import MoodIcon from '@mui/icons-material/Mood';
 import { useController } from 'redux-saga-controller';
 import React, { memo, useEffect, useCallback, useMemo } from 'react';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 
 // components
 import FRadio from 'components/forms/radio';
 import FInput from 'components/forms/input';
+import FSwitch from 'components/form-switch';
 import FCheckbox from 'components/forms/checkbox';
 import FDatePicker from 'components/form-date-picker';
 import Select, { AsyncSelect } from 'components/select';
@@ -78,7 +81,10 @@ const Test = () => {
       .oneOf([true], 'Field must be checked'),
     userDate: yup.string()
       .nullable()
-      .required('REQUIRED_FIELD')
+      .required('REQUIRED_FIELD'),
+    formSwitch: yup.bool()
+      .required('VALIDATION_ERROR.REQUIRED_FIELD')
+      .oneOf([true], 'Field must be checked'),
   }), []);
 
   const onSubmit = useCallback(values => {
@@ -127,6 +133,13 @@ const Test = () => {
             <button type="submit">Submit</button>
           </Grid>
           <Grid item xs={8}>
+            <FSwitch
+              size="medium"
+              name="formSwitch"
+              label="Remember me"
+              checkedIcon={<MoodIcon fontSize="small"/>}
+              icon={<SentimentVeryDissatisfiedIcon fontSize="small"/>}
+            />
             <FRadio
               required
               fullWidth
