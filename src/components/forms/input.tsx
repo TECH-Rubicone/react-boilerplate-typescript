@@ -22,7 +22,6 @@ const FInput: React.FC<FInputProps> = props => {
   return <TextField
     {...attr}
     {...field}
-    fullWidth
     label={label}
     id={field.name}
     error={invalid}
