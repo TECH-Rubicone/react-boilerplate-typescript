@@ -5,15 +5,15 @@ import React, { memo, useMemo, useCallback } from 'react';
 import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { useControllerActions, useControllerData } from 'redux-saga-controller';
 
-// local dependencies
-import { controller } from './controller';
-
 // components
 import SearchInput from 'components/search-input';
 import Dropdown, { DropdownOption } from 'components/dropdown';
 
 // constants
 import * as ROUTES from 'constants/routes';
+
+// local dependencies
+import { controller } from './controller';
 
 const Actions = () => {
   const { name, disabled, selected } = useControllerData(controller);
@@ -33,7 +33,7 @@ const Actions = () => {
     },
   ], [handleItemsDelete]);
 
-  return <Grid container>
+  return <Grid container alignItems="center">
     <Grid item xs={12} md={4}>
       <SearchInput
         value={name}
@@ -44,12 +44,12 @@ const Actions = () => {
         onInputChange={handleInputChange}
       />
     </Grid>
-    <Grid container xs={12} md={8} alignItems="center" justifyContent="flex-end">
-      <Stack spacing={2} direction="row">
+    <Grid item xs={12} md={8} sx={{ height: '100%' }} alignItems="center">
+      <Stack spacing={2} direction="row" alignItems="center" justifyContent="flex-end">
         <Dropdown
           title="Options"
           options={options}
-          disabled={disabled}
+          disabled={disabled || selected.length === 0}
         />
         <Button
           component={Link}
