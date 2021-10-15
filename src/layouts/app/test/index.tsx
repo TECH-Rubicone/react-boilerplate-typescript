@@ -2,9 +2,10 @@
 import * as yup from 'yup';
 import { Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
+import MoodIcon from '@mui/icons-material/Mood';
 import { useController } from 'redux-saga-controller';
 import React, { memo, useEffect, useCallback, useMemo } from 'react';
-import { Mood as MoodIcon, SentimentVeryDissatisfied as SentimentVeryDissatisfiedIcon } from '@mui/icons-material';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 
 // components
 import FRadio from 'components/forms/radio';
