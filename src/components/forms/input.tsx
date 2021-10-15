@@ -24,7 +24,6 @@ const FInput: React.FC<FInputProps> = props => {
     {...field}
     fullWidth
     label={label}
-    margin="normal"
     id={field.name}
     error={invalid}
     focused={meta.touched}
