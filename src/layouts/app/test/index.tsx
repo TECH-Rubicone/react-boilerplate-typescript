@@ -1,10 +1,10 @@
 // outsource dependencies
 import * as yup from 'yup';
-import { Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import { useController } from 'redux-saga-controller';
-import React, { memo, useEffect, useCallback, useMemo } from 'react';
-import { Mood as MoodIcon, SentimentVeryDissatisfied as SentimentVeryDissatisfiedIcon } from '@mui/icons-material';
+import { Grid, IconButton, InputAdornment } from '@mui/material';
+import React, { memo, useEffect, useCallback, useMemo, useState } from 'react';
+import { Mood as MoodIcon, SentimentVeryDissatisfied as SentimentVeryDissatisfiedIcon, Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@mui/icons-material';
 
 // components
 import FRadio from 'components/forms/radio';
@@ -14,6 +14,7 @@ import FCheckbox from 'components/forms/checkbox';
 import FDatePicker from 'components/form-date-picker';
 import Select, { AsyncSelect } from 'components/select';
 import FSelect, { FAsyncSelect } from 'components/fselect';
+import { validationStyles } from 'components/forms/helpers';
 
 // interfaces
 import { AnyObject } from 'interfaces/common';
@@ -62,6 +63,9 @@ const Test = () => {
     { updateData, initialize }
   ] = useController(controller);
   useEffect(() => { initialize(); }, [initialize]);
+
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+
   const validationSchema = useMemo(() => yup.object().shape({
     username: yup.string()
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
@@ -95,6 +99,8 @@ const Test = () => {
     []
   );
 
+  const handleToggleHidePassword = useCallback(() => setIsPasswordHidden(!isPasswordHidden), [isPasswordHidden]);
+
   return <Grid
     mt={4}
     container
@@ -109,15 +115,31 @@ const Test = () => {
         <Grid container spacing={3}>
           <Grid item xs={7}>
             <FInput
+              fullWidth
               type="text"
               name="username"
               label="Email Address"
+              sx={{ marginBottom: 2 }}
             />
             <FInput
-              variant="filled"
-              type="password"
+              fullWidth
               name="password"
+              variant="filled"
               label="Password"
+              sx={{ marginBottom: 2 }}
+              type={isPasswordHidden ? 'password' : 'text'}
+              InputProps={(valid, invalid) => ({
+                endAdornment: <InputAdornment position="end">
+                  <IconButton
+                    edge="end"
+                    onClick={handleToggleHidePassword}
+                    aria-label="toggle password visibility"
+                    color={validationStyles(valid, invalid)}
+                  >
+                    { isPasswordHidden ? <VisibilityIcon /> : <VisibilityOffIcon /> }
+                  </IconButton>
+                </InputAdornment>
+              })}
             />
             <FDatePicker
               name="userDate"
