@@ -35,7 +35,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ menu, children }) => <Box display="flex">
   <Header />
   <SideMenu menu={menu} />
-  <Box component="main" flexGrow={1} p={2} mt={5}>
+  <Box component="main" flexGrow={1} px={2} mt={8}>
     { children }
   </Box>
 </Box>;

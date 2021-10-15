@@ -4,12 +4,15 @@ import React, { memo, useCallback, useMemo, FC } from 'react';
 import { useControllerActions, useControllerData } from 'redux-saga-controller';
 import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TableSortLabel, Checkbox, } from '@mui/material';
 
+// components
+import Pagination from 'components/pagination';
+
+// hooks
+import useFreeHeight from 'hooks/use-free-height';
+
 // local dependencies
 import ListItem from './list-item';
 import { controller, User } from './controller';
-
-// components
-import Pagination from 'components/pagination';
 
 interface Column {
   label: string
@@ -23,10 +26,17 @@ const columns: Array<Column> = [
   { name: 'id', label: 'Id', minWidth: 100, align: 'right' },
   { name: 'createdDate', label: 'Creation Date', minWidth: 170, align: 'right', },
   { name: 'roles', label: 'Roles', minWidth: 170, align: 'right', },
-  { name: 'actions', label: 'Actions', minWidth: 60, align: 'left', },
 ];
 
 const List = () => {
+  const freeHeight = useFreeHeight();
+  const contentHeight = freeHeight
+  - 73  // title
+  - 56  // actions
+  - 16  // table padding
+  - 52  // table pagination
+  - 16; // mb
+
   const {
     list,
     size,
@@ -49,7 +59,7 @@ const List = () => {
   );
   const handlePageChange = useCallback((page: number) => updateFilters({ page }), [updateFilters]);
 
-  const toggleSelections = useCallback(event => {
+  const toggleSelections = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     let newSelected: Array<User> = [];
     if (event.target.checked) {
       newSelected = selected.concat(list);
@@ -63,7 +73,7 @@ const List = () => {
   );
 
   return <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-    <TableContainer sx={{ maxHeight: 600 }}>
+    <TableContainer sx={{ height: contentHeight }}>
       <Table stickyHeader aria-label="sticky table">
         <TableHead>
           <TableRow>
@@ -73,17 +83,17 @@ const List = () => {
                 onChange={toggleSelections}
                 checked={Boolean(selected.length && isEveryChecked)}
                 indeterminate={Boolean(isSomeChecked && !isEveryChecked)}
-                inputProps={{
-                  'aria-label': 'select all desserts'
-                }}
               />
             </TableCell>
             { columns.map(({ name, minWidth, label }) => <TableCell
               key={name}
-              style={{ minWidth: minWidth }}
+              style={{ minWidth }}
             >
               <SortByField field={name}>{ label }</SortByField>
             </TableCell>) }
+            <TableCell style={{ minWidth: 60 }}>
+             Actions
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
