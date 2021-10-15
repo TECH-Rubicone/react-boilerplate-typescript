@@ -11,6 +11,7 @@ interface Act<Payload> extends Action {
 interface SignInPayload {
   username: string,
   password: string,
+  userDate: string,
   client: string,
 }
 
@@ -35,8 +36,11 @@ export const controller: Controller<Actions, Initial> = create({
     initialValues: {
       username: '',
       password: '',
+      userDate: '10/10/2010',
       client: 'admin_application',
-      radio1: 1
+      radio1: 1,
+      fsyncMultiple: [],
+      fAsyncMultiple: [],
     },
   },
   subscriber: function * () {
