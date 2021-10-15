@@ -135,6 +135,7 @@ const Test = () => {
             <FSwitch
               size="medium"
               name="formSwitch"
+              color="secondary"
               label="Remember me"
               checkedIcon={<MoodIcon fontSize="small"/>}
               icon={<SentimentVeryDissatisfiedIcon fontSize="small"/>}
