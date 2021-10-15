@@ -64,6 +64,7 @@ const SignIn = () => {
                   type="text"
                   id="username"
                   name="username"
+                  margin="normal"
                   label="Email Address"
                   placeholder="Email Address"
                 />
@@ -73,6 +74,7 @@ const SignIn = () => {
                   id="password"
                   type="password"
                   name="password"
+                  margin="normal"
                   label="Password"
                   placeholder="Password"
                 />
