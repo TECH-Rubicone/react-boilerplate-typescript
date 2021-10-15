@@ -61,6 +61,7 @@ const SignIn = () => {
               </Grid>
               <Grid item xs={12}>
                 <FInput
+                  fullWidth
                   type="text"
                   id="username"
                   name="username"
@@ -71,6 +72,7 @@ const SignIn = () => {
               </Grid>
               <Grid item xs={12} mb={1}>
                 <FInput
+                  fullWidth
                   id="password"
                   type="password"
                   name="password"
