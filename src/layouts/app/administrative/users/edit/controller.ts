@@ -1,11 +1,12 @@
 // outsource dependencies
 import { Action } from 'redux';
+import { toast } from 'react-toastify';
 import { takeEvery, put, call } from 'redux-saga/effects';
 import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 
-// local dependencies
-import { NEW_ID } from '../../../../../services/route';
-import { instanceAPI } from '../../../../../services/api.service';
+// services
+import { NEW_ID } from 'services/route';
+import { instanceAPI } from 'services/api-private.service';
 
 type Role = {
   id: number;
@@ -18,7 +19,7 @@ export interface UserInfo {
   prefix: string | null
   suffix: string | null
   username: string | null
-  firsName: string | null
+  firstName: string | null
   lastName: string | null
   roles: Array<Role> | null
   middleName: string | null
@@ -36,7 +37,7 @@ interface InitializePayload {
 }
 
 interface UpdateDataPayload {
-  username: string,
+  username: string
 }
 
 interface Actions extends ActionCreators<Initial> {
@@ -67,7 +68,7 @@ const initial = {
     prefix: '',
     suffix: '',
     username: '',
-    firsName: '',
+    firstName: '',
     lastName: '',
     middleName: '',
     coverImage: '',
@@ -89,12 +90,25 @@ export default controller;
 function * initializeSaga ({ payload: { id } }: Act<InitializePayload>) {
   yield put(controller.action.updateCtrl({ id }));
   if (id !== NEW_ID) {
-    const initialValues:UserInfo = yield call(instanceAPI, `admin-service/users/${id}`, { method: 'GET' });
-    yield put(controller.action.updateCtrl({ initialValues }));
+    try {
+      const initialValues: UserInfo = yield call(instanceAPI, `admin-service/users/${id}`, { method: 'GET' });
+      yield put(controller.action.updateCtrl({ initialValues }));
+    } catch ({ message }) {
+      yield put(controller.action.updateCtrl({ errorMessage: String(message) }));
+      yield call(toast, `Error: ${message}`);
+    }
   }
   yield put(controller.action.updateCtrl({ initialized: true, disabled: false }));
 }
 
 function * updateDataSaga ({ payload }: Act<UpdateDataPayload>) {
-  yield console.log('Payload:', payload);
+  yield put(controller.action.updateCtrl({ disabled: true }));
+  try {
+    const initialValues: UserInfo = yield call(instanceAPI, 'admin-service/users', { method: 'PUT', data: payload });
+    yield put(controller.action.updateCtrl({ initialValues }));
+  } catch ({ message }) {
+    yield put(controller.action.updateCtrl({ errorMessage: String(message) }));
+    yield call(toast, `Error: ${message}`);
+  }
+  yield put(controller.action.updateCtrl({ disabled: false }));
 }
