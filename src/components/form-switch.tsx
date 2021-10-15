@@ -8,8 +8,8 @@ import { validationStyles } from './forms/helpers';
 
 interface FSwitchProps extends SwitchProps {
   name: string
-  label?: string
   skipTouch?: boolean
+  label?: React.ReactNode
 }
 
 const FSwitch: React.FC<FSwitchProps> = props => {
