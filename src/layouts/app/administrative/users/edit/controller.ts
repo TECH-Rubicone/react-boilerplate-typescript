@@ -8,10 +8,8 @@ import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-co
 import { NEW_ID } from 'services/route';
 import { instanceAPI } from 'services/api-private.service';
 
-type Role = {
-  id: number;
-  name: string;
-}
+// interfaces
+import { EntityContentDto } from 'interfaces/api';
 
 export interface UserInfo {
   name: string | null
@@ -19,12 +17,12 @@ export interface UserInfo {
   prefix: string | null
   suffix: string | null
   username: string | null
-  firstName: string | null
   lastName: string | null
-  roles: Array<Role> | null
+  firstName: string | null
   middleName: string | null
   createdDate: string | null
   coverImage: string | undefined
+  roles: Array<EntityContentDto> | null
 }
 
 // Prepare actions
@@ -33,7 +31,7 @@ interface Act<Payload> extends Action {
 }
 
 interface InitializePayload {
-    id: number | string
+  id: string
 }
 
 interface UpdateDataPayload {
@@ -41,17 +39,17 @@ interface UpdateDataPayload {
 }
 
 interface Actions extends ActionCreators<Initial> {
-    initialize: ActionCreator<InitializePayload>
-    updateData: ActionCreator<UpdateDataPayload>
+  initialize: ActionCreator<InitializePayload>
+  updateData: ActionCreator<UpdateDataPayload>
 }
 
 interface Initial {
-    disabled: boolean
-    initialized: boolean
-    errorMessage: null | string
+  disabled: boolean
+  initialized: boolean
+  errorMessage: null | string
 
-    id: number | string
-    initialValues: UserInfo
+  id: number | string
+  initialValues: UserInfo
 }
 
 // configure
@@ -68,11 +66,11 @@ const initial = {
     prefix: '',
     suffix: '',
     username: '',
-    firstName: '',
     lastName: '',
-    middleName: '',
+    firstName: '',
     coverImage: '',
-    createdDate: ''
+    middleName: '',
+    createdDate: '',
   }
 };
 
@@ -89,14 +87,14 @@ export default controller;
 
 function * initializeSaga ({ payload: { id } }: Act<InitializePayload>) {
   yield put(controller.action.updateCtrl({ id }));
-  if (id !== NEW_ID) {
-    try {
+  try {
+    if (id !== NEW_ID) {
       const initialValues: UserInfo = yield call(instanceAPI, `admin-service/users/${id}`, { method: 'GET' });
       yield put(controller.action.updateCtrl({ initialValues }));
-    } catch ({ message }) {
-      yield put(controller.action.updateCtrl({ errorMessage: String(message) }));
-      yield call(toast, `Error: ${message}`);
     }
+  } catch ({ message }) {
+    yield put(controller.action.updateCtrl({ errorMessage: String(message) }));
+    yield call(toast, `Error: ${message}`);
   }
   yield put(controller.action.updateCtrl({ initialized: true, disabled: false }));
 }

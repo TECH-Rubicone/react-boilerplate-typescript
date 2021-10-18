@@ -8,3 +8,21 @@ export type OAuth2AccessTokenDto = {
   accessTokenValiditySeconds: number
   refreshTokenValiditySeconds: number
 }
+
+export interface PageFullRoleDto {
+  size: number
+  offset: number
+  pageNumber: number
+  totalPages: number
+  totalElements: number
+  content: Array<FullRoleDto>
+}
+
+export type FullRoleDto = EntityContentDto & {
+  permissions: Array<EntityContentDto>
+}
+
+export type EntityContentDto = {
+  id: number
+  name: string
+}
