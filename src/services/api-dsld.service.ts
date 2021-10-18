@@ -8,7 +8,7 @@ import config from 'configs';
 import { paramsSerializer, prepareError, prepareResponse } from './api-helpers.service';
 
 // configure
-export const API_PATH = `${config.DSLD_URL }/${ config.DSLD_PATH }/${ config.DSLD_VERSION}`;
+export const API_PATH = `${config.DSLD_URL}/${config.DSLD_PATH}/${config.DSLD_VERSION}`;
 
 /******************************************************************
  *           DSLD  requester instance

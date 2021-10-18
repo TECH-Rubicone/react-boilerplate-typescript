@@ -5,7 +5,7 @@ import { StringObject } from 'interfaces/common';
 import config from '../configs';
 
 // absolute path to API
-export const API_PATH = `${config.SERVICE_URL }/${ config.API_PATH}`;
+export const API_PATH = `${config.SERVICE_URL}/${config.API_PATH}`;
 
 // private names
 export const API_NAMES: StringObject = {
