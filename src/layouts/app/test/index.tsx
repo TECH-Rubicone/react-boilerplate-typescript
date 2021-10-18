@@ -50,7 +50,6 @@ function getRoles ({ data, params }: AnyObject) {
   return instanceAPI.post<PageFullRoleDto, PageFullRoleDto>(
     'admin-service/roles/filter',
     {
-      method: 'POST',
       data: data || {},
       params: params || {},
     }
@@ -88,6 +87,9 @@ const Test = () => {
     formSwitch: yup.bool()
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
       .oneOf([true], 'Field must be checked'),
+    fsync: yup.string()
+      .required('VALIDATION_ERROR.REQUIRED_FIELD')
+      .oneOf(['HI'], 'Field must be checked'),
   }), []);
 
   const onSubmit = useCallback(values => {
@@ -95,7 +97,7 @@ const Test = () => {
   }, [updateData]);
 
   const getRolesMemo = useCallback(
-    () => getRoles({ data: null, params: { size: 15, page: 0 } }).then(({ content }) => content),
+    search => getRoles({ data: null, params: { size: 15, page: 0, search } }).then(({ content }) => content),
     []
   );
 
@@ -226,10 +228,9 @@ const Test = () => {
           </Grid>
           <Grid item xs={7}>
             <Select
-              fullWidth
               multiple
+              fullWidth
               size="small"
-              name="select"
               label="Select"
               getOptionLabel={({ label }) => label}
               options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
@@ -237,10 +238,8 @@ const Test = () => {
           </Grid>
           <Grid item xs={7}>
             <AsyncSelect
-              loading
               multiple
               fullWidth
-              name="async-select"
               loadingText="LOADING"
               label="Async multiple"
               loadOptions={getRolesMemo}
