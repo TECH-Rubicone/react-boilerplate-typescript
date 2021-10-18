@@ -20,7 +20,6 @@ type ValueMethods = {
 
 type FSelectProps = SelectProps & ValueMethods & {
   name: string
-  required?: boolean
   skipTouch?: boolean
 };
 
@@ -49,7 +48,7 @@ const FSelect: React.FC<FSelectProps> = ({ name, prepareValue, skipTouch, getFie
       focused={meta.touched}
       value={field.value ? prepareValue(field.value) : null}
     />
-    { meta.error && <FormHelperText error>{ meta.error }</FormHelperText> }
+    { invalid && <FormHelperText error>{ meta.error }</FormHelperText> }
   </>;
 };
 
@@ -57,7 +56,6 @@ export default memo(FSelect);
 
 type FAsyncSelectProps = AsyncSelectProps & ValueMethods & {
   name: string
-  required?: boolean
   skipTouch?: boolean
 };
 
@@ -87,6 +85,6 @@ export const FAsyncSelect: React.FC<FAsyncSelectProps> = memo(props => {
       focused={meta.touched}
       value={field.value ? prepareValue(field.value) : null}
     />
-    { meta.error && <FormHelperText error>{ meta.error }</FormHelperText> }
+    { invalid && <FormHelperText error>{ meta.error }</FormHelperText> }
   </>;
 });
