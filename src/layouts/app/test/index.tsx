@@ -1,10 +1,10 @@
 // outsource dependencies
 import * as yup from 'yup';
-import { Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import { useController } from 'redux-saga-controller';
-import React, { memo, useEffect, useCallback, useMemo } from 'react';
-import { Mood as MoodIcon, SentimentVeryDissatisfied as SentimentVeryDissatisfiedIcon } from '@mui/icons-material';
+import { Grid, IconButton, InputAdornment } from '@mui/material';
+import React, { memo, useEffect, useCallback, useMemo, useState } from 'react';
+import { Mood as MoodIcon, SentimentVeryDissatisfied as SentimentVeryDissatisfiedIcon, Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@mui/icons-material';
 
 // components
 import FRadio from 'components/forms/radio';
@@ -14,6 +14,7 @@ import FCheckbox from 'components/forms/checkbox';
 import FDatePicker from 'components/form-date-picker';
 import Select, { AsyncSelect } from 'components/select';
 import FSelect, { FAsyncSelect } from 'components/fselect';
+import { validationStyles } from 'components/forms/helpers';
 
 // interfaces
 import { AnyObject } from 'interfaces/common';
@@ -49,7 +50,6 @@ function getRoles ({ data, params }: AnyObject) {
   return instanceAPI.post<PageFullRoleDto, PageFullRoleDto>(
     'admin-service/roles/filter',
     {
-      method: 'POST',
       data: data || {},
       params: params || {},
     }
@@ -62,6 +62,9 @@ const Test = () => {
     { updateData, initialize }
   ] = useController(controller);
   useEffect(() => { initialize(); }, [initialize]);
+
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+
   const validationSchema = useMemo(() => yup.object().shape({
     username: yup.string()
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
@@ -84,6 +87,9 @@ const Test = () => {
     formSwitch: yup.bool()
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
       .oneOf([true], 'Field must be checked'),
+    fsync: yup.string()
+      .required('VALIDATION_ERROR.REQUIRED_FIELD')
+      .oneOf(['HI'], 'Field must be checked'),
   }), []);
 
   const onSubmit = useCallback(values => {
@@ -91,9 +97,11 @@ const Test = () => {
   }, [updateData]);
 
   const getRolesMemo = useCallback(
-    () => getRoles({ data: null, params: { size: 15, page: 0 } }).then(({ content }) => content),
+    search => getRoles({ data: null, params: { size: 15, page: 0, search } }).then(({ content }) => content),
     []
   );
+
+  const handleToggleHidePassword = useCallback(() => setIsPasswordHidden(!isPasswordHidden), [isPasswordHidden]);
 
   return <Grid
     mt={4}
@@ -109,15 +117,31 @@ const Test = () => {
         <Grid container spacing={3}>
           <Grid item xs={7}>
             <FInput
+              fullWidth
               type="text"
               name="username"
               label="Email Address"
+              sx={{ marginBottom: 2 }}
             />
             <FInput
-              variant="filled"
-              type="password"
+              fullWidth
               name="password"
+              variant="filled"
               label="Password"
+              sx={{ marginBottom: 2 }}
+              type={isPasswordHidden ? 'password' : 'text'}
+              InputProps={(valid, invalid) => ({
+                endAdornment: <InputAdornment position="end">
+                  <IconButton
+                    edge="end"
+                    onClick={handleToggleHidePassword}
+                    aria-label="toggle password visibility"
+                    color={validationStyles(valid, invalid)}
+                  >
+                    { isPasswordHidden ? <VisibilityIcon /> : <VisibilityOffIcon /> }
+                  </IconButton>
+                </InputAdornment>
+              })}
             />
             <FDatePicker
               name="userDate"
@@ -204,10 +228,9 @@ const Test = () => {
           </Grid>
           <Grid item xs={7}>
             <Select
-              fullWidth
               multiple
+              fullWidth
               size="small"
-              name="select"
               label="Select"
               getOptionLabel={({ label }) => label}
               options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
@@ -215,10 +238,8 @@ const Test = () => {
           </Grid>
           <Grid item xs={7}>
             <AsyncSelect
-              loading
               multiple
               fullWidth
-              name="async-select"
               loadingText="LOADING"
               label="Async multiple"
               loadOptions={getRolesMemo}
