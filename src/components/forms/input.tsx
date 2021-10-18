@@ -22,9 +22,7 @@ const FInput: React.FC<FInputProps> = props => {
   return <TextField
     {...attr}
     {...field}
-    fullWidth
     label={label}
-    margin="normal"
     id={field.name}
     error={invalid}
     focused={meta.touched}

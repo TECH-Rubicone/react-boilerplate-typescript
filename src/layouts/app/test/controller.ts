@@ -9,8 +9,10 @@ interface Act<Payload> extends Action {
 }
 
 interface SignInPayload {
+  formSwitch: boolean,
   username: string,
   password: string,
+  userDate: string,
   client: string,
 }
 
@@ -35,8 +37,10 @@ export const controller: Controller<Actions, Initial> = create({
     initialValues: {
       username: '',
       password: '',
+      userDate: '10/10/2010',
       client: 'admin_application',
       radio1: 1,
+      formSwitch: false,
       fsyncMultiple: [],
       fAsyncMultiple: [],
     },

@@ -33,7 +33,6 @@ const SignIn = () => {
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
       .min(8, 'VALIDATION_ERROR.MIN_LENGTH_CHARACTERS'),
   }), []);
-
   const onSubmit = useCallback(values => { signIn(values); }, [signIn]);
   const clearError = useCallback(() => { updateCtrl({ errorMessage: '' }); }, [updateCtrl]);
 
@@ -62,18 +61,22 @@ const SignIn = () => {
               </Grid>
               <Grid item xs={12}>
                 <FInput
+                  fullWidth
                   type="text"
                   id="username"
                   name="username"
+                  margin="normal"
                   label="Email Address"
                   placeholder="Email Address"
                 />
               </Grid>
               <Grid item xs={12} mb={1}>
                 <FInput
+                  fullWidth
                   id="password"
                   type="password"
                   name="password"
+                  margin="normal"
                   label="Password"
                   placeholder="Password"
                 />

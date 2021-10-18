@@ -2,19 +2,18 @@
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import React, { memo, useCallback, useMemo, FC } from 'react';
-import { Checkbox, TableCell, TableRow } from '@mui/material';
+import { Checkbox, TableCell, TableRow, Chip } from '@mui/material';
 import { useControllerActions, useControllerData } from 'redux-saga-controller';
-
-// components
-
-// services
-import _ from 'services/lodash.service';
+import { Create as CreateIcon, Delete as DeleteIcon, AccountCircle as AccountCircleIcon } from '@mui/icons-material';
 
 // constants
 import * as ROUTES from 'constants/routes';
 
 // configs
 import config from 'configs';
+
+// services
+import _ from 'services/lodash.service';
 
 // local dependencies
 import { controller, User, Role } from './controller';
@@ -32,7 +31,7 @@ const ListItem: FC<User> = ({ id, name, roles, createdDate }) => {
 
   const isChecked = useMemo(() => Boolean(_.find(selected, { id })), [id, selected]);
 
-  const toggleSelection = useCallback(event => {
+  const toggleSelection = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     // NOTE a temporary variable to store selected
     let newSelected: Array<User>;
     if (event.target.checked) {
@@ -58,19 +57,21 @@ const ListItem: FC<User> = ({ id, name, roles, createdDate }) => {
     <TableCell>{ name || 'Undefined Name' }</TableCell>
     <TableCell>{ id }</TableCell>
     <TableCell>{ date }</TableCell>
-    <TableCell>{ (roles ?? []).map((item: Role) => item?.name) }</TableCell>
+    <TableCell>
+      { (roles ?? []).map((item: Role) => <Chip
+        size="small"
+        key={item.id}
+        color="primary"
+        label={item?.name}
+        icon={<AccountCircleIcon />}
+        sx={{ marginRight: 1, marginBottom: 1 }}
+      />) }
+    </TableCell>
     <TableCell>
       <Link to={ROUTES.ADMINISTRATIVE_USERS_EDIT.LINK({ id })} className="text-gray-d btn btn-sm pt-0 pb-0">
-        pencil
+        <CreateIcon color="action" />
       </Link>
-      /
-      <button
-        disabled={disabled}
-        onClick={handleItemDelete}
-        className="text-gray-d btn btn-sm pt-0 pb-0"
-      >
-        trash
-      </button>
+      <DeleteIcon color="error" className="cursor-pointer" onClick={handleItemDelete} />
     </TableCell>
   </TableRow>;
 };

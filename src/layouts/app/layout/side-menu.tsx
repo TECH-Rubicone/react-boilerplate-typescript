@@ -14,7 +14,7 @@ import { controller } from '../controller';
 import { ItemByTypeProps, SubItemByTypeProps, DRAWER_WIDTH } from './index';
 
 const closedMixin = (theme: Theme) => ({
-  width: `calc(${theme.spacing(7)} + 1px)`,
+  width: 60,
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen
@@ -87,13 +87,14 @@ export interface ItemLinkProps {
 
 const ItemLink: React.FC<ItemLinkProps> = ({ name, link, icon, isActive, ...props }) => {
   const location = useLocation<Location>();
+  const { open } = useControllerData(controller);
   const selected = useMemo(() => isActive(location), [isActive, location]);
   const Icon = icon ?? BookmarkIcon;
   return <ListItemButton selected={selected} component={Link} to={link} {...props}>
-    <ListItemIcon>
+    <ListItemIcon sx={{ minWidth: !open ? 24 : 48 }}>
       <Icon />
     </ListItemIcon>
-    <ListItemText primary={name} />
+    { open && <ListItemText primary={name} /> }
   </ListItemButton>;
 };
 
@@ -106,13 +107,14 @@ export interface ItemActionProps {
 
 const ItemAction: React.FC<ItemActionProps> = ({ name, action, icon, isActive, ...props }) => {
   const location = useLocation<Location>();
+  const { open } = useControllerData(controller);
   const selected = useMemo(() => isActive(location), [isActive, location]);
   const Icon = icon ?? BookmarkIcon;
   return <ListItemButton onClick={action} {...props} selected={selected}>
-    <ListItemIcon>
+    <ListItemIcon sx={{ minWidth: !open ? 24 : 48 }}>
       <Icon />
     </ListItemIcon>
-    <ListItemText primary={name} />
+    { open && <ListItemText primary={name} /> }
   </ListItemButton>;
 };
 
@@ -137,12 +139,12 @@ const ItemMenu: React.FC<ItemMenuProps> = ({ name, icon, list, isActive }) => {
   const { open } = useControllerData(controller);
 
   const [ref, setRef] = useState<null | HTMLElement>(null);
-  const [opened, setOpened] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => { setOpened(false); }, [open]);
+  useEffect(() => { setIsOpen(false); }, [open]);
 
   const selected = useMemo(() => isActive(location), [isActive, location]);
-  const handleMenuToggle = useCallback(() => { setOpened(state => !state); }, []);
+  const handleMenuToggle = useCallback(() => { setIsOpen(state => !state); }, []);
 
   const Icon = icon ?? BookmarkIcon;
   return <>
@@ -151,20 +153,22 @@ const ItemMenu: React.FC<ItemMenuProps> = ({ name, icon, list, isActive }) => {
       selected={selected}
       onClick={handleMenuToggle}
     >
-      <ListItemIcon>
+      <ListItemIcon sx={{ minWidth: !open ? 24 : 48 }}>
         <Icon />
       </ListItemIcon>
-      <ListItemText primary={name} />
-      { opened ? <ExpandLessIcon /> : <ExpandMoreIcon /> }
+      { open && <>
+        <ListItemText primary={name} />
+        { isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon /> }
+      </> }
     </ListItemButton>
     { open
-      ? <Collapse in={opened}>
+      ? <Collapse in={isOpen}>
         <List disablePadding>
           { (list ?? []).map((item, index) => <SubItemByType key={index} {...item} />) }
         </List>
       </Collapse>
       : <Menu
-        open={opened}
+        open={isOpen}
         anchorEl={ref}
         onClose={handleMenuToggle}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -202,15 +206,14 @@ export type SubItemLinkProps = {
 
 const SubItemLink: React.FC<SubItemLinkProps> = ({ icon, isActive, link, name }) => {
   const location = useLocation<Location>();
+  const { open } = useControllerData(controller);
   const selected = useMemo(() => isActive(location), [isActive, location]);
   const Icon = icon ?? BookmarkIcon;
-  return <MenuItem component={Link} to={link} selected={selected}>
-    <ListItemIcon>
+  return <MenuItem component={Link} to={link} selected={selected} sx={{ p: 1.5, pl: 2 }}>
+    <ListItemIcon sx={{ minWidth: !open ? 24 : 48 }}>
       <Icon fontSize="small" />
     </ListItemIcon>
-    <ListItemText>
-      { name }
-    </ListItemText>
+    { open && <ListItemText primary={name} /> }
   </MenuItem>;
 };
 
@@ -223,14 +226,13 @@ export type SubItemActionProps = {
 
 const SubItemAction: React.FC<SubItemActionProps> = ({ icon, isActive, name, action }) => {
   const location = useLocation<Location>();
+  const { open } = useControllerData(controller);
   const selected = useMemo(() => isActive(location), [isActive, location]);
   const Icon = icon ?? BookmarkIcon;
-  return <MenuItem key={name} selected={selected}>
-    <ListItemIcon>
+  return <MenuItem key={name} selected={selected} sx={{ p: 1.5, pl: 2 }}>
+    <ListItemIcon sx={{ minWidth: !open ? 24 : 48 }}>
       <Icon fontSize="small" />
     </ListItemIcon>
-    <ListItemText onClick={action}>
-      { name }
-    </ListItemText>
+    { open && <ListItemText primary={name} onClick={action} /> }
   </MenuItem>;
 };
