@@ -18,7 +18,6 @@ const List = () => {
   const [
     { initialized },
     { initialize, clearCtrl },
-    isControllerSubscribed
   ] = useController(controller);
 
   const freeHeight = useFreeHeight();
@@ -26,12 +25,9 @@ const List = () => {
   useEffect(() => {
     initialize();
     return () => { clearCtrl(); };
-  }, [initialized, clearCtrl, initialize]);
+  }, [clearCtrl, initialize]);
 
-  return <Preloader
-    sx={{ height: freeHeight }}
-    active={!isControllerSubscribed && !initialized}
-  >
+  return <Preloader active={!initialized} sx={{ height: freeHeight }}>
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Typography variant="h3">Users</Typography>
