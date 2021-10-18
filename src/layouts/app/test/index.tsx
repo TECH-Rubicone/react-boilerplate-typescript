@@ -246,6 +246,7 @@ const Test = () => {
           </Grid>
           <Grid item xs={7}>
             <FSelect
+              required
               name="fsync"
               label="FSync"
               filterSelectedOptions

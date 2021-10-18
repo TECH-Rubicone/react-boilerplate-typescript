@@ -20,7 +20,6 @@ type ValueMethods = {
 
 type FSelectProps = SelectProps & ValueMethods & {
   name: string
-  required?: boolean
   skipTouch?: boolean
 };
 
@@ -57,7 +56,6 @@ export default memo(FSelect);
 
 type FAsyncSelectProps = AsyncSelectProps & ValueMethods & {
   name: string
-  required?: boolean
   skipTouch?: boolean
 };
 

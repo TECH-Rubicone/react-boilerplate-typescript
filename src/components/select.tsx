@@ -11,6 +11,7 @@ import { ValidationColor } from './forms/helpers';
 
 interface DefaultSelectProps extends Omit<AutocompleteProps<AnyObject, boolean, boolean, boolean>, 'renderInput' | 'options'> {
   focused?: boolean
+  required?: boolean
   label: React.ReactNode
   color?: ValidationColor
 }
@@ -26,7 +27,7 @@ type AsyncProps = {
 export type SelectProps = DefaultSelectProps & SyncProps;
 export type AsyncSelectProps = DefaultSelectProps & AsyncProps;
 
-const Select: React.FC<SelectProps> = ({ focused, color, label, ...attr }) => {
+const Select: React.FC<SelectProps> = ({ focused, color, label, required, ...attr }) => {
   return <Autocomplete
     {...attr}
     renderInput={params => <TextField
@@ -34,6 +35,7 @@ const Select: React.FC<SelectProps> = ({ focused, color, label, ...attr }) => {
       label={label}
       color={color}
       focused={focused}
+      required={required}
     />}
   />;
 };
