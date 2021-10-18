@@ -2,11 +2,12 @@
 import React, { useCallback } from 'react';
 import { Menu } from '@mui/icons-material';
 import { useControllerActions, useControllerData } from 'redux-saga-controller';
-import { AppBarProps, AppBar, IconButton, styled, Toolbar, Typography } from '@mui/material';
+import { AppBarProps, AppBar, IconButton, styled, Toolbar, Typography, Grid } from '@mui/material';
 
 // local dependencies
 import { DRAWER_WIDTH } from './index';
 import { controller } from '../controller';
+import UserAccountMenu from './user-account-menu';
 
 type StyledAppBarProps = AppBarProps & {
   open?: boolean;
@@ -45,9 +46,20 @@ const Header = () => {
       >
         <Menu />
       </IconButton> }
-      <Typography variant="h5" noWrap component="div" className="ml" m={2}>
-        React boilerplate typescript
-      </Typography>
+      <Grid
+        container
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between">
+        <Grid item>
+          <Typography variant="h5" noWrap component="div" className="ml" m={2}>
+            React boilerplate typescript
+          </Typography>
+        </Grid>
+        <Grid item>
+          <UserAccountMenu/>
+        </Grid>
+      </Grid>
     </Toolbar>
   </StyledAppBar>;
 };
