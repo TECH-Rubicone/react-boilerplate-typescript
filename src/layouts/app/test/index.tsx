@@ -229,7 +229,6 @@ const Test = () => {
           <Grid item xs={7}>
             <Select
               multiple
-              fullWidth
               size="small"
               label="Select"
               getOptionLabel={({ label }) => label}
@@ -239,7 +238,6 @@ const Test = () => {
           <Grid item xs={7}>
             <AsyncSelect
               multiple
-              fullWidth
               loadingText="LOADING"
               label="Async multiple"
               loadOptions={getRolesMemo}
@@ -248,7 +246,6 @@ const Test = () => {
           </Grid>
           <Grid item xs={7}>
             <FSelect
-              fullWidth
               name="fsync"
               label="FSync"
               filterSelectedOptions
@@ -261,7 +258,6 @@ const Test = () => {
           </Grid>
           <Grid item xs={7}>
             <FSelect
-              fullWidth
               multiple
               label="FSync multiple"
               name="fsyncMultiple"
@@ -275,7 +271,6 @@ const Test = () => {
           </Grid>
           <Grid item xs={7}>
             <FSelect
-              fullWidth
               name="FSyncObj"
               label="FSyncObj"
               getOptionLabel={({ label }) => label}
@@ -287,7 +282,6 @@ const Test = () => {
           </Grid>
           <Grid item xs={7}>
             <FAsyncSelect
-              fullWidth
               name="async"
               label="Async"
               loadingText="LOADING"
