@@ -17,7 +17,7 @@ import FDatePicker from 'components/form-date-picker';
 import FSelect, { FAsyncSelect } from 'components/fselect';
 
 // constants
-import { getItemName, prepareValue, getItem } from 'constants/extractors';
+import { getItemName, prepareValue, getItem, getItemValue } from 'constants/extractors';
 
 // hooks
 import useFreeHeight from 'hooks/use-free-height';
@@ -184,8 +184,8 @@ const UserEdit = () => {
                           size="small"
                           name="prefix"
                           options={prefixes}
-                          getFieldValue={getItem}
                           prepareValue={prepareValue}
+                          getFieldValue={getItemValue}
                           label={<strong>Prefix</strong>}
                         />
                         <FSelect
@@ -193,8 +193,8 @@ const UserEdit = () => {
                           size="small"
                           name="suffix"
                           options={suffixes}
-                          getFieldValue={getItem}
                           prepareValue={prepareValue}
+                          getFieldValue={getItemValue}
                           label={<strong>Suffix</strong>}
                         />
                       </> }
