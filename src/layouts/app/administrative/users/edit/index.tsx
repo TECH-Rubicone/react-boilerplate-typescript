@@ -23,15 +23,17 @@ import { getItemName, prepareValue, getItem, getItemValue } from 'constants/extr
 import useFreeHeight from 'hooks/use-free-height';
 
 // interfaces
+import { Params } from 'interfaces/routes';
 import { FullRoleDto } from 'interfaces/api';
+import { AnyObject } from 'interfaces/common';
 import { Pagination } from 'interfaces/pagination';
-import { AnyObject, Params } from 'interfaces/common';
 
 // local dependencies
 import { controller } from './controller';
 
-const prefixOptions = ['Mr', 'Mrs', 'Miss', 'Ms', 'Mx', 'Sir', 'Dr', 'Lady', 'Lord'];
-const suffixOptions = ['Jr.', 'Sr.', '2nd', '3rd', 'II', 'III', 'IV', 'V'];
+// configure
+const prefixes = ['Mr', 'Mrs', 'Miss', 'Ms', 'Mx', 'Sir', 'Dr', 'Lady', 'Lord'].map(option => ({ value: option, label: option }));
+const suffixes = ['Jr.', 'Sr.', '2nd', '3rd', 'II', 'III', 'IV', 'V'].map(option => ({ value: option, label: option }));
 
 const getRoles = (search: string) => instanceAPI.post<Pagination<FullRoleDto>, Pagination<FullRoleDto>>(
   'admin-service/roles/filter',
@@ -40,6 +42,8 @@ const getRoles = (search: string) => instanceAPI.post<Pagination<FullRoleDto>, P
     params: { size: 15, page: 0 },
   }
 ).then(({ content }) => content);
+
+const isOptionEqualToValue = (option: AnyObject, value: AnyObject) => option.name === value.name;
 
 const UserEdit = () => {
   const { id } = useParams<Params>();
@@ -67,9 +71,6 @@ const UserEdit = () => {
       .nullable(),
   }), []);
 
-  const prefixes = useMemo(() => prefixOptions.map(option => ({ value: option, label: option })), []);
-  const suffixes = useMemo(() => suffixOptions.map(option => ({ value: option, label: option })), []);
-
   const freeHeight = useFreeHeight();
   const contentHeight = freeHeight
     - 64 // mt
@@ -81,11 +82,6 @@ const UserEdit = () => {
   }, [initialize, clearCtrl, id]);
   // NOTE Actions page
   const onSubmit = useCallback(values => { updateData(values); }, [updateData]);
-
-  const isOptionEqualToValue = useCallback(
-    (option: AnyObject, value: AnyObject) => option.name === value.name,
-    []
-  );
 
   return <Preloader active={isControllerSubscribed && !initialized}>
     <Box>
