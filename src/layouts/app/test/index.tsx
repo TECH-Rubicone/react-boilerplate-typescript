@@ -16,6 +16,9 @@ import Select, { AsyncSelect } from 'components/select';
 import FSelect, { FAsyncSelect } from 'components/fselect';
 import { validationStyles } from 'components/forms/helpers';
 
+// constants
+import { getItemLabel, getItemName, getItemValue } from 'constants/extractors';
+
 // interfaces
 import { AnyObject } from 'interfaces/common';
 
@@ -46,15 +49,13 @@ type EntityContentDto = {
   name: string
 }
 
-function getRoles ({ data, params }: AnyObject) {
-  return instanceAPI.post<PageFullRoleDto, PageFullRoleDto>(
-    'admin-service/roles/filter',
-    {
-      data: data || {},
-      params: params || {},
-    }
-  );
-}
+const getRoles = (name: string) => instanceAPI.post<PageFullRoleDto, PageFullRoleDto>(
+  'admin-service/roles/filter',
+  {
+    data: { name },
+    params: { size: 15, page: 0 },
+  }
+).then(({ content }) => content);
 
 const Test = () => {
   const [
@@ -95,11 +96,6 @@ const Test = () => {
   const onSubmit = useCallback(values => {
     updateData(values);
   }, [updateData]);
-
-  const getRolesMemo = useCallback(
-    search => getRoles({ data: null, params: { size: 15, page: 0, search } }).then(({ content }) => content),
-    []
-  );
 
   const handleToggleHidePassword = useCallback(() => setIsPasswordHidden(!isPasswordHidden), [isPasswordHidden]);
 
@@ -169,10 +165,10 @@ const Test = () => {
               fullWidth
               name="radioAny"
               label="radioAny"
-              prepareFormValue={item => item.value}
               getFieldValue={item => item}
               getOptionValue={item => item?.value}
               getOptionLabel={item => item?.label}
+              prepareFormValue={item => item.value}
               options={[5, '2', true].map(item => ({ value: item, label: `Number #${item}` }))}
             />
           </Grid>
@@ -182,10 +178,10 @@ const Test = () => {
               fullWidth
               name="radioNumber"
               label="radioNumber"
-              prepareFormValue={item => item.value}
               getFieldValue={item => item}
               getOptionValue={item => item?.value}
               getOptionLabel={item => item?.label}
+              prepareFormValue={item => item.value}
               options={[1, 2, 3, 4, 5].map(item => ({ value: item, label: `Number #${item}` }))}
             />
           </Grid>
@@ -231,7 +227,7 @@ const Test = () => {
               multiple
               size="small"
               label="Select"
-              getOptionLabel={({ label }) => label}
+              getOptionLabel={getItemLabel}
               options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
             />
           </Grid>
@@ -240,8 +236,8 @@ const Test = () => {
               multiple
               loadingText="LOADING"
               label="Async multiple"
-              loadOptions={getRolesMemo}
-              getOptionLabel={({ name }) => name}
+              loadOptions={getRoles}
+              getOptionLabel={getItemName}
             />
           </Grid>
           <Grid item xs={7}>
@@ -250,8 +246,8 @@ const Test = () => {
               name="fsync"
               label="FSync"
               filterSelectedOptions
-              getOptionLabel={({ label }) => label}
-              getFieldValue={({ value }: AnyObject) => value}
+              getFieldValue={getItemValue}
+              getOptionLabel={getItemLabel}
               prepareValue={(value: AnyObject) => ({ value, label: value })}
               options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
               isOptionEqualToValue={(option, value) => option.value === value.value}
@@ -287,7 +283,7 @@ const Test = () => {
               label="Async"
               loadingText="LOADING"
               filterSelectedOptions
-              loadOptions={getRolesMemo}
+              loadOptions={getRoles}
               getFieldValue={({ name }: AnyObject) => name}
               getOptionLabel={option => option.name ? option.name : option}
               prepareValue={(value: AnyObject) => ({ name: value, label: value })}
@@ -298,11 +294,11 @@ const Test = () => {
             <FAsyncSelect
               multiple
               fullWidth
-              loadingText="LOADING"
               name="fAsyncMultiple"
+              loadingText="LOADING"
               label="Async multiple"
               filterSelectedOptions
-              loadOptions={getRolesMemo}
+              loadOptions={getRoles}
               getOptionLabel={option => option.name}
               prepareValue={(value: AnyObject) => value}
               getFieldValue={(value) => value}

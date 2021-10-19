@@ -14,7 +14,11 @@ import * as ROUTES from 'constants/routes';
 // interfaces
 import { EntityContentDto } from 'interfaces/api';
 
-export interface UserInfo {
+type ImageDto = {
+  img: string | null
+}
+
+export interface AdminFullUserDto {
   name: string | null
   email: string | null
   prefix: string | null
@@ -24,7 +28,7 @@ export interface UserInfo {
   firstName: string | null
   middleName: string | null
   createdDate: string | null
-  coverImage: string | undefined
+  coverImage: ImageDto | null
   roles: Array<EntityContentDto> | null
 }
 
@@ -52,7 +56,7 @@ interface Initial {
   errorMessage: null | string
 
   id: string
-  initialValues: UserInfo
+  initialValues: AdminFullUserDto
 }
 
 // configure
@@ -64,16 +68,16 @@ const initial = {
   id: NEW_ID,
   initialValues: {
     roles: [],
-    name: '',
-    email: '',
-    prefix: '',
-    suffix: '',
-    username: '',
-    lastName: '',
-    firstName: '',
-    coverImage: '',
-    middleName: '',
-    createdDate: '',
+    name: null,
+    email: null,
+    prefix: null,
+    suffix: null,
+    username: null,
+    lastName: null,
+    firstName: null,
+    coverImage: null,
+    middleName: null,
+    createdDate: null,
   }
 };
 
@@ -92,7 +96,7 @@ function * initializeSaga ({ payload: { id } }: Act<InitializePayload>) {
   yield put(controller.action.updateCtrl({ id }));
   try {
     if (id !== NEW_ID) {
-      const initialValues: UserInfo = yield call(instanceAPI, `admin-service/users/${id}`, { method: 'GET' });
+      const initialValues: AdminFullUserDto = yield call(instanceAPI, `admin-service/users/${id}`, { method: 'GET' });
       yield put(controller.action.updateCtrl({ initialValues }));
     }
   } catch ({ message }) {

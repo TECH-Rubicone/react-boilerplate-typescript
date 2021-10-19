@@ -5,3 +5,7 @@ export interface StringObject {
 export interface AnyObject {
   [key: string]: any
 }
+
+export type Params = {
+  id: string
+};

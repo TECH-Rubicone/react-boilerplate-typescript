@@ -23,16 +23,17 @@ import { getItemName, prepareValue, getItem, getItemValue } from 'constants/extr
 import useFreeHeight from 'hooks/use-free-height';
 
 // interfaces
-import { AnyObject } from 'interfaces/common';
-import { PageFullRoleDto } from 'interfaces/api';
+import { AnyObject, Params } from 'interfaces/common';
+import { FullRoleDto, PageFullRoleDto } from 'interfaces/api';
 
 // local dependencies
 import { controller } from './controller';
 
-const prefixOptions = ['Jr.', 'Sr.', '2nd', '3rd', 'II', 'III', 'IV', 'V'];
+const prefixOptions = ['Mr', 'Mrs', 'Miss', 'Ms', 'Mx', 'Sir', 'Dr', 'Lady', 'Lord'];
+const suffixOptions = ['Jr.', 'Sr.', '2nd', '3rd', 'II', 'III', 'IV', 'V'];
 
 const UserEdit = () => {
-  const { id } = useParams<{id: string}>();
+  const { id } = useParams<Params>();
   const [
     { initialized, disabled, initialValues },
     { initialize, clearCtrl, updateData },
@@ -57,13 +58,13 @@ const UserEdit = () => {
       .nullable(),
   }), []);
 
-  const prefixes = useMemo(() => prefixOptions.map((option: string) => ({ value: option, label: option })), []);
-  const suffixes = useMemo(() => prefixOptions.map((option: string) => ({ value: option, label: option })), []);
+  const prefixes = useMemo(() => prefixOptions.map(option => ({ value: option, label: option })), []);
+  const suffixes = useMemo(() => suffixOptions.map(option => ({ value: option, label: option })), []);
 
   const freeHeight = useFreeHeight();
   const contentHeight = freeHeight
-    - 64 // top margin
-    - 16; // button bottom margin
+    - 64 // mt
+    - 16; // button mb
 
   useEffect(() => {
     initialize({ id });
@@ -73,20 +74,20 @@ const UserEdit = () => {
   const onSubmit = useCallback(values => { updateData(values); }, [updateData]);
 
   const getRolesMemo = useCallback(
-    () => instanceAPI.post<PageFullRoleDto, PageFullRoleDto>(
+    search => instanceAPI.post<PageFullRoleDto<FullRoleDto>, PageFullRoleDto<FullRoleDto>>(
       'admin-service/roles/filter',
       {
-        data: null,
+        data: { name: search },
         params: { size: 15, page: 0 },
       }
     ).then(({ content }) => content),
     []
   );
 
-  const isOptionEqualToValue = useMemo(() => (option: AnyObject, value: AnyObject) => option.name === value.name, []);
-
-  const isEditId = id !== NEW_ID;
-  const isEditPage = isEditId ? 'Edit' : 'Create';
+  const isOptionEqualToValue = useCallback(
+    (option: AnyObject, value: AnyObject) => option.name === value.name,
+    []
+  );
 
   return <Preloader active={isControllerSubscribed && !initialized}>
     <Box>
@@ -99,7 +100,7 @@ const UserEdit = () => {
         <Form noValidate>
           <Grid container>
             <Grid item xs={12}>
-              <Typography variant="h3">{ isEditPage } User</Typography>
+              <Typography variant="h3">{ id === NEW_ID ? 'Create' : 'Edit' } User</Typography>
             </Grid>
             <Grid item container xs={12} spacing={3} justifyContent="center" alignContent="center" sx={{ height: contentHeight }}>
               <Grid item xs={12} md={6}>
@@ -124,7 +125,7 @@ const UserEdit = () => {
                         name="lastName"
                         label={<strong>Last Name</strong>}
                       />
-                      { isEditId && <>
+                      { id !== NEW_ID && <>
                         <FInput
                           fullWidth
                           type="text"
@@ -170,10 +171,10 @@ const UserEdit = () => {
                         type="text"
                         size="small"
                         name="email"
-                        required={!isEditId}
+                        required={id === NEW_ID}
                         label={<strong>Email</strong>}
                       />
-                      { isEditId && <>
+                      { id !== NEW_ID && <>
                         <FDatePicker
                           inputFormat="L"
                           name="createdDate"
@@ -206,7 +207,7 @@ const UserEdit = () => {
           </Grid>
           <Box mb={2} display="flex" justifyContent="flex-end">
             <Button type="submit" variant="contained" color="success" disabled={disabled}>
-              { isEditPage }
+              { id === NEW_ID ? 'Create' : 'Edit' }
             </Button>
           </Box>
         </Form>
