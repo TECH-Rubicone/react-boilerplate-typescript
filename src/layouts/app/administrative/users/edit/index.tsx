@@ -23,14 +23,23 @@ import { getItemName, prepareValue, getItem, getItemValue } from 'constants/extr
 import useFreeHeight from 'hooks/use-free-height';
 
 // interfaces
+import { FullRoleDto } from 'interfaces/api';
+import { Pagination } from 'interfaces/pagination';
 import { AnyObject, Params } from 'interfaces/common';
-import { FullRoleDto, PageFullRoleDto } from 'interfaces/api';
 
 // local dependencies
 import { controller } from './controller';
 
 const prefixOptions = ['Mr', 'Mrs', 'Miss', 'Ms', 'Mx', 'Sir', 'Dr', 'Lady', 'Lord'];
 const suffixOptions = ['Jr.', 'Sr.', '2nd', '3rd', 'II', 'III', 'IV', 'V'];
+
+const getRoles = (search: string) => instanceAPI.post<Pagination<FullRoleDto>, Pagination<FullRoleDto>>(
+  'admin-service/roles/filter',
+  {
+    data: { name: search },
+    params: { size: 15, page: 0 },
+  }
+).then(({ content }) => content);
 
 const UserEdit = () => {
   const { id } = useParams<Params>();
@@ -72,17 +81,6 @@ const UserEdit = () => {
   }, [initialize, clearCtrl, id]);
   // NOTE Actions page
   const onSubmit = useCallback(values => { updateData(values); }, [updateData]);
-
-  const getRolesMemo = useCallback(
-    search => instanceAPI.post<PageFullRoleDto<FullRoleDto>, PageFullRoleDto<FullRoleDto>>(
-      'admin-service/roles/filter',
-      {
-        data: { name: search },
-        params: { size: 15, page: 0 },
-      }
-    ).then(({ content }) => content),
-    []
-  );
 
   const isOptionEqualToValue = useCallback(
     (option: AnyObject, value: AnyObject) => option.name === value.name,
@@ -159,9 +157,9 @@ const UserEdit = () => {
                         name="roles"
                         loadingText="LOADING"
                         filterSelectedOptions
+                        loadOptions={getRoles}
                         prepareValue={getItem}
                         getFieldValue={getItem}
-                        loadOptions={getRolesMemo}
                         getOptionLabel={getItemName}
                         label={<strong>Roles</strong>}
                         isOptionEqualToValue={isOptionEqualToValue}

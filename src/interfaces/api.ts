@@ -9,15 +9,6 @@ export type OAuth2AccessTokenDto = {
   refreshTokenValiditySeconds: number
 }
 
-export interface PageFullRoleDto <Dto> {
-  size: number
-  offset: number
-  pageNumber: number
-  totalPages: number
-  totalElements: number
-  content: Array<Dto>
-}
-
 export type FullRoleDto = EntityContentDto & {
   permissions: Array<EntityContentDto>
 }
