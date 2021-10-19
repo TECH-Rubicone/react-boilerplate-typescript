@@ -39,7 +39,13 @@ export interface Initial {
   disabled: boolean;
   user: Me | null;
   initialized: boolean;
-  accessToken: string | null;
+  token: {
+    accessToken: string | null,
+    refreshToken?: string | null,
+    accessTokenValiditySeconds?: number | null,
+    refreshTokenValiditySeconds?: number | null,
+  };
+  auth: boolean;
 }
 
 type InitializePayload = null;
@@ -54,10 +60,16 @@ export const controller: Controller<Actions, Initial> = create({
   actions: ['initialize', 'getSelf'],
   initial: {
     user: null,
+    auth: true,
     health: false,
     disabled: true,
-    accessToken: null,
     initialized: false,
+    token: {
+      accessToken: '',
+      refreshToken: '',
+      accessTokenValiditySeconds: null,
+      refreshTokenValiditySeconds: null
+    },
   },
   subscriber: function * () {
     yield takeEvery(controller.action.initialize.TYPE, initializeSaga);
@@ -84,7 +96,7 @@ function * initializeSaga () {
     const hasSession: boolean = yield call(restoreSessionFromStore);
     if (hasSession) {
       yield call(getSelfExecutor);
-      yield put(controller.action.updateCtrl({ accessToken: getAccessToken() }));
+      yield put(controller.action.updateCtrl({ token: { accessToken: getAccessToken() } }));
     }
   } catch ({ message }) {
     yield call(signOutSaga);

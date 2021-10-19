@@ -5,9 +5,10 @@ import { useControllerActions, useControllerData } from 'redux-saga-controller';
 import { AppBarProps, AppBar, IconButton, styled, Toolbar, Typography, Grid } from '@mui/material';
 
 // local dependencies
+import MENU from '../layout/menu';
 import { DRAWER_WIDTH } from './index';
 import { controller } from '../controller';
-import UserAccountMenu from './user-account-menu';
+import UserAccountMenu from './user-menu';
 
 type StyledAppBarProps = AppBarProps & {
   open?: boolean;
@@ -57,7 +58,7 @@ const Header = () => {
           </Typography>
         </Grid>
         <Grid item>
-          <UserAccountMenu/>
+          <UserAccountMenu list={MENU}/>
         </Grid>
       </Grid>
     </Toolbar>

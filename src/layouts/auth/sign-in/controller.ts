@@ -71,6 +71,7 @@ function * initializeSaga () {
 
 function * signInSaga ({ payload }: Act<SignInPayload>) {
   yield put(controller.action.updateCtrl({ disabled: true, errorMessage: '' }));
+  yield put(rootController.action.updateCtrl({ auth: true }));
   try {
     const session: OAuth2AccessTokenDto = yield call(instancePUB, '/auth/token', { method: 'POST', data: payload });
     yield call(dismissToast);
