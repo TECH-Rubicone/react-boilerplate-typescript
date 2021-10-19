@@ -1,12 +1,15 @@
 // outsource dependencies
 import { Action } from 'redux';
 import { toast } from 'react-toastify';
-import { takeEvery, put, call } from 'redux-saga/effects';
+import { takeEvery, put, call, select } from 'redux-saga/effects';
 import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 
 // services
 import { NEW_ID } from 'services/route';
 import { instanceAPI } from 'services/api-private.service';
+
+// constants
+import * as ROUTES from 'constants/routes';
 
 // interfaces
 import { EntityContentDto } from 'interfaces/api';
@@ -48,7 +51,7 @@ interface Initial {
   initialized: boolean
   errorMessage: null | string
 
-  id: number | string
+  id: string
   initialValues: UserInfo
 }
 
@@ -101,9 +104,11 @@ function * initializeSaga ({ payload: { id } }: Act<InitializePayload>) {
 
 function * updateDataSaga ({ payload }: Act<UpdateDataPayload>) {
   yield put(controller.action.updateCtrl({ disabled: true }));
+  const { id }: Partial<Initial> = yield select(controller.select);
   try {
-    const initialValues: UserInfo = yield call(instanceAPI, 'admin-service/users', { method: 'PUT', data: payload });
-    yield put(controller.action.updateCtrl({ initialValues }));
+    yield call(instanceAPI, 'admin-service/users', { method: id === NEW_ID ? 'POST' : 'PUT', data: payload });
+    yield call(toast.success, 'Success');
+    yield call(ROUTES.ADMINISTRATIVE_USERS_LIST.PUSH);
   } catch ({ message }) {
     yield put(controller.action.updateCtrl({ errorMessage: String(message) }));
     yield call(toast, `Error: ${message}`);

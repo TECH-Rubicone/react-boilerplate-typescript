@@ -44,8 +44,6 @@ const UserEdit = () => {
       .required('VALIDATION_ERROR.REQUIRED_FIELD'),
     middleName: yup.string()
       .nullable(),
-    username: yup.string()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD'),
     roles: yup.array()
       .min(1),
     lastName: yup.string()
@@ -135,7 +133,6 @@ const UserEdit = () => {
                           label={<strong>Middle Name</strong>}
                         />
                         <FInput
-                          required
                           fullWidth
                           type="text"
                           size="small"
@@ -181,7 +178,6 @@ const UserEdit = () => {
                           inputFormat="L"
                           name="createdDate"
                           label="Creation Date"
-                          disabled={id === NEW_ID}
                         />
                         <FSelect
                           fullWidth
