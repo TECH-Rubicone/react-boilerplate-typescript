@@ -32,7 +32,7 @@ interface LayoutProps {
   children: React.ReactNode
 }
 
-const Layout: React.FC<LayoutProps> = ({ menu, children }) => <Box display="flex">
+const Layout: React.FC<LayoutProps> = ({ menu, children }) => <Box display="flex" height="100%">
   <Header />
   <SideMenu menu={menu} />
   <Box component="main" flexGrow={1} px={2} mt={8}>

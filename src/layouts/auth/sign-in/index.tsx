@@ -3,12 +3,14 @@ import * as yup from 'yup';
 import { Formik, Form } from 'formik';
 import { Link as RouterLink } from 'react-router-dom';
 import { useController } from 'redux-saga-controller';
-import React, { memo, useEffect, useCallback, useMemo } from 'react';
-import { Paper, Button, CircularProgress, Typography, Link, Grid } from '@mui/material';
+import React, { memo, useEffect, useCallback, useMemo, useState } from 'react';
+import { Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@mui/icons-material';
+import { Paper, Button, CircularProgress, Typography, Link, Grid, InputAdornment, IconButton } from '@mui/material';
 
 // components
 import FInput from 'components/forms/input';
 import AlertError from 'components/alert-error';
+import { validationStyles } from 'components/forms/helpers';
 
 // constants
 import * as ROUTES from 'constants/routes';
@@ -21,6 +23,9 @@ const SignIn = () => {
     { initialized, disabled, errorMessage, initialValues },
     { updateCtrl, clearCtrl, signIn, initialize }
   ] = useController(controller);
+
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+
   useEffect(() => {
     initialize();
     return () => { clearCtrl(); };
@@ -35,6 +40,7 @@ const SignIn = () => {
   }), []);
   const onSubmit = useCallback(values => { signIn(values); }, [signIn]);
   const clearError = useCallback(() => { updateCtrl({ errorMessage: '' }); }, [updateCtrl]);
+  const handleToggleHidePassword = useCallback(() => setIsPasswordHidden(!isPasswordHidden), [isPasswordHidden]);
 
   return <Grid
     m="auto"
@@ -63,7 +69,6 @@ const SignIn = () => {
                 <FInput
                   fullWidth
                   type="text"
-                  id="username"
                   name="username"
                   margin="normal"
                   label="Email Address"
@@ -73,12 +78,23 @@ const SignIn = () => {
               <Grid item xs={12} mb={1}>
                 <FInput
                   fullWidth
-                  id="password"
                   type="password"
                   name="password"
                   margin="normal"
                   label="Password"
                   placeholder="Password"
+                  InputProps={(valid, invalid) => ({
+                    endAdornment: <InputAdornment position="end">
+                      <IconButton
+                        edge="end"
+                        onClick={handleToggleHidePassword}
+                        aria-label="toggle password visibility"
+                        color={validationStyles(valid, invalid)}
+                      >
+                        { isPasswordHidden ? <VisibilityIcon /> : <VisibilityOffIcon /> }
+                      </IconButton>
+                    </InputAdornment>
+                  })}
                 />
               </Grid>
               { errorMessage && <Grid item xs={12} mb={1}>

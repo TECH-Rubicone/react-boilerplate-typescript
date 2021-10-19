@@ -136,7 +136,7 @@ function * initializeSaga () {
   yield put(controller.action.clearCtrl());
   try {
     const query: Partial<Filters> = yield call(ROUTES.ADMINISTRATIVE_USERS_LIST.QUERY);
-    yield put(controller.action.updateFilters(query));
+    yield call(updateFiltersSaga, { type: controller.action.updateFilters.TYPE, payload: query });
   } catch ({ message }) {
     yield put(controller.action.updateCtrl({ errorMessage: String(message) }));
   }

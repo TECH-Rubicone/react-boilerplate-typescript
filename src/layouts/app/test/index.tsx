@@ -1,10 +1,10 @@
 // outsource dependencies
 import * as yup from 'yup';
-import { Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import { useController } from 'redux-saga-controller';
-import React, { memo, useEffect, useCallback, useMemo } from 'react';
-import { Mood as MoodIcon, SentimentVeryDissatisfied as SentimentVeryDissatisfiedIcon } from '@mui/icons-material';
+import { Grid, IconButton, InputAdornment } from '@mui/material';
+import React, { memo, useEffect, useCallback, useMemo, useState } from 'react';
+import { Mood as MoodIcon, SentimentVeryDissatisfied as SentimentVeryDissatisfiedIcon, Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@mui/icons-material';
 
 // components
 import FRadio from 'components/forms/radio';
@@ -14,6 +14,10 @@ import FCheckbox from 'components/forms/checkbox';
 import FDatePicker from 'components/form-date-picker';
 import Select, { AsyncSelect } from 'components/select';
 import FSelect, { FAsyncSelect } from 'components/fselect';
+import { validationStyles } from 'components/forms/helpers';
+
+// constants
+import { getItemLabel, getItemName, getItemValue } from 'constants/extractors';
 
 // interfaces
 import { AnyObject } from 'interfaces/common';
@@ -45,16 +49,13 @@ type EntityContentDto = {
   name: string
 }
 
-function getRoles ({ data, params }: AnyObject) {
-  return instanceAPI.post<PageFullRoleDto, PageFullRoleDto>(
-    'admin-service/roles/filter',
-    {
-      method: 'POST',
-      data: data || {},
-      params: params || {},
-    }
-  );
-}
+const getRoles = (name: string) => instanceAPI.post<PageFullRoleDto, PageFullRoleDto>(
+  'admin-service/roles/filter',
+  {
+    data: { name },
+    params: { size: 15, page: 0 },
+  }
+).then(({ content }) => content);
 
 const Test = () => {
   const [
@@ -62,6 +63,9 @@ const Test = () => {
     { updateData, initialize }
   ] = useController(controller);
   useEffect(() => { initialize(); }, [initialize]);
+
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+
   const validationSchema = useMemo(() => yup.object().shape({
     username: yup.string()
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
@@ -84,16 +88,16 @@ const Test = () => {
     formSwitch: yup.bool()
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
       .oneOf([true], 'Field must be checked'),
+    fsync: yup.string()
+      .required('VALIDATION_ERROR.REQUIRED_FIELD')
+      .oneOf(['HI'], 'Field must be checked'),
   }), []);
 
   const onSubmit = useCallback(values => {
     updateData(values);
   }, [updateData]);
 
-  const getRolesMemo = useCallback(
-    () => getRoles({ data: null, params: { size: 15, page: 0 } }).then(({ content }) => content),
-    []
-  );
+  const handleToggleHidePassword = useCallback(() => setIsPasswordHidden(!isPasswordHidden), [isPasswordHidden]);
 
   return <Grid
     mt={4}
@@ -109,15 +113,31 @@ const Test = () => {
         <Grid container spacing={3}>
           <Grid item xs={7}>
             <FInput
+              fullWidth
               type="text"
               name="username"
               label="Email Address"
+              sx={{ marginBottom: 2 }}
             />
             <FInput
-              variant="filled"
-              type="password"
+              fullWidth
               name="password"
+              variant="filled"
               label="Password"
+              sx={{ marginBottom: 2 }}
+              type={isPasswordHidden ? 'password' : 'text'}
+              InputProps={(valid, invalid) => ({
+                endAdornment: <InputAdornment position="end">
+                  <IconButton
+                    edge="end"
+                    onClick={handleToggleHidePassword}
+                    aria-label="toggle password visibility"
+                    color={validationStyles(valid, invalid)}
+                  >
+                    { isPasswordHidden ? <VisibilityIcon /> : <VisibilityOffIcon /> }
+                  </IconButton>
+                </InputAdornment>
+              })}
             />
             <FDatePicker
               name="userDate"
@@ -145,10 +165,10 @@ const Test = () => {
               fullWidth
               name="radioAny"
               label="radioAny"
-              prepareFormValue={item => item.value}
               getFieldValue={item => item}
               getOptionValue={item => item?.value}
               getOptionLabel={item => item?.label}
+              prepareFormValue={item => item.value}
               options={[5, '2', true].map(item => ({ value: item, label: `Number #${item}` }))}
             />
           </Grid>
@@ -158,10 +178,10 @@ const Test = () => {
               fullWidth
               name="radioNumber"
               label="radioNumber"
-              prepareFormValue={item => item.value}
               getFieldValue={item => item}
               getOptionValue={item => item?.value}
               getOptionLabel={item => item?.label}
+              prepareFormValue={item => item.value}
               options={[1, 2, 3, 4, 5].map(item => ({ value: item, label: `Number #${item}` }))}
             />
           </Grid>
@@ -204,35 +224,30 @@ const Test = () => {
           </Grid>
           <Grid item xs={7}>
             <Select
-              fullWidth
               multiple
               size="small"
-              name="select"
               label="Select"
-              getOptionLabel={({ label }) => label}
+              getOptionLabel={getItemLabel}
               options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
             />
           </Grid>
           <Grid item xs={7}>
             <AsyncSelect
-              loading
               multiple
-              fullWidth
-              name="async-select"
               loadingText="LOADING"
               label="Async multiple"
-              loadOptions={getRolesMemo}
-              getOptionLabel={({ name }) => name}
+              loadOptions={getRoles}
+              getOptionLabel={getItemName}
             />
           </Grid>
           <Grid item xs={7}>
             <FSelect
-              fullWidth
+              required
               name="fsync"
               label="FSync"
               filterSelectedOptions
-              getOptionLabel={({ label }) => label}
-              getFieldValue={({ value }: AnyObject) => value}
+              getFieldValue={getItemValue}
+              getOptionLabel={getItemLabel}
               prepareValue={(value: AnyObject) => ({ value, label: value })}
               options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
               isOptionEqualToValue={(option, value) => option.value === value.value}
@@ -240,7 +255,6 @@ const Test = () => {
           </Grid>
           <Grid item xs={7}>
             <FSelect
-              fullWidth
               multiple
               label="FSync multiple"
               name="fsyncMultiple"
@@ -254,7 +268,6 @@ const Test = () => {
           </Grid>
           <Grid item xs={7}>
             <FSelect
-              fullWidth
               name="FSyncObj"
               label="FSyncObj"
               getOptionLabel={({ label }) => label}
@@ -266,12 +279,11 @@ const Test = () => {
           </Grid>
           <Grid item xs={7}>
             <FAsyncSelect
-              fullWidth
               name="async"
               label="Async"
               loadingText="LOADING"
               filterSelectedOptions
-              loadOptions={getRolesMemo}
+              loadOptions={getRoles}
               getFieldValue={({ name }: AnyObject) => name}
               getOptionLabel={option => option.name ? option.name : option}
               prepareValue={(value: AnyObject) => ({ name: value, label: value })}
@@ -282,11 +294,11 @@ const Test = () => {
             <FAsyncSelect
               multiple
               fullWidth
-              loadingText="LOADING"
               name="fAsyncMultiple"
+              loadingText="LOADING"
               label="Async multiple"
               filterSelectedOptions
-              loadOptions={getRolesMemo}
+              loadOptions={getRoles}
               getOptionLabel={option => option.name}
               prepareValue={(value: AnyObject) => value}
               getFieldValue={(value) => value}
