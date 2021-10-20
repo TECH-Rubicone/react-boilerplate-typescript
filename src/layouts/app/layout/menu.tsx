@@ -8,12 +8,12 @@ const MENU = [
   {
     icon: Person,
     description: 'Profile',
-    link: ROUTES.ADMINISTRATIVE_USER_PROFILE.LINK(),
+    link: ROUTES.ADMINISTRATIVE_PROFILE_INFO.LINK(),
   },
   {
     icon: Settings,
     description: 'Settings',
-    link: ROUTES.ADMINISTRATIVE_USER_SETTINGS.LINK(),
+    link: ROUTES.ADMINISTRATIVE_PROFILE_SETTINGS.LINK(),
   },
 ];
 

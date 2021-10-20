@@ -7,11 +7,11 @@ import MENU from './menu';
 import Test from './test';
 import Client from './client';
 import Welcome from './welcome';
-import { controller } from '../controller';
 import Administrative from './administrative';
 import Layout, { ItemByTypeProps } from './layout';
 
 // outsource libraries
+import { controller } from '../controller';
 import { useControllerData } from 'redux-saga-controller';
 
 // constants

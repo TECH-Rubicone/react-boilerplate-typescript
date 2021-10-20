@@ -25,10 +25,11 @@ export const ADMINISTRATIVE_USERS_LIST = defineRoute(`${ADMINISTRATIVE.ROUTE}/us
 export const ADMINISTRATIVE_USERS_EDIT = defineRoute(`${ADMINISTRATIVE.ROUTE}/users/edit/:id`, {
   params: [ANNOTATION.ID({})]
 });
-export const ADMINISTRATIVE_USER = defineRoute(`${ADMINISTRATIVE.ROUTE}/user`, {});
-export const ADMINISTRATIVE_USER_PROFILE = defineRoute(`${ADMINISTRATIVE_USER.ROUTE}/profile`, {});
-export const ADMINISTRATIVE_USER_SETTINGS = defineRoute(`${ADMINISTRATIVE_USER.ROUTE}/settings`, {});
 
+// PROFILE
+export const ADMINISTRATIVE_PROFILE = defineRoute(`${ADMINISTRATIVE.ROUTE}/user`, {});
+export const ADMINISTRATIVE_PROFILE_INFO = defineRoute(`${ADMINISTRATIVE_PROFILE.ROUTE}/profile`, {});
+export const ADMINISTRATIVE_PROFILE_SETTINGS = defineRoute(`${ADMINISTRATIVE_PROFILE.ROUTE}/settings`, {});
 
 // NOTE CLIENT
 export const CLIENT_DSLD = defineRoute(`${CLIENT.ROUTE}/dsld`, {});

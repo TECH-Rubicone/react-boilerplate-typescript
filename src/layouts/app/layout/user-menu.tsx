@@ -29,7 +29,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ list }) => {
     alignItems="center"
   >
     <Grid item>
-      <MenuItem component={Link} to={ROUTES.ADMINISTRATIVE_USER_PROFILE.LINK()}>
+      <MenuItem component={Link} to={ROUTES.ADMINISTRATIVE_PROFILE_INFO.LINK()}>
         Profile
       </MenuItem>
     </Grid>
