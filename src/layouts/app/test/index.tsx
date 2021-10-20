@@ -26,9 +26,6 @@ import { AnyObject } from 'interfaces/common';
 // services
 import { instanceAPI } from 'services/api-private.service';
 
-// locale
-import 'locale/i18next';
-
 // local dependencies
 import { controller } from './controller';
 

@@ -1,0 +1,199 @@
+{
+  "translation": {
+    "project": "React boilerplate typescript",
+    "layouts": {
+      "auth": "Auth",
+      "test": "Test",
+      "client": "Client",
+      "layout": "Layout",
+      "welcome": "Welcome",
+      "administrative": "Administrative"
+    },
+    "menu": {
+      "test": "Test",
+      "auth": "Auth",
+      "users": "Users",
+      "signUp": "Sign Up",
+      "action": "Actions",
+      "signIn": "Sign In",
+      "welcome": "Welcome",
+      "administrative": "Administrative"
+    },
+    "actions": {
+      "submit": "Submit"
+    },
+    "forms": {
+      "validate": {
+        "STRING": "Must be a string",
+        "NUMBER": "Must be a number",
+        "INTEGER": "Must be an integer",
+        "MIN_VALUE": "Min value {{entity}}",
+        "MAX_VALUE": "Max value {{entity}}",
+        "INVALID_EMAIL": "E-mail is invalid",
+        "UNIQUE": "{{entity}} must a unique",
+        "INVALID_DATE": "Invalid date format",
+        "REQUIRED_FIELD": "Field is required",
+        "PASSWORD_MATCH": "Password must match",
+        "POSITIVE": "Must be a positive number",
+        "DEFINED_FIELD": "{{entity}} should be defined",
+        "CONTAIN_ONLY": "Field must contain only {{entity}}",
+        "MIN_DATE": "Selected date cannot be before {{min}}",
+        "ONE_OF_POSITIVE": "One of the fields must be positive",
+        "EQUAL": "{{entity}} should be equal to {{equalEntity}}",
+        "MAX_DATE": "Selected date cannot be later then {{max}}",
+        "MULTIPLE_ROLE": "Can't assign for user more than one role",
+        "USER_ALREADY_EXIST": "User with such an email already exists.",
+        "MIN_LENGTH": "At least {{min}} {{entity}} should be presented",
+        "MAX_LENGTH": "At maximum {{max}} {{entity}} should be presented",
+        "TENANT_ALREADY_EXIST": "Tenant with such an email already exists.",
+        "LESS": "{{entity}} should be equal to or less than {{equalEntity}}",
+        "MIN_LENGTH_CHARACTERS": "Field must contain at least {{min}} characters",
+        "EQUAL_OR_LESS": "{{entity}} should be equal to or less than {{equalEntity}}",
+        "invalid-form": "Some form details are incorrect or missing... Please check!",
+        "invalid-order-form": "Some order details are incorrect or missing... Please check!",
+        "MAX_LENGTH_CHARACTERS": "The maximum number of characters for the field is {{max}}"
+      }
+    },
+    "placeholder": {
+      "email": "Email",
+      "roles": "Roles",
+      "prefix": "Prefix",
+      "suffix": "Suffix",
+      "password": "Password",
+      "lastName": "Last Name",
+      "userName": "User Name",
+      "firstName": "First Name",
+      "middleName": "Middle Name",
+      "createdDate": "Creation Date"
+    },
+    "label": {
+      "email": "Email",
+      "roles": "Roles",
+      "prefix": "Prefix",
+      "suffix": "Suffix",
+      "password": "Password",
+      "lastName": "Last Name",
+      "userName": "User Name",
+      "firstName": "First Name",
+      "middleName": "Middle Name",
+      "createdDate": "Creation Date"
+    },
+    "errors": {
+      "details": "Details.",
+      "default": "Something went wrong...",
+      "undefined": "Something went wrong...",
+      "download-file": "File download is not possible.",
+      "crash": "App has crashed. Please reload page and try again.\nIf nothing happens contact contact@abiagenten.com",
+      "ACCESS_DENIED": "Access denied.",
+      "ACCESS_IS_DISABLED": "User is disabled.",
+      "UNKNOWN_ERROR": "Something went wrong...",
+      "SQL_CODE_NULL": "Something went wrong...",
+      "DEAL_DOESNT_EXIST": "Deal doesn't exist.",
+      "EMAIL_NOT_UNIQUE": "Email must be unique.",
+      "TITLE_NOT_UNIQUE": "Title must be unique.",
+      "ORDER_DOESNT_EXIST": "Order doesn't exists.",
+      "TENANT_DOESNT_EXIST": "Tenant doesn't exist.",
+      "RESET_TOKEN_EXPIRED": "Reset token is expired.",
+      "BAD_CREDENTIALS": "Email or password is invalid."
+    }
+  },
+  "WELCOME": {
+    "notifications": {
+      "success": {
+      },
+      "error": {
+      },
+      "confirm": {
+      }
+    },
+    "general": {
+      "title": "WELCOME!",
+      "description": "We are really glad to see you!",
+      "other": "Welcome footer"
+    }
+  },
+  "AUTH": {
+    "notifications": {
+      "success": {
+      },
+      "error": {
+      },
+      "confirm": {
+      }
+    },
+    "actions": {
+      "login": "Login",
+      "forgotPassword": "Forgot Password?"
+    },
+    "general": {
+      "title": "Boilerplate"
+    }
+  },
+  "USERS": {
+    "notifications": {
+      "success": {
+      },
+      "error": {
+      },
+      "confirm": {
+      }
+    },
+    "actions": {
+      "search": "Search",
+      "options": "Options",
+      "remove": "Remove selected",
+      "create": "Create User",
+      "sort": {
+        "name": "Name",
+        "id": "Id",
+        "creationDate": "Creation Date",
+        "roles": "Roles",
+        "actions": "Actions"
+      }
+    },
+    "general": {
+      "title": "Users"
+    },
+    "title": "Users"
+  },
+  "EDIT": {
+    "notifications": {
+      "success": {
+      },
+      "error": {
+      },
+      "confirm": {
+      }
+    },
+    "actions": {
+      "submit": "Edit"
+    },
+    "general": {
+      "title": "Edit User",
+      "form": {
+        "name": "Name",
+        "role": "Role"
+      }
+    }
+  },
+  "CREATE": {
+    "notifications": {
+      "success": {
+      },
+      "error": {
+      },
+      "confirm": {
+      }
+    },
+    "actions": {
+      "submit": "Create"
+    },
+    "general": {
+      "title": "Create User",
+      "form": {
+        "name": "Name",
+        "role": "Role"
+      }
+    }
+  }
+}
