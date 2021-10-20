@@ -6,9 +6,9 @@ import { AppBarProps, AppBar, IconButton, styled, Toolbar, Typography, Grid } fr
 
 // local dependencies
 import MENU from '../layout/menu';
+import UserMenu from './user-menu';
 import { DRAWER_WIDTH } from './index';
 import { controller } from '../controller';
-import UserAccountMenu from './user-menu';
 
 type StyledAppBarProps = AppBarProps & {
   open?: boolean;
@@ -51,14 +51,15 @@ const Header = () => {
         container
         display="flex"
         alignItems="center"
-        justifyContent="space-between">
+        justifyContent="space-between"
+      >
         <Grid item>
-          <Typography variant="h5" noWrap component="div" className="ml" m={2}>
+          <Typography variant="h5" noWrap component="div" m={2}>
             React boilerplate typescript
           </Typography>
         </Grid>
         <Grid item>
-          <UserAccountMenu list={MENU}/>
+          <UserMenu list={MENU}/>
         </Grid>
       </Grid>
     </Toolbar>

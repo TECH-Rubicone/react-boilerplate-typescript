@@ -36,7 +36,7 @@ export const getAccessToken = (): string | null => _.get(
   null
 );
 
-const getRefreshToken = (): string | null => _.get(
+export const getRefreshToken = (): string | null => _.get(
   storage.get(API_NAMES.AUTH_STORE),
   API_NAMES.REFRESH_TOKEN,
   null

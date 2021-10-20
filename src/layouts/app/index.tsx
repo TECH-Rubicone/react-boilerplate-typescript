@@ -10,6 +10,8 @@ import Welcome from './welcome';
 import { controller } from '../controller';
 import Administrative from './administrative';
 import Layout, { ItemByTypeProps } from './layout';
+
+// outsource libraries
 import { useControllerData } from 'redux-saga-controller';
 
 // constants
@@ -17,7 +19,6 @@ import * as ROUTES from 'constants/routes';
 
 const App = () => {
   const { auth } = useControllerData(controller);
-
   if (!auth) { return <Redirect to={ROUTES.SIGN_IN.ROUTE} />; }
   return <Layout menu={MENU as Array<ItemByTypeProps>}>
     <Switch>

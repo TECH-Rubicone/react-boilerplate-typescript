@@ -7,25 +7,21 @@ import { Avatar, IconButton, ListItemIcon, ListItemText, MenuItem, Grid, Menu, L
 
 // local dependencies
 import { controller } from '../../controller';
-import { API_NAMES } from '../../../constants/api';
 
-// services
-import storage from '../../../services/storage.service';
+// constants
+import * as ROUTES from 'constants/routes';
 
-export interface UserMenu {
+export interface UserMenuProps {
   list: Array<ItemMenuProps>
 }
 
-const UserMenu: React.FC<UserMenu> = ({ list }) => {
+const UserMenu: React.FC<UserMenuProps> = ({ list }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [ref, setRef] = useState<null | HTMLElement>(null);
-  const { updateCtrl } = useControllerActions(controller);
+  const { signOut } = useControllerActions(controller);
   useEffect(() => { setIsOpen(false); }, []);
+  const logout = useCallback(() => { signOut(); }, [signOut]);
   const handleMenuToggle = useCallback(() => { setIsOpen(state => !state); }, []);
-  const logout = useCallback(() => {
-    updateCtrl({ token: { accessToken: null }, auth: false });
-    storage.remove(API_NAMES.AUTH_STORE);
-  }, [updateCtrl]);
   return <Grid
     container
     spacing={2}
@@ -33,13 +29,8 @@ const UserMenu: React.FC<UserMenu> = ({ list }) => {
     alignItems="center"
   >
     <Grid item>
-      <MenuItem component={Link} to="#">
-          Contact
-      </MenuItem>
-    </Grid>
-    <Grid item>
-      <MenuItem component={Link} to="#">
-          Profile
+      <MenuItem component={Link} to={ROUTES.ADMINISTRATIVE_USER_PROFILE.LINK()}>
+        Profile
       </MenuItem>
     </Grid>
     <Grid item>
@@ -56,7 +47,7 @@ const UserMenu: React.FC<UserMenu> = ({ list }) => {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        { (list ?? []).map((item, index) => <ItemMenu key={index} {...item}/>) }
+        { (list ?? []).map((item, index) => <ItemMenu key={index} {...item} handleClose={handleMenuToggle} />) }
         <Divider/>
         <MenuItem sx={{ p: 0 }}>
           <ListItemButton onClick={logout}>
@@ -77,11 +68,12 @@ interface ItemMenuProps {
   link: string
   description: string
   icon?: SvgIconComponent
+  handleClose?: () => void
 }
 
-const ItemMenu: React.FC<ItemMenuProps> = ({ description, icon, link }) => {
+const ItemMenu: React.FC<ItemMenuProps> = ({ description, icon, link, handleClose }) => {
   const Icon = icon ?? PersonAdd;
-  return <MenuItem component={Link} to={link}>
+  return <MenuItem component={Link} to={link} onClick={handleClose}>
     <ListItemIcon>
       <Icon/>
     </ListItemIcon>

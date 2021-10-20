@@ -1,26 +1,19 @@
 // outsource dependencies
-import { Person, PersonAdd, Settings } from '@mui/icons-material';
+import { Person, Settings } from '@mui/icons-material';
+
+// constants
+import * as ROUTES from 'constants/routes';
 
 const MENU = [
   {
-    link: '#',
     icon: Person,
     description: 'Profile',
+    link: ROUTES.ADMINISTRATIVE_USER_PROFILE.LINK(),
   },
   {
-    link: '#',
-    icon: Person,
-    description: 'My account',
-  },
-  {
-    link: '#',
-    icon: PersonAdd,
-    description: 'Add another account',
-  },
-  {
-    link: '#',
     icon: Settings,
     description: 'Settings',
+    link: ROUTES.ADMINISTRATIVE_USER_SETTINGS.LINK(),
   },
 ];
 
