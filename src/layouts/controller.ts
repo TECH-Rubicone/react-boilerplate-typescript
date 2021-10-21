@@ -63,7 +63,7 @@ interface Actions extends ActionCreators<Initial>{
 
 export const controller: Controller<Actions, Initial> = create({
   prefix: 'root',
-  actions: ['initialize', 'getSelf', 'signOut'],
+  actions: ['initialize', 'getSelf', 'signOut', 'getSelfExecutor'],
   initial: {
     user: null,
     auth: true,
@@ -81,6 +81,7 @@ export const controller: Controller<Actions, Initial> = create({
   subscriber: function * () {
     yield takeEvery(controller.action.initialize.TYPE, initializeSaga);
     yield takeEvery(controller.action.signOut.TYPE, signOutSaga);
+    yield takeEvery(controller.action.getSelfExecutor.TYPE, getSelfExecutor);
   }
 });
 

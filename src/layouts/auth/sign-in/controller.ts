@@ -71,11 +71,19 @@ function * initializeSaga () {
 
 function * signInSaga ({ payload }: Act<SignInPayload>) {
   yield put(controller.action.updateCtrl({ disabled: true, errorMessage: '' }));
-  yield put(rootController.action.updateCtrl({ auth: true }));
   try {
     const session: OAuth2AccessTokenDto = yield call(instancePUB, '/auth/token', { method: 'POST', data: payload });
     yield call(dismissToast);
     yield call(setupSession, session);
+    yield put(rootController.action.updateCtrl({
+      token: {
+        accessToken: session.accessToken,
+        refreshToken: session.refreshToken,
+        accessTokenValiditySeconds: session.accessTokenValiditySeconds,
+        refreshTokenValiditySeconds: session.refreshTokenValiditySeconds
+      },
+      auth: true
+    }));
     yield call(toast.success, 'Welcome! We are really glad to see you!');
     yield call(ROUTES.APP.PUSH);
   } catch ({ message }) {

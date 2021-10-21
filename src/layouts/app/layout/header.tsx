@@ -35,9 +35,7 @@ const StyledAppBar = styled(AppBar, {
 const Header = () => {
   const { open } = useControllerData(controller);
   const { updateCtrl } = useControllerActions(controller);
-
   const handleOpen = useCallback(() => updateCtrl({ open: true }), [updateCtrl]);
-
   return <StyledAppBar position="fixed" open={open}>
     <Toolbar>
       { !open && <IconButton
