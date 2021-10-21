@@ -8,7 +8,7 @@ import { API_NAMES } from '../constants/api';
 // services
 import storage from '../services/storage.service';
 import { instancePUB } from 'services/api-public.service';
-import { getAccessToken, instanceAPI, restoreSessionFromStore, setupSession, getRefreshToken } from 'services/api-private.service';
+import { instanceAPI, restoreSessionFromStore, setupSession, getToken } from 'services/api-private.service';
 
 type Permission = {
   id: number;
@@ -44,7 +44,7 @@ export interface Initial {
   disabled: boolean;
   initialized: boolean;
   errorMessage: string;
-  token?: {
+  token: {
     accessToken: string | null,
     refreshToken: string | null,
     accessTokenValiditySeconds?: number | null,
@@ -103,8 +103,14 @@ function * initializeSaga () {
     const hasSession: boolean = yield call(restoreSessionFromStore);
     if (hasSession) {
       yield call(getSelfExecutor);
+      const {
+        accessToken,
+        refreshToken,
+        accessTokenValiditySeconds,
+        refreshTokenValiditySeconds
+      } = yield call(getToken);
       yield put(controller.action.updateCtrl({
-        token: { accessToken: getAccessToken(), refreshToken: getRefreshToken() }
+        token: { accessToken, refreshToken, refreshTokenValiditySeconds, accessTokenValiditySeconds }
       }));
     }
   } catch ({ message }) {
@@ -125,7 +131,8 @@ function * signOutSaga () {
         accessTokenValiditySeconds: null,
         refreshTokenValiditySeconds: null
       },
-      auth: false }));
+      auth: false
+    }));
     yield call(storage.remove, API_NAMES.AUTH_STORE);
   } catch ({ message }) {
     yield put(controller.action.updateCtrl({ errorMessage: String(message) }));
