@@ -142,7 +142,7 @@ function * signOutSaga () {
   yield put(controller.action.updateCtrl({ user: null })); // redirect to signIn
 }
 
-function * getSelfExecutor () {
+export function * getSelfExecutor () {
   const user: Me = yield call(instanceAPI, 'auth/users/me', { method: 'GET' });
   yield put(controller.action.updateCtrl({ user }));
 }

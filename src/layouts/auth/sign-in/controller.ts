@@ -5,7 +5,7 @@ import { put, call, takeEvery, select } from 'redux-saga/effects';
 import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 
 // local dependencies
-import { controller as rootController, Initial as RootInitial, Me } from 'layouts/controller';
+import { controller as rootController, getSelfExecutor, Initial as RootInitial } from 'layouts/controller';
 
 // components
 import { showWelcomeToast, dismissToast } from 'components/toast';
@@ -18,7 +18,7 @@ import { OAuth2AccessTokenDto } from 'interfaces/api';
 
 // services
 import { instancePUB } from 'services/api-public.service';
-import { instanceAPI, setupSession } from 'services/api-private.service';
+import { setupSession } from 'services/api-private.service';
 
 // NOTE action shortcut
 interface Act<Payload> extends Action {
@@ -84,9 +84,4 @@ function * signInSaga ({ payload }: Act<SignInPayload>) {
     yield call(toast.error, String(message));
   }
   yield put(controller.action.updateCtrl({ disabled: false }));
-}
-
-function * getSelfExecutor () {
-  const user: Me = yield call(instanceAPI, 'auth/users/me', { method: 'GET' });
-  yield put(rootController.action.updateCtrl({ user }));
 }

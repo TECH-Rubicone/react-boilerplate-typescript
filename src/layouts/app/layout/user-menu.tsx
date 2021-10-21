@@ -1,13 +1,13 @@
 // outsource dependencies
 import { Link } from 'react-router-dom';
 import React, { memo, useCallback, useState } from 'react';
-import { AvatarTypeMap } from '@mui/material/Avatar/Avatar';
 import { useControllerActions } from 'redux-saga-controller';
 import { Logout, PersonAdd, SvgIconComponent } from '@mui/icons-material';
-import { Avatar, IconButton, ListItemIcon, ListItemText, MenuItem, Grid, Menu, ListItemButton, Divider, } from '@mui/material';
+import { IconButton, ListItemIcon, ListItemText, MenuItem, Grid, Menu, ListItemButton, Divider, } from '@mui/material';
 
 // local dependencies
 import { controller } from '../../controller';
+import UserAvatar from '../../../components/user-avatar';
 
 // constants
 import * as ROUTES from 'constants/routes';
@@ -38,7 +38,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ list }) => {
         ref={setRef}
         onClick={handleMenuToggle}
       >
-        <UserAvatar name="User"/>
+        <UserAvatar name="Jon Doe" />
       </IconButton>
       { isOpen && <Menu
         open={isOpen}
@@ -47,7 +47,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ list }) => {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        { (list ?? []).map((item, index) => <ItemMenu key={index} {...item} handleClose={handleMenuToggle} />) }
+        { (list ?? []).map((item, index) => <ItemMenu key={index} {...item} handleClose={handleMenuToggle}/>) }
         <Divider/>
         <MenuItem sx={{ p: 0 }}>
           <ListItemButton onClick={logout}>
@@ -79,28 +79,4 @@ const ItemMenu: React.FC<ItemMenuProps> = ({ description, icon, link, handleClos
     </ListItemIcon>
     <ListItemText>{ description }</ListItemText>
   </MenuItem>;
-};
-
-interface UserAvatarProps extends AvatarTypeMap {
-  name?: string
-  userImg?: string
-}
-
-type UserAvatarType = Omit<UserAvatarProps, 'defaultComponent' | 'props'>;
-
-function stringAvatar (name: string) {
-  return {
-    sx: {
-      width: 32,
-      height: 32,
-      bgcolor: 'warning.main',
-    },
-    children: `${name?.split('')[0].toUpperCase()}`,
-  };
-}
-
-const UserAvatar: React.FC<UserAvatarType> = ({ name, userImg, ...attr }) => {
-  const userImage = userImg ?? '';
-  const userName = name ?? 'Anonymous';
-  return <Avatar alt={userName} src={userImage} {...stringAvatar(userName)} {...attr}/>;
 };
