@@ -5,7 +5,7 @@ import { useControllerActions, useControllerData } from 'redux-saga-controller';
 import { AppBarProps, AppBar, IconButton, styled, Toolbar, Typography, Grid } from '@mui/material';
 
 // local dependencies
-import MENU from '../layout/menu';
+import MENU from './menu';
 import UserMenu from './user-menu';
 import { DRAWER_WIDTH } from './index';
 import { controller } from '../controller';

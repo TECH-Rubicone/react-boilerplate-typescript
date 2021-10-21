@@ -5,7 +5,7 @@ import { put, call, takeEvery, select } from 'redux-saga/effects';
 import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 
 // local dependencies
-import { controller as rootController, Initial as RootInitial } from 'layouts/controller';
+import { controller as rootController, Initial as RootInitial, Me } from 'layouts/controller';
 
 // components
 import { showWelcomeToast, dismissToast } from 'components/toast';
@@ -18,7 +18,7 @@ import { OAuth2AccessTokenDto } from 'interfaces/api';
 
 // services
 import { instancePUB } from 'services/api-public.service';
-import { setupSession } from 'services/api-private.service';
+import { instanceAPI, setupSession } from 'services/api-private.service';
 
 // NOTE action shortcut
 interface Act<Payload> extends Action {
@@ -75,15 +75,8 @@ function * signInSaga ({ payload }: Act<SignInPayload>) {
     const session: OAuth2AccessTokenDto = yield call(instancePUB, '/auth/token', { method: 'POST', data: payload });
     yield call(dismissToast);
     yield call(setupSession, session);
-    yield put(rootController.action.updateCtrl({
-      token: {
-        accessToken: session.accessToken,
-        refreshToken: session.refreshToken,
-        accessTokenValiditySeconds: session.accessTokenValiditySeconds,
-        refreshTokenValiditySeconds: session.refreshTokenValiditySeconds
-      },
-      auth: true
-    }));
+    yield put(rootController.action.updateCtrl({ token: session, auth: true }));
+    yield call(getSelfExecutor);
     yield call(toast.success, 'Welcome! We are really glad to see you!');
     yield call(ROUTES.APP.PUSH);
   } catch ({ message }) {
@@ -91,4 +84,9 @@ function * signInSaga ({ payload }: Act<SignInPayload>) {
     yield call(toast.error, String(message));
   }
   yield put(controller.action.updateCtrl({ disabled: false }));
+}
+
+function * getSelfExecutor () {
+  const user: Me = yield call(instanceAPI, 'auth/users/me', { method: 'GET' });
+  yield put(rootController.action.updateCtrl({ user }));
 }

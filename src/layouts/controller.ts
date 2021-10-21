@@ -5,8 +5,6 @@ import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-co
 // constants
 import { API_NAMES } from '../constants/api';
 
-// local dependencies
-
 // services
 import storage from '../services/storage.service';
 import { instancePUB } from 'services/api-public.service';
@@ -46,12 +44,12 @@ export interface Initial {
   disabled: boolean;
   initialized: boolean;
   errorMessage: string;
-  token: {
+  token?: {
     accessToken: string | null,
     refreshToken: string | null,
     accessTokenValiditySeconds?: number | null,
     refreshTokenValiditySeconds?: number | null,
-  } | null;
+  };
 }
 
 type InitializePayload = null;
@@ -120,7 +118,14 @@ function * initializeSaga () {
 function * signOutSaga () {
   try {
     yield call(instanceAPI, '/auth/logout', { method: 'POST' });
-    yield put(controller.action.updateCtrl({ token: null, auth: false }));
+    yield put(controller.action.updateCtrl({
+      token: {
+        accessToken: null,
+        refreshToken: null,
+        accessTokenValiditySeconds: null,
+        refreshTokenValiditySeconds: null
+      },
+      auth: false }));
     yield call(storage.remove, API_NAMES.AUTH_STORE);
   } catch ({ message }) {
     yield put(controller.action.updateCtrl({ errorMessage: String(message) }));

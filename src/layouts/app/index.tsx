@@ -1,7 +1,7 @@
 // outsource libraries
-import React, { memo, useEffect } from 'react';
+import React, { memo } from 'react';
+import { useControllerData } from 'redux-saga-controller';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import { useControllerActions, useControllerData } from 'redux-saga-controller';
 
 // local dependencies
 import MENU from './menu';
@@ -17,10 +17,6 @@ import * as ROUTES from 'constants/routes';
 
 const App = () => {
   const { auth } = useControllerData(controller);
-  const { getSelfExecutor } = useControllerActions(controller);
-  useEffect(() => {
-    if (auth) { getSelfExecutor(); }
-  }, [auth, getSelfExecutor]);
   if (!auth) { return <Redirect to={ROUTES.SIGN_IN.ROUTE} />; }
   return <Layout menu={MENU as Array<ItemByTypeProps>}>
     <Switch>
