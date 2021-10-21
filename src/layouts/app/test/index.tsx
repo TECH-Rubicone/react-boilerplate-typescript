@@ -114,7 +114,7 @@ const Test = () => {
       { ({ values }) => <Form>
         <Grid container spacing={3}>
           <Grid item xs={7}>
-            <Typography component="h5">it is i18next { t('welcome') }</Typography>
+            <Typography component="h5">{ t('project') }</Typography>
           </Grid>
           <Grid item xs={7}>
             <FInput

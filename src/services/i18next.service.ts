@@ -1,6 +1,6 @@
 // outsource dependencies
-import i18n, { FormatFunction, TFunction } from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import i18n, { FormatFunction, TFunction } from 'i18next';
 
 // configs
 import config from 'configs';

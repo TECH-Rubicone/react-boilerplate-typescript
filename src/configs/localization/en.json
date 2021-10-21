@@ -39,8 +39,6 @@
         "MAX_LENGTH": "At maximum {{max}} {{entity}} should be presented",
         "TENANT_ALREADY_EXIST": "Tenant with such an email already exists.",
         "MIN_LENGTH_CHARACTERS": "Field must contain at least {{min}} characters",
-        "invalid-form": "Some form details are incorrect or missing... Please check!",
-        "invalid-order-form": "Some order details are incorrect or missing... Please check!",
         "MAX_LENGTH_CHARACTERS": "The maximum number of characters for the field is {{max}}"
       }
     },
@@ -71,8 +69,6 @@
     "errors": {
       "default": "Something went wrong...",
       "undefined": "Something went wrong...",
-      "download-file": "File download is not possible.",
-      "crash": "App has crashed. Please reload page and try again.\nIf nothing happens contact contact@abiagenten.com",
       "ACCESS_DENIED": "Access denied.",
       "ACCESS_IS_DISABLED": "User is disabled.",
       "UNKNOWN_ERROR": "Something went wrong...",
@@ -93,8 +89,8 @@
       },
       "general": {
         "title": "WELCOME!",
-        "description": "We are really glad to see you!",
-        "other": "Welcome footer"
+        "other": "Welcome footer",
+        "description": "We are really glad to see you!"
       }
     },
     "AUTH": {
@@ -116,7 +112,6 @@
       }
     },
     "USERS": {
-      "delete": "Do you want to delete {{count:single=this color}}{{count:plural=these colors}}?",
       "notifications": {
         "success": {
           "uploaded": "Users were successfully uploaded"
@@ -124,7 +119,7 @@
         "error": {
         },
         "confirm": {
-          "delete": "Do you want to delete {{count:single=this color}}{{count:plural=these colors}}?"
+          "delete": "Do you want to delete selected {{count:single=user}}{{count:plural=users}}?"
         }
       },
       "actions": {
@@ -133,7 +128,7 @@
         "create": "Create User",
         "remove": "Remove selected",
         "next-page": "Go to next page",
-        "previous-page": "Go to previous page",
+        "go-previous": "Go to previous page",
         "sort": {
           "id": "Id",
           "name": "Name",
@@ -143,7 +138,6 @@
         }
       },
       "general": {
-        "of": "of",
         "title": "Users",
         "items-number": "Rows per page:"
       }
@@ -161,9 +155,9 @@
         "submit": "Edit"
       },
       "general": {
-        "title": "Edit User",
+        "role": "Role",
         "name": "Name",
-        "role": "Role"
+        "title": "Edit User"
       }
     },
     "CREATE": {
@@ -179,9 +173,9 @@
         "submit": "Create"
       },
       "general": {
-        "title": "Create User",
+        "role": "Role",
         "name": "Name",
-        "role": "Role"
+        "title": "Create User"
       }
     }
   }
