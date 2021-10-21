@@ -7,6 +7,7 @@ import { ToastContainer } from 'react-toastify';
 
 // services
 import { history } from 'services/route';
+import LanguageService from 'services/i18next.service';
 
 // local dependencies
 import App from './layouts';
@@ -15,6 +16,8 @@ import reportWebVitals from './reportWebVitals';
 
 // styles
 import './styles';
+
+LanguageService.initialize();
 
 ReactDOM.render(
   <React.StrictMode>

@@ -6,10 +6,12 @@ import i18n, { FormatFunction, TFunction } from 'i18next';
 import config from 'configs';
 import en from 'configs/localization/en.json';
 import ru from 'configs/localization/ru.json';
+import ukr from 'configs/localization/ukr.json';
 
 export const LANGUAGES = {
   EN: 'en',
   RU: 'ru',
+  URK: 'urk',
 };
 
 export class LanguageService {
@@ -39,6 +41,7 @@ export class LanguageService {
       resources: {
         en,
         ru,
+        ukr,
       },
     }).then(() => config.DEBUG && console.info('%c LanguageService.initialize',
       'color: #035DC8; font-weight: bolder; font-size: 12px;'))
@@ -46,7 +49,5 @@ export class LanguageService {
       'background: #EE5577; color: #FFF; font-weight: bolder; font-size: 12px;',
       '\n error:', error))
 }
-
-LanguageService.initialize();
 
 export default LanguageService;
