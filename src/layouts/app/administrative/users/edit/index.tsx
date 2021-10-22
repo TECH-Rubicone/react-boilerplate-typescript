@@ -55,13 +55,15 @@ const UserEdit = () => {
 
   const validationSchema = useMemo(() => yup.object().shape({
     firstName: yup.string()
+      .nullable()
+      .required('VALIDATION_ERROR.REQUIRED_FIELD'),
+    lastName: yup.string()
+      .nullable()
       .required('VALIDATION_ERROR.REQUIRED_FIELD'),
     middleName: yup.string()
       .nullable(),
     roles: yup.array()
       .min(1),
-    lastName: yup.string()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD'),
     email: yup.string()
       .required('VALIDATION_ERROR.REQUIRED_FIELD')
       .email('VALIDATION_ERROR.INVALID_EMAIL'),
