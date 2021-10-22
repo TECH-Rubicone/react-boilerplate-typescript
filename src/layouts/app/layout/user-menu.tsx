@@ -1,8 +1,8 @@
 // outsource dependencies
 import { Link } from 'react-router-dom';
 import React, { memo, useCallback, useState } from 'react';
+import { useControllerActions } from 'redux-saga-controller';
 import { Logout, PersonAdd, SvgIconComponent } from '@mui/icons-material';
-import { useControllerActions, useControllerData } from 'redux-saga-controller';
 import { IconButton, ListItemIcon, ListItemText, MenuItem, Grid, Menu, ListItemButton, Divider, } from '@mui/material';
 
 // components
@@ -21,7 +21,6 @@ export interface UserMenuProps {
 const UserMenu: React.FC<UserMenuProps> = ({ list }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [ref, setRef] = useState<null | HTMLElement>(null);
-  const { user } = useControllerData(controller);
   const { signOut } = useControllerActions(controller);
   const logout = useCallback(() => { signOut(); }, [signOut]);
   const handleMenuToggle = useCallback(() => { setIsOpen(state => !state); }, []);
@@ -41,7 +40,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ list }) => {
         ref={setRef}
         onClick={handleMenuToggle}
       >
-        <UserAvatar user={user}/>
+        <UserAvatar firstName="Jon" lastName="Doe"/>
       </IconButton>
       { isOpen && <Menu
         open={isOpen}
