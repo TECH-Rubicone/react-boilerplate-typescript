@@ -7,12 +7,12 @@ import * as ROUTES from 'constants/routes';
 const MENU = [
   {
     icon: Person,
-    description: 'Profile',
+    name: 'Profile',
     link: ROUTES.ADMINISTRATIVE_PROFILE_INFO.LINK(),
   },
   {
     icon: Settings,
-    description: 'Settings',
+    name: 'Settings',
     link: ROUTES.ADMINISTRATIVE_PROFILE_SETTINGS.LINK(),
   },
 ];

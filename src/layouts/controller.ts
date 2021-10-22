@@ -30,6 +30,8 @@ export type Me = null | {
   roles: Role[];
   username: string;
   enabled: boolean;
+  lastName: string;
+  firstName: string;
   coverImage: Image;
   clinicRole: string;
   createdDate: string;

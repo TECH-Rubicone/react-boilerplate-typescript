@@ -2,41 +2,17 @@
 import React, { memo } from 'react';
 import { Avatar, AvatarProps } from '@mui/material';
 
-type Permission = {
-  id: number;
-  name: string;
-};
-
-type Role = {
-  id: number;
-  name: string;
-}
-
-type Image = {
-  url: string;
-}
-
-export type User = null | {
-  id: number;
-  name: string;
-  roles: Role[];
-  username: string;
-  enabled: boolean;
-  coverImage: Image;
-  lastName?: string;
-  firstName?: string;
-  clinicRole: string;
-  createdDate: string;
-  hasDrChronoToken: boolean;
-  permissions: Permission[];
-}
+// local dependencies
+import { Me } from '../layouts/controller';
 
 interface UserAvatarProps extends AvatarProps {
-  user: User
+  user: Me
 }
 
 const UserAvatar: React.FC<UserAvatarProps> = ({ user, ...attr }) => {
-  const stringAvatar = `${user?.name.split(' ')[0][0]}${user?.name.split(' ')[1][0]}`;
+  const lastName = user?.lastName ?? '_';
+  const firstName = user?.firstName ?? '_';
+  const stringAvatar = `${firstName[0]}${lastName[0]}`;
   return <Avatar
     alt={user?.name}
     src={user?.coverImage.url}
