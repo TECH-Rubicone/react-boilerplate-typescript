@@ -2,9 +2,11 @@
 import React, { useCallback } from 'react';
 import { Menu } from '@mui/icons-material';
 import { useControllerActions, useControllerData } from 'redux-saga-controller';
-import { AppBarProps, AppBar, IconButton, styled, Toolbar, Typography } from '@mui/material';
+import { AppBarProps, AppBar, IconButton, styled, Toolbar, Typography, Grid } from '@mui/material';
 
 // local dependencies
+import MENU from './menu';
+import UserMenu from './user-menu';
 import { DRAWER_WIDTH } from './index';
 import { controller } from '../controller';
 
@@ -33,9 +35,7 @@ const StyledAppBar = styled(AppBar, {
 const Header = () => {
   const { open } = useControllerData(controller);
   const { updateCtrl } = useControllerActions(controller);
-
   const handleOpen = useCallback(() => updateCtrl({ open: true }), [updateCtrl]);
-
   return <StyledAppBar position="fixed" open={open}>
     <Toolbar>
       { !open && <IconButton
@@ -45,9 +45,21 @@ const Header = () => {
       >
         <Menu />
       </IconButton> }
-      <Typography variant="h5" noWrap component="div" className="ml" m={2}>
-        React boilerplate typescript
-      </Typography>
+      <Grid
+        container
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <Grid item>
+          <Typography variant="h5" noWrap component="div" m={2}>
+            React boilerplate typescript
+          </Typography>
+        </Grid>
+        <Grid item>
+          <UserMenu list={MENU}/>
+        </Grid>
+      </Grid>
     </Toolbar>
   </StyledAppBar>;
 };

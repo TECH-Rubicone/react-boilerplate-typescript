@@ -2,10 +2,13 @@
 import { call, delay, put, takeEvery } from 'redux-saga/effects';
 import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 
-// local dependencies
+// constants
+import { API_NAMES } from 'constants/api';
+
 // services
+import storage from 'services/storage.service';
 import { instancePUB } from 'services/api-public.service';
-import { getAccessToken, instanceAPI, restoreSessionFromStore, setupSession } from 'services/api-private.service';
+import { instanceAPI, restoreSessionFromStore, setupSession, getToken } from 'services/api-private.service';
 
 type Permission = {
   id: number;
@@ -35,11 +38,28 @@ export type Me = null | {
 }
 
 export interface Initial {
+  auth: boolean;
+  user: Me | null;
   health: boolean;
   disabled: boolean;
-  user: Me | null;
   initialized: boolean;
-  accessToken: string | null;
+  errorMessage: string;
+  token: {
+    accessToken: string | null,
+    refreshToken: string | null,
+    accessTokenValiditySeconds?: number | null,
+    refreshTokenValiditySeconds?: number | null,
+  };
+}
+
+type Token = {
+  accessToken: string
+  scope: Array<string>
+  refreshToken: string
+  resources: Array<string>
+  authorities: Array<string>
+  accessTokenValiditySeconds: number
+  refreshTokenValiditySeconds: number
 }
 
 type InitializePayload = null;
@@ -51,16 +71,25 @@ interface Actions extends ActionCreators<Initial>{
 
 export const controller: Controller<Actions, Initial> = create({
   prefix: 'root',
-  actions: ['initialize', 'getSelf'],
+  actions: ['initialize', 'getSelf', 'signOut', 'getSelfExecutor'],
   initial: {
     user: null,
+    auth: true,
     health: false,
     disabled: true,
-    accessToken: null,
+    errorMessage: '',
     initialized: false,
+    token: {
+      accessToken: '',
+      refreshToken: '',
+      accessTokenValiditySeconds: null,
+      refreshTokenValiditySeconds: null
+    },
   },
   subscriber: function * () {
+    yield takeEvery(controller.action.signOut.TYPE, signOutSaga);
     yield takeEvery(controller.action.initialize.TYPE, initializeSaga);
+    yield takeEvery(controller.action.getSelfExecutor.TYPE, getSelfExecutor);
   }
 });
 
@@ -84,7 +113,8 @@ function * initializeSaga () {
     const hasSession: boolean = yield call(restoreSessionFromStore);
     if (hasSession) {
       yield call(getSelfExecutor);
-      yield put(controller.action.updateCtrl({ accessToken: getAccessToken() }));
+      const token: Token = yield call(getToken);
+      yield put(controller.action.updateCtrl({ token }));
     }
   } catch ({ message }) {
     yield call(signOutSaga);
@@ -97,15 +127,25 @@ function * initializeSaga () {
 function * signOutSaga () {
   try {
     yield call(instanceAPI, '/auth/logout', { method: 'POST' });
+    yield put(controller.action.updateCtrl({
+      token: {
+        accessToken: null,
+        refreshToken: null,
+        accessTokenValiditySeconds: null,
+        refreshTokenValiditySeconds: null
+      },
+      auth: false
+    }));
+    yield call(storage.remove, API_NAMES.AUTH_STORE);
   } catch ({ message }) {
-    console.error('SIGN_OUT', message);
+    yield put(controller.action.updateCtrl({ errorMessage: String(message) }));
   }
   // NOTE clear client side session from store
   yield call(setupSession, null);
   yield put(controller.action.updateCtrl({ user: null })); // redirect to signIn
 }
 
-function * getSelfExecutor () {
+export function * getSelfExecutor () {
   const user: Me = yield call(instanceAPI, 'auth/users/me', { method: 'GET' });
   yield put(controller.action.updateCtrl({ user }));
 }

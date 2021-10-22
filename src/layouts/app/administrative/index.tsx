@@ -10,10 +10,12 @@ import Home from 'common/home';
 
 // local dependencies
 import Users from './users';
+import Profile from './profile';
 
 const App = () => <Switch>
   <Route path={ROUTES.ADMINISTRATIVE_HOME.ROUTE} component={Home} />
   <Route path={ROUTES.ADMINISTRATIVE_USERS.ROUTE} component={Users} />
+  <Route path={ROUTES.ADMINISTRATIVE_PROFILE.ROUTE} component={Profile}/>
   <Redirect to={ROUTES.ADMINISTRATIVE_HOME.ROUTE} />
 </Switch>;
 

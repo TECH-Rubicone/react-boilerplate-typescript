@@ -5,7 +5,7 @@ import { put, call, takeEvery, select } from 'redux-saga/effects';
 import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 
 // local dependencies
-import { controller as rootController, Initial as RootInitial } from 'layouts/controller';
+import { controller as rootController, getSelfExecutor, Initial as RootInitial } from 'layouts/controller';
 
 // components
 import { showWelcomeToast, dismissToast } from 'components/toast';
@@ -75,6 +75,8 @@ function * signInSaga ({ payload }: Act<SignInPayload>) {
     const session: OAuth2AccessTokenDto = yield call(instancePUB, '/auth/token', { method: 'POST', data: payload });
     yield call(dismissToast);
     yield call(setupSession, session);
+    yield put(rootController.action.updateCtrl({ token: session, auth: true }));
+    yield call(getSelfExecutor);
     yield call(toast.success, 'Welcome! We are really glad to see you!');
     yield call(ROUTES.APP.PUSH);
   } catch ({ message }) {

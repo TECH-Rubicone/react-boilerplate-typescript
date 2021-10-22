@@ -24,10 +24,7 @@ type Session = OAuth2AccessTokenDto | null;
  * @param {Object} [session=null]
  */
 const updateStoredSession = (session: Session): void => {
-  return (!session ? storage.remove(API_NAMES.AUTH_STORE) : storage.set(API_NAMES.AUTH_STORE, {
-    [API_NAMES.ACCESS_TOKEN]: session.accessToken,
-    [API_NAMES.REFRESH_TOKEN]: session.refreshToken
-  }));
+  return (!session ? storage.remove(API_NAMES.AUTH_STORE) : storage.set(API_NAMES.AUTH_STORE, session));
 };
 
 export const getAccessToken = (): string | null => _.get(
@@ -36,11 +33,13 @@ export const getAccessToken = (): string | null => _.get(
   null
 );
 
-const getRefreshToken = (): string | null => _.get(
+export const getRefreshToken = (): string | null => _.get(
   storage.get(API_NAMES.AUTH_STORE),
   API_NAMES.REFRESH_TOKEN,
   null
 );
+
+export const getToken = () => storage.get(API_NAMES.AUTH_STORE);
 
 const hasStoredSession = (): boolean => _.isEmpty(storage.get(API_NAMES.AUTH_STORE));
 
