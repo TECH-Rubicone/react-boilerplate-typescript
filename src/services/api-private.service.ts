@@ -39,11 +39,7 @@ export const getRefreshToken = (): string | null => _.get(
   null
 );
 
-export const getToken = (): Session => _.get(
-  storage.get(API_NAMES.AUTH_STORE),
-  API_NAMES.AUTH_STORE,
-  null
-);
+export const getToken = () => storage.get(API_NAMES.AUTH_STORE);
 
 const hasStoredSession = (): boolean => _.isEmpty(storage.get(API_NAMES.AUTH_STORE));
 

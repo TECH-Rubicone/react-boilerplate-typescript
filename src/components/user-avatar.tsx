@@ -2,11 +2,37 @@
 import React, { memo } from 'react';
 import { Avatar, AvatarProps } from '@mui/material';
 
-// local dependencies
-import { Me } from '../layouts/controller';
+type Permission = {
+  id: number;
+  name: string;
+};
+
+type Role = {
+  id: number;
+  name: string;
+}
+
+type Image = {
+  url: string;
+}
+
+export type User = null | {
+  id: number;
+  name: string;
+  roles: Role[];
+  username: string;
+  enabled: boolean;
+  coverImage: Image;
+  lastName?: string;
+  firstName?: string;
+  clinicRole: string;
+  createdDate: string;
+  hasDrChronoToken: boolean;
+  permissions: Permission[];
+}
 
 interface UserAvatarProps extends AvatarProps {
-  user: Me
+  user: User
 }
 
 const UserAvatar: React.FC<UserAvatarProps> = ({ user, ...attr }) => {
