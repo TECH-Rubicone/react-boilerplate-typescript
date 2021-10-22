@@ -1,17 +1,47 @@
 // outsource dependencies
+import i18n from 'i18next';
 import { Location } from 'history';
 import { Link, useLocation } from 'react-router-dom';
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useControllerActions, useControllerData } from 'redux-saga-controller';
-import { DrawerProps, Collapse, Divider, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, ListSubheader, Stack, Menu, MenuItem, styled, Theme } from '@mui/material';
-import { SvgIconComponent, ChevronLeft as ChevronLeftIcon, ExpandLess as ExpandLessIcon, ExpandMore as ExpandMoreIcon, Remove as RemoveIcon, Bookmark as BookmarkIcon } from '@mui/icons-material';
+import { DrawerProps, Collapse, Divider, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, ListSubheader, Stack, Menu, MenuItem, styled, Theme, Box } from '@mui/material';
+import { SvgIconComponent, ChevronLeft as ChevronLeftIcon, ExpandLess as ExpandLessIcon, ExpandMore as ExpandMoreIcon, Remove as RemoveIcon, Bookmark as BookmarkIcon, Language } from '@mui/icons-material';
 
 // hooks
 import { HEADER_HEIGHT } from 'hooks/use-free-height';
 
+// services
+import LanguageService from 'services/i18next.service';
+
+// configs
+import config from 'configs';
+
+// assets
+import US from 'assets/us-flag.svg';
+import RU from 'assets/ru-flag.svg';
+import UKR from 'assets/ukr-flag.svg';
+
 // local dependencies
 import { controller } from '../controller';
 import { ItemByTypeProps, SubItemByTypeProps, DRAWER_WIDTH } from './index';
+
+const languages = [
+  {
+    icon: US,
+    name: 'English',
+    action: () => { i18n.changeLanguage('en'); },
+  },
+  {
+    icon: RU,
+    name: 'Russian',
+    action: () => { i18n.changeLanguage('ru'); },
+  },
+  {
+    icon: UKR,
+    name: 'Ukrainian',
+    action: () => { i18n.changeLanguage('ukr'); },
+  },
+];
 
 const closedMixin = (theme: Theme) => ({
   width: 60,
@@ -63,6 +93,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ menu }) => {
   const { open } = useControllerData(controller);
   const { updateCtrl } = useControllerActions(controller);
   const handleDrawerClose = useCallback(() => updateCtrl({ open: false }), [updateCtrl]);
+
   return <StyledDrawer variant="permanent" open={open}>
     <Stack direction="row" justifyContent="flex-end" alignItems="center" sx={{ height: HEADER_HEIGHT }}>
       <IconButton onClick={handleDrawerClose} sx={{ mr: 1 }}>
@@ -73,10 +104,51 @@ const SideMenu: React.FC<SideMenuProps> = ({ menu }) => {
     <List>
       { menu.map((item, index) => <ItemByType key={index} {...item} />) }
     </List>
+    { config.DEBUG && <Languages /> }
   </StyledDrawer>;
 };
 
 export default SideMenu;
+
+const Languages: React.FC = () => {
+  const { open } = useControllerData(controller);
+  const [isOpen, setIsOpen] = useState(false);
+  const [ref, setRef] = useState<null | HTMLElement>(null);
+  const handleToggle = useCallback(() => setIsOpen(state => !state), [setIsOpen]);
+
+  useEffect(() => { setIsOpen(false); }, [open]);
+
+  const list = useMemo(() => languages.map(item => ({
+    ...item,
+    action: () => {
+      item.action();
+      handleToggle();
+    }
+  })), [handleToggle]);
+
+  return <Box width="100%" mt="auto">
+    <ListItemButton ref={setRef} onClick={handleToggle} sx={{ justifyContent: 'center' }}>
+      <ListItemIcon sx={{ minWidth: !open ? 24 : 48 }}>
+        <Language />
+      </ListItemIcon>
+      { open && <ListItemText primary={LanguageService.translate('menu.language')} /> }
+    </ListItemButton>
+    { <Menu
+      open={isOpen}
+      anchorEl={ref}
+      onClose={handleToggle}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+    >
+      { (list ?? []).map(({ icon, action, name }) => <MenuItem key={name} sx={{ p: 1.5, pl: 2 }}>
+        <ListItemIcon sx={{ minWidth: !open ? 24 : 48 }}>
+          <img src={icon} alt="It is a flag of something county" style={{ width: 26 }} />
+        </ListItemIcon>
+        <ListItemText primary={name} onClick={action} />
+      </MenuItem>) }
+    </Menu> }
+  </Box>;
+};
 
 export interface ItemLinkProps {
   name: string
@@ -90,7 +162,7 @@ const ItemLink: React.FC<ItemLinkProps> = ({ name, link, icon, isActive, ...prop
   const { open } = useControllerData(controller);
   const selected = useMemo(() => isActive(location), [isActive, location]);
   const Icon = icon ?? BookmarkIcon;
-  return <ListItemButton selected={selected} component={Link} to={link} {...props}>
+  return <ListItemButton sx={{ justifyContent: 'center' }} selected={selected} component={Link} to={link} {...props}>
     <ListItemIcon sx={{ minWidth: !open ? 24 : 48 }}>
       <Icon />
     </ListItemIcon>
@@ -110,7 +182,7 @@ const ItemAction: React.FC<ItemActionProps> = ({ name, action, icon, isActive, .
   const { open } = useControllerData(controller);
   const selected = useMemo(() => isActive(location), [isActive, location]);
   const Icon = icon ?? BookmarkIcon;
-  return <ListItemButton onClick={action} {...props} selected={selected}>
+  return <ListItemButton sx={{ justifyContent: 'center' }} onClick={action} {...props} selected={selected}>
     <ListItemIcon sx={{ minWidth: !open ? 24 : 48 }}>
       <Icon />
     </ListItemIcon>
@@ -152,6 +224,7 @@ const ItemMenu: React.FC<ItemMenuProps> = ({ name, icon, list, isActive }) => {
       ref={setRef}
       selected={selected}
       onClick={handleMenuToggle}
+      sx={{ justifyContent: 'center' }}
     >
       <ListItemIcon sx={{ minWidth: !open ? 24 : 48 }}>
         <Icon />

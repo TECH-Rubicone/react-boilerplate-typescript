@@ -1,5 +1,5 @@
 // outsource dependencies
-import { FormatListBulletedOutlined, StarBorderOutlined, SupervisorAccountOutlined, VpnKeyOutlined } from '@mui/icons-material';
+import { Dangerous, FormatListBulletedOutlined, StarBorderOutlined, SupervisorAccountOutlined, VpnKeyOutlined } from '@mui/icons-material';
 
 // constants
 import * as ROUTES from 'constants/routes';
@@ -16,7 +16,7 @@ const MENU = [
   {
     type: MENU_TYPE.LINK,
     name: 'Test',
-    icon: VpnKeyOutlined,
+    icon: Dangerous,
     link: ROUTES.TEST.LINK(),
     isActive: location => ROUTES.TEST.REGEXP.test(location?.pathname),
   },

@@ -1,0 +1,183 @@
+{
+  "translation": {
+    "project": "React boilerplate typescript",
+    "layouts": {
+      "auth": "Auth",
+      "test": "Test",
+      "client": "Client",
+      "layout": "Layout",
+      "welcome": "Welcome",
+      "administrative": "Administrative"
+    },
+    "menu": {
+      "title": "Menu",
+      "test": "Test",
+      "auth": "Auth",
+      "users": "Users",
+      "action": "Action",
+      "sign-up": "Sign Up",
+      "sign-in": "Sign In",
+      "welcome": "Welcome",
+      "language": "Language",
+      "administrative": "Administrative"
+    },
+    "actions": {
+      "submit": "Submit"
+    },
+    "forms": {
+      "validate": {
+        "STRING": "Must be a string",
+        "NUMBER": "Must be a number",
+        "INTEGER": "Must be an integer",
+        "MIN_VALUE": "Min value {{entity}}",
+        "MAX_VALUE": "Max value {{entity}}",
+        "INVALID_EMAIL": "E-mail is invalid",
+        "UNIQUE": "{{entity}} must a unique",
+        "REQUIRED_FIELD": "Field is required",
+        "DEFINED_FIELD": "{{entity}} should be defined",
+        "USER_ALREADY_EXIST": "User with such an email already exists.",
+        "MIN_LENGTH": "At least {{min}} {{entity}} should be presented",
+        "MAX_LENGTH": "At maximum {{max}} {{entity}} should be presented",
+        "TENANT_ALREADY_EXIST": "Tenant with such an email already exists.",
+        "MIN_LENGTH_CHARACTERS": "Field must contain at least {{min}} characters",
+        "MAX_LENGTH_CHARACTERS": "The maximum number of characters for the field is {{max}}"
+      }
+    },
+    "placeholder": {
+      "email": "Email",
+      "roles": "Roles",
+      "prefix": "Prefix",
+      "suffix": "Suffix",
+      "password": "Password",
+      "lastName": "Last Name",
+      "userName": "User Name",
+      "firstName": "First Name",
+      "middleName": "Middle Name",
+      "createdDate": "Creation Date"
+    },
+    "label": {
+      "email": "Email",
+      "roles": "Roles",
+      "prefix": "Prefix",
+      "suffix": "Suffix",
+      "password": "Password",
+      "lastName": "Last Name",
+      "userName": "User Name",
+      "firstName": "First Name",
+      "middleName": "Middle Name",
+      "createdDate": "Creation Date"
+    },
+    "errors": {
+      "default": "Something went wrong...",
+      "undefined": "Something went wrong...",
+      "ACCESS_DENIED": "Access denied.",
+      "ACCESS_IS_DISABLED": "User is disabled.",
+      "UNKNOWN_ERROR": "Something went wrong...",
+      "SQL_CODE_NULL": "Something went wrong...",
+      "EMAIL_IS_UNIQUE": "Email must be unique.",
+      "TENANT_DOESNT_EXIST": "Tenant doesn't exist.",
+      "RESET_TOKEN_EXPIRED": "Reset token is expired.",
+      "BAD_CREDENTIALS": "Email or password is invalid."
+    },
+    "WELCOME": {
+      "notifications": {
+        "success": {
+        },
+        "error": {
+        },
+        "confirm": {
+        }
+      },
+      "general": {
+        "title": "WELCOME!",
+        "other": "Welcome footer",
+        "description": "We are really glad to see you!"
+      }
+    },
+    "AUTH": {
+      "notifications": {
+        "success": {
+          "sign-in": "Welcome, We are glad to see you!"
+        },
+        "error": {
+        },
+        "confirm": {
+        }
+      },
+      "actions": {
+        "login": "Login",
+        "forgot-password": "Forgot Password?"
+      },
+      "general": {
+        "title": "Boilerplate"
+      }
+    },
+    "USERS": {
+      "notifications": {
+        "success": {
+          "uploaded": "Users were successfully uploaded"
+        },
+        "error": {
+        },
+        "confirm": {
+          "delete": "Do you want to delete selected {{count:single=user}}{{count:plural=users}}?"
+        }
+      },
+      "actions": {
+        "search": "Search",
+        "options": "Options",
+        "create": "Create User",
+        "remove": "Remove selected",
+        "next-page": "Go to next page",
+        "go-previous": "Go to previous page",
+        "sort": {
+          "id": "Id",
+          "name": "Name",
+          "roles": "Roles",
+          "actions": "Actions",
+          "createdDate": "Creation Date"
+        }
+      },
+      "general": {
+        "title": "Users",
+        "items-number": "Rows per page:"
+      }
+    },
+    "EDIT": {
+      "notifications": {
+        "success": {
+        },
+        "error": {
+        },
+        "confirm": {
+        }
+      },
+      "actions": {
+        "submit": "Edit"
+      },
+      "general": {
+        "role": "Role",
+        "name": "Name",
+        "title": "Edit User"
+      }
+    },
+    "CREATE": {
+      "notifications": {
+        "success": {
+        },
+        "error": {
+        },
+        "confirm": {
+        }
+      },
+      "actions": {
+        "submit": "Create"
+      },
+      "general": {
+        "role": "Role",
+        "name": "Name",
+        "title": "Create User"
+      }
+    }
+  }
+}

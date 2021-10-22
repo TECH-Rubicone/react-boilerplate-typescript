@@ -1,8 +1,9 @@
 // outsource dependencies
 import * as yup from 'yup';
 import { Formik, Form } from 'formik';
+import { useTranslation } from 'react-i18next';
 import { useController } from 'redux-saga-controller';
-import { Grid, IconButton, InputAdornment } from '@mui/material';
+import { Grid, IconButton, InputAdornment, Typography } from '@mui/material';
 import React, { memo, useEffect, useCallback, useMemo, useState } from 'react';
 import { Mood as MoodIcon, SentimentVeryDissatisfied as SentimentVeryDissatisfiedIcon, Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@mui/icons-material';
 
@@ -63,6 +64,7 @@ const Test = () => {
     { updateData, initialize }
   ] = useController(controller);
   useEffect(() => { initialize(); }, [initialize]);
+  const { t } = useTranslation();
 
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
@@ -111,6 +113,9 @@ const Test = () => {
     >
       { ({ values }) => <Form>
         <Grid container spacing={3}>
+          <Grid item xs={7}>
+            <Typography component="h5">{ t('project') }</Typography>
+          </Grid>
           <Grid item xs={7}>
             <FInput
               fullWidth
