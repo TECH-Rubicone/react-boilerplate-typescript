@@ -6,12 +6,21 @@ import i18n, { FormatFunction, TFunction } from 'i18next';
 import config from 'configs';
 import en from 'configs/localization/en.json';
 import ru from 'configs/localization/ru.json';
-import ukr from 'configs/localization/ukr.json';
+import uk from 'configs/localization/ukr.json';
 
 export const LANGUAGES = {
-  EN: 'en',
-  RU: 'ru',
-  URK: 'urk',
+  EN: {
+    short: 'en',
+    full: 'English',
+  },
+  RU: {
+    short: 'ru',
+    full: 'Russian',
+  },
+  UK: {
+    short: 'uk',
+    full: 'Ukrainian',
+  },
 };
 
 export class LanguageService {
@@ -30,9 +39,9 @@ export class LanguageService {
   static initialize = () => i18n
     .use(initReactI18next)
     .init({
-      lng: LANGUAGES.EN,
-      fallbackLng: LANGUAGES.EN,
       debug: config.DEBUG,
+      lng: LANGUAGES.EN.short,
+      fallbackLng: LANGUAGES.EN.short,
       interpolation: {
         escapeValue: false,
         formatSeparator: ':',
@@ -41,7 +50,7 @@ export class LanguageService {
       resources: {
         en,
         ru,
-        ukr,
+        uk,
       },
     }).then(() => config.DEBUG && console.info('%c LanguageService.initialize',
       'color: #035DC8; font-weight: bolder; font-size: 12px;'))

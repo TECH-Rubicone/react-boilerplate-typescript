@@ -11,7 +11,7 @@ import { SvgIconComponent, ChevronLeft as ChevronLeftIcon, ExpandLess as ExpandL
 import { HEADER_HEIGHT } from 'hooks/use-free-height';
 
 // services
-import LanguageService from 'services/i18next.service';
+import LanguageService, { LANGUAGES } from 'services/i18next.service';
 
 // configs
 import config from 'configs';
@@ -19,7 +19,7 @@ import config from 'configs';
 // assets
 import US from 'assets/us-flag.svg';
 import RU from 'assets/ru-flag.svg';
-import UKR from 'assets/ukr-flag.svg';
+import UK from 'assets/ukr-flag.svg';
 
 // local dependencies
 import { controller } from '../controller';
@@ -28,18 +28,18 @@ import { ItemByTypeProps, SubItemByTypeProps, DRAWER_WIDTH } from './index';
 const languages = [
   {
     icon: US,
-    name: 'English',
-    action: () => { i18n.changeLanguage('en'); },
+    name: LANGUAGES.EN.full,
+    action: () => { i18n.changeLanguage(LANGUAGES.EN.short); },
   },
   {
     icon: RU,
-    name: 'Russian',
-    action: () => { i18n.changeLanguage('ru'); },
+    name: LANGUAGES.RU.full,
+    action: () => { i18n.changeLanguage(LANGUAGES.RU.short); },
   },
   {
-    icon: UKR,
-    name: 'Ukrainian',
-    action: () => { i18n.changeLanguage('ukr'); },
+    icon: UK,
+    name: LANGUAGES.UK.full,
+    action: () => { i18n.changeLanguage(LANGUAGES.UK.short); },
   },
 ];
 
@@ -140,11 +140,11 @@ const Languages: React.FC = () => {
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       transformOrigin={{ vertical: 'top', horizontal: 'center' }}
     >
-      { (list ?? []).map(({ icon, action, name }) => <MenuItem key={name} sx={{ p: 1.5, pl: 2 }}>
+      { (list ?? []).map(({ icon, action, name }) => <MenuItem key={name} onClick={action} sx={{ p: 1.5, pl: 2 }}>
         <ListItemIcon sx={{ minWidth: !open ? 24 : 48 }}>
-          <img src={icon} alt="It is a flag of something county" style={{ width: 26 }} />
+          <img src={icon} alt={name} style={{ width: 26 }} />
         </ListItemIcon>
-        <ListItemText primary={name} onClick={action} />
+        <ListItemText primary={name} />
       </MenuItem>) }
     </Menu> }
   </Box>;
