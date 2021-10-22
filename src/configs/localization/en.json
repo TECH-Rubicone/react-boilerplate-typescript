@@ -2,23 +2,23 @@
   "translation": {
     "project": "React boilerplate typescript",
     "layouts": {
-      "auth": "Auth",
       "test": "Test",
       "client": "Client",
       "layout": "Layout",
       "welcome": "Welcome",
+      "auth": "Authentication",
       "administrative": "Administrative"
     },
     "menu": {
-      "title": "Menu",
+      "menu": "Menu",
       "test": "Test",
-      "auth": "Auth",
       "users": "Users",
       "action": "Action",
       "sign-up": "Sign Up",
       "sign-in": "Sign In",
       "welcome": "Welcome",
       "language": "Language",
+      "auth": "Authentication",
       "administrative": "Administrative"
     },
     "actions": {
@@ -41,43 +41,50 @@
         "TENANT_ALREADY_EXIST": "Tenant with such an email already exists.",
         "MIN_LENGTH_CHARACTERS": "Field must contain at least {{min}} characters",
         "MAX_LENGTH_CHARACTERS": "The maximum number of characters for the field is {{max}}"
+      },
+      "placeholder": {
+        "email": "Email",
+        "roles": "Roles",
+        "prefix": "Prefix",
+        "search": "Search",
+        "suffix": "Suffix",
+        "actions": "Actions",
+        "password": "Password",
+        "lastName": "Last Name",
+        "username": "User Name",
+        "firstName": "First Name",
+        "middleName": "Middle Name",
+        "createdDate": "Creation Date"
+      },
+      "label": {
+        "of": "of",
+        "id": "Id",
+        "name": "Name",
+        "email": "Email",
+        "roles": "Roles",
+        "prefix": "Prefix",
+        "suffix": "Suffix",
+        "actions": "Actions",
+        "password": "Password",
+        "lastName": "Last Name",
+        "username": "User Name",
+        "firstName": "First Name",
+        "middleName": "Middle Name",
+        "createdDate": "Creation Date",
+        "items-number": "Rows per page:"
+      },
+      "errors": {
+        "default": "Something went wrong...",
+        "undefined": "Something went wrong...",
+        "ACCESS_DENIED": "Access denied.",
+        "ACCESS_IS_DISABLED": "User is disabled.",
+        "UNKNOWN_ERROR": "Something went wrong...",
+        "SQL_CODE_NULL": "Something went wrong...",
+        "EMAIL_IS_UNIQUE": "Email must be unique.",
+        "TENANT_DOESNT_EXIST": "Tenant doesn't exist.",
+        "RESET_TOKEN_EXPIRED": "Reset token is expired.",
+        "BAD_CREDENTIALS": "Email or password is invalid."
       }
-    },
-    "placeholder": {
-      "email": "Email",
-      "roles": "Roles",
-      "prefix": "Prefix",
-      "suffix": "Suffix",
-      "password": "Password",
-      "lastName": "Last Name",
-      "userName": "User Name",
-      "firstName": "First Name",
-      "middleName": "Middle Name",
-      "createdDate": "Creation Date"
-    },
-    "label": {
-      "email": "Email",
-      "roles": "Roles",
-      "prefix": "Prefix",
-      "suffix": "Suffix",
-      "password": "Password",
-      "lastName": "Last Name",
-      "userName": "User Name",
-      "firstName": "First Name",
-      "middleName": "Middle Name",
-      "createdDate": "Creation Date"
-    },
-    "errors": {
-      "default": "Something went wrong...",
-      "undefined": "Something went wrong...",
-      "ACCESS_DENIED": "Access denied.",
-      "ACCESS_IS_DISABLED": "User is disabled.",
-      "UNKNOWN_ERROR": "Something went wrong...",
-      "SQL_CODE_NULL": "Something went wrong...",
-      "EMAIL_IS_UNIQUE": "Email must be unique.",
-      "TENANT_DOESNT_EXIST": "Tenant doesn't exist.",
-      "RESET_TOKEN_EXPIRED": "Reset token is expired.",
-      "BAD_CREDENTIALS": "Email or password is invalid."
     },
     "WELCOME": {
       "notifications": {
@@ -129,18 +136,10 @@
         "create": "Create User",
         "remove": "Remove selected",
         "next-page": "Go to next page",
-        "go-previous": "Go to previous page",
-        "sort": {
-          "id": "Id",
-          "name": "Name",
-          "roles": "Roles",
-          "actions": "Actions",
-          "createdDate": "Creation Date"
-        }
+        "go-previous": "Go to previous page"
       },
       "general": {
-        "title": "Users",
-        "items-number": "Rows per page:"
+        "title": "Users"
       }
     },
     "EDIT": {
@@ -153,30 +152,14 @@
         }
       },
       "actions": {
-        "submit": "Edit"
+        "edit": "Edit",
+        "create": "Create"
       },
       "general": {
         "role": "Role",
         "name": "Name",
-        "title": "Edit User"
-      }
-    },
-    "CREATE": {
-      "notifications": {
-        "success": {
-        },
-        "error": {
-        },
-        "confirm": {
-        }
-      },
-      "actions": {
-        "submit": "Create"
-      },
-      "general": {
-        "role": "Role",
-        "name": "Name",
-        "title": "Create User"
+        "edit-title": "Edit User",
+        "create-title": "Create User"
       }
     }
   }

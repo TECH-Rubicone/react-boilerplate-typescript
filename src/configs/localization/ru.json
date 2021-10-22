@@ -1,8 +1,165 @@
 {
   "translation": {
-    "project": "React Шаблон Типаскрипт",
+    "project": "React boilerplate typescript",
+    "layouts": {
+      "test": "Тест",
+      "layout": "Макет",
+      "client": "Клиент",
+      "auth": "Авторизация",
+      "welcome": "Добро пожаловать",
+      "administrative": "Админка"
+    },
     "menu": {
-      "language": "Язык"
+      "menu": "Меню",
+      "test": "Тест",
+      "sign-in": "Вход",
+      "language": "Язык",
+      "action": "Действие",
+      "auth": "Авторизация",
+      "users": "Пользователи",
+      "welcome": "Добро пожаловать",
+      "sign-up": "Зарегистрироваться",
+      "administrative": "Админка"
+    },
+    "actions": {
+      "submit": "Submit"
+    },
+    "forms": {
+      "validate": {
+        "NUMBER": "Должно быть число",
+        "STRING": "Должна быть строка",
+        "INVALID_EMAIL": "Неверный e-mail",
+        "INTEGER": "Должно быть целое число",
+        "REQUIRED_FIELD": "Обязательное поле",
+        "UNIQUE": "{{entity}} должно быть уникальным",
+        "MIN_VALUE": "Минимальное значение {{entity}}",
+        "MAX_VALUE": "Максимальное значение {{entity}}",
+        "DEFINED_FIELD": "{{entity}} должно быть определено",
+        "MIN_LENGTH": "Минимум {{min}} {{entity}} следует предоставить",
+        "MAX_LENGTH": "Максимум {{max}} {{entity}} следует предоставить",
+        "USER_ALREADY_EXIST": "Пользователь с такой почтой уже существует.",
+        "MIN_LENGTH_CHARACTERS": "Поле должно содержать не менее {{min}} символов",
+        "TENANT_ALREADY_EXIST": "Арендатор с таким электронным адресом уже существует.",
+        "MAX_LENGTH_CHARACTERS": "The maximum number of characters for the field is {{max}}"
+      },
+      "placeholder": {
+        "roles": "Роли",
+        "search": "Поиск",
+        "suffix": "Суфикс",
+        "firstName": "Имя",
+        "prefix": "Префикс",
+        "password": "Пароль",
+        "lastName": "Фамилия",
+        "middleName": "Второе имя",
+        "email": "Электронная почта",
+        "username": "Имя пользователя",
+        "createdDate": "Дата создания"
+      },
+      "label": {
+        "of": "из",
+        "id": "Id",
+        "name": "Имя",
+        "email": "Электронная почта",
+        "roles": "Роли",
+        "prefix": "Префикс",
+        "suffix": "Суфикс",
+        "actions": "Опции",
+        "password": "Пароли",
+        "lastName": "Фамилия",
+        "username": "Имя пользователя",
+        "firstName": "Имя",
+        "middleName": "Второе имя",
+        "createdDate": "Дата создания",
+        "items-number": "Количество строк:"
+      },
+      "errors": {
+        "default": "Что-то пошло не так...",
+        "undefined": "Что-то пошло не так...",
+        "ACCESS_DENIED": "Доступ запрещен.",
+        "ACCESS_IS_DISABLED": "Пользователь отключен.",
+        "UNKNOWN_ERROR": "Что-то пошло не так...",
+        "SQL_CODE_NULL": "Что-то пошло не так...",
+        "EMAIL_IS_UNIQUE": "Электронная почта должна быть уникальной.",
+        "TENANT_DOESNT_EXIST": "Арендатор не существует.",
+        "RESET_TOKEN_EXPIRED": "Срок действия reset token истек.",
+        "BAD_CREDENTIALS": "Электронная почта или пароль недействительны."
+      }
+    },
+    "WELCOME": {
+      "notifications": {
+        "success": {
+        },
+        "error": {
+        },
+        "confirm": {
+        }
+      },
+      "general": {
+        "title": "Добро пожаловать!",
+        "other": "Добро пожаловать!",
+        "description": "Мы очень рады видеть вас!"
+      }
+    },
+    "AUTH": {
+      "notifications": {
+        "success": {
+          "sign-in": "Добро пожаловать, мы рады видеть вас!"
+        },
+        "error": {
+        },
+        "confirm": {
+        }
+      },
+      "actions": {
+        "login": "Войти",
+        "forgot-password": "Забыли пароль?"
+      },
+      "general": {
+        "title": "Boilerplate"
+      }
+    },
+    "USERS": {
+      "notifications": {
+        "success": {
+          "uploaded": "Пользователи были успешно загружены"
+        },
+        "error": {
+        },
+        "confirm": {
+          "delete": "Вы хотите удалить {{count:single=выбранного пользователя}}{{count:plural=выбранных пользователей}}?"
+        }
+      },
+      "actions": {
+        "search": "Поиск",
+        "options": "Опции",
+        "create": "Создать",
+        "remove": "Удалить",
+        "next-page": "Далее",
+        "go-previous": "Назад"
+      },
+      "general": {
+        "title": "Пользователи"
+      }
+    },
+    "EDIT": {
+      "notifications": {
+        "success": {
+        },
+        "error": {
+        },
+        "confirm": {
+        }
+      },
+      "actions": {
+        "edit": "Изменить",
+        "create": "Создать"
+      },
+      "general": {
+        "role": "Роль",
+        "name": "Имя",
+        "edit-title": "Создать пользователя",
+        "create-title": "Изменить данные пользователя"
+      }
     }
   }
 }

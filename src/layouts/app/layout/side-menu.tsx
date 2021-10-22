@@ -1,6 +1,7 @@
 // outsource dependencies
 import i18n from 'i18next';
 import { Location } from 'history';
+import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useControllerActions, useControllerData } from 'redux-saga-controller';
@@ -10,8 +11,9 @@ import { SvgIconComponent, ChevronLeft as ChevronLeftIcon, ExpandLess as ExpandL
 // hooks
 import { HEADER_HEIGHT } from 'hooks/use-free-height';
 
+// TODO move languages to constants
 // services
-import LanguageService, { LANGUAGES } from 'services/i18next.service';
+import { LANGUAGES } from 'services/i18next.service';
 
 // configs
 import config from 'configs';
@@ -93,7 +95,9 @@ const SideMenu: React.FC<SideMenuProps> = ({ menu }) => {
   const { open } = useControllerData(controller);
   const { updateCtrl } = useControllerActions(controller);
   const handleDrawerClose = useCallback(() => updateCtrl({ open: false }), [updateCtrl]);
+  const { t } = useTranslation();
 
+  const list = useMemo(() => menu.map(item => ({ ...item, name: t(item.name) })), [menu, t]);
   return <StyledDrawer variant="permanent" open={open}>
     <Stack direction="row" justifyContent="flex-end" alignItems="center" sx={{ height: HEADER_HEIGHT }}>
       <IconButton onClick={handleDrawerClose} sx={{ mr: 1 }}>
@@ -102,7 +106,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ menu }) => {
     </Stack>
     <Divider />
     <List>
-      { menu.map((item, index) => <ItemByType key={index} {...item} />) }
+      { list.map((item, index) => <ItemByType key={index} {...item} />) }
     </List>
     { config.DEBUG && <Languages /> }
   </StyledDrawer>;
@@ -111,6 +115,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ menu }) => {
 export default SideMenu;
 
 const Languages: React.FC = () => {
+  const { t } = useTranslation();
   const { open } = useControllerData(controller);
   const [isOpen, setIsOpen] = useState(false);
   const [ref, setRef] = useState<null | HTMLElement>(null);
@@ -131,7 +136,7 @@ const Languages: React.FC = () => {
       <ListItemIcon sx={{ minWidth: !open ? 24 : 48 }}>
         <Language />
       </ListItemIcon>
-      { open && <ListItemText primary={LanguageService.translate('menu.language')} /> }
+      { open && <ListItemText primary={t('menu.language')} /> }
     </ListItemButton>
     { <Menu
       open={isOpen}
@@ -209,6 +214,7 @@ export interface ItemMenuProps {
 const ItemMenu: React.FC<ItemMenuProps> = ({ name, icon, list, isActive }) => {
   const location = useLocation<Location>();
   const { open } = useControllerData(controller);
+  const { t } = useTranslation();
 
   const [ref, setRef] = useState<null | HTMLElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -219,6 +225,7 @@ const ItemMenu: React.FC<ItemMenuProps> = ({ name, icon, list, isActive }) => {
   const handleMenuToggle = useCallback(() => { setIsOpen(state => !state); }, []);
 
   const Icon = icon ?? BookmarkIcon;
+  const items = useMemo(() => list.map(item => ({ ...item, name: t(item.name) })), [list, t]);
   return <>
     <ListItemButton
       ref={setRef}
@@ -237,7 +244,7 @@ const ItemMenu: React.FC<ItemMenuProps> = ({ name, icon, list, isActive }) => {
     { open
       ? <Collapse in={isOpen}>
         <List disablePadding>
-          { (list ?? []).map((item, index) => <SubItemByType key={index} {...item} />) }
+          { (items ?? []).map((item, index) => <SubItemByType key={index} {...item} />) }
         </List>
       </Collapse>
       : <Menu
@@ -247,7 +254,7 @@ const ItemMenu: React.FC<ItemMenuProps> = ({ name, icon, list, isActive }) => {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'left' }}
       >
-        { (list ?? []).map((item, index) => <SubItemByType key={index} {...item} />) }
+        { (items ?? []).map((item, index) => <SubItemByType key={index} {...item} />) }
       </Menu> }
   </>;
 };

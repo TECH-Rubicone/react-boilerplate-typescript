@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import { Formik, Form } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useController } from 'redux-saga-controller';
-import { Grid, IconButton, InputAdornment, Typography } from '@mui/material';
+import { Grid, IconButton, InputAdornment } from '@mui/material';
 import React, { memo, useEffect, useCallback, useMemo, useState } from 'react';
 import { Mood as MoodIcon, SentimentVeryDissatisfied as SentimentVeryDissatisfiedIcon, Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@mui/icons-material';
 
@@ -95,41 +95,28 @@ const Test = () => {
       .oneOf(['HI'], 'Field must be checked'),
   }), []);
 
-  const onSubmit = useCallback(values => {
-    updateData(values);
-  }, [updateData]);
+  const onSubmit = useCallback(values => { updateData(values); }, [updateData]);
 
   const handleToggleHidePassword = useCallback(() => setIsPasswordHidden(!isPasswordHidden), [isPasswordHidden]);
 
-  return <Grid
-    mt={4}
-    container
-    display="flex"
-  >
-    <Formik
-      onSubmit={onSubmit}
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-    >
+  return <Grid mt={4} container>
+    <Formik onSubmit={onSubmit} initialValues={initialValues} validationSchema={validationSchema}>
       { ({ values }) => <Form>
-        <Grid container spacing={3}>
-          <Grid item xs={7}>
-            <Typography component="h5">{ t('project') }</Typography>
-          </Grid>
+        <Grid item container spacing={3}>
           <Grid item xs={7}>
             <FInput
               fullWidth
               type="text"
               name="username"
-              label="Email Address"
               sx={{ marginBottom: 2 }}
+              label={t('forms.label.username')}
             />
             <FInput
               fullWidth
               name="password"
               variant="filled"
-              label="Password"
               sx={{ marginBottom: 2 }}
+              label={t('forms.label.password')}
               type={isPasswordHidden ? 'password' : 'text'}
               InputProps={(valid, invalid) => ({
                 endAdornment: <InputAdornment position="end">
@@ -154,7 +141,9 @@ const Test = () => {
             <pre>
               { JSON.stringify(values, null, 2) }
             </pre>
-            <button type="submit">Submit</button>
+            <button type="submit">
+              { t('forms.label.submit') }
+            </button>
           </Grid>
           <Grid item xs={8}>
             <FSwitch

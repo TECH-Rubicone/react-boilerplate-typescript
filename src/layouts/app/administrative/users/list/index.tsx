@@ -1,4 +1,5 @@
 // outsource dependencies
+import { useTranslation } from 'react-i18next';
 import React, { memo, useEffect } from 'react';
 import { useController } from 'redux-saga-controller';
 import { Divider, Grid, Typography } from '@mui/material';
@@ -20,6 +21,7 @@ const List = () => {
     { initialize, clearCtrl },
   ] = useController(controller);
 
+  const { t } = useTranslation();
   const freeHeight = useFreeHeight();
 
   useEffect(() => {
@@ -30,7 +32,9 @@ const List = () => {
   return <Preloader active={!initialized} sx={{ height: freeHeight }}>
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Typography variant="h3">Users</Typography>
+        <Typography variant="h3">
+          { t('USERS.general.title') }
+        </Typography>
         <Divider />
       </Grid>
       <Grid item xs={12}>
