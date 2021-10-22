@@ -3,10 +3,10 @@ import { call, delay, put, takeEvery } from 'redux-saga/effects';
 import { ActionCreator, ActionCreators, Controller, create } from 'redux-saga-controller';
 
 // constants
-import { API_NAMES } from '../constants/api';
+import { API_NAMES } from 'constants/api';
 
 // services
-import storage from '../services/storage.service';
+import storage from 'services/storage.service';
 import { instancePUB } from 'services/api-public.service';
 import { instanceAPI, restoreSessionFromStore, setupSession, getToken } from 'services/api-private.service';
 
@@ -52,6 +52,16 @@ export interface Initial {
   };
 }
 
+type Token = {
+  accessToken: string
+  scope: Array<string>
+  refreshToken: string
+  resources: Array<string>
+  authorities: Array<string>
+  accessTokenValiditySeconds: number
+  refreshTokenValiditySeconds: number
+}
+
 type InitializePayload = null;
 
 interface Actions extends ActionCreators<Initial>{
@@ -77,8 +87,8 @@ export const controller: Controller<Actions, Initial> = create({
     },
   },
   subscriber: function * () {
-    yield takeEvery(controller.action.initialize.TYPE, initializeSaga);
     yield takeEvery(controller.action.signOut.TYPE, signOutSaga);
+    yield takeEvery(controller.action.initialize.TYPE, initializeSaga);
     yield takeEvery(controller.action.getSelfExecutor.TYPE, getSelfExecutor);
   }
 });
@@ -103,15 +113,8 @@ function * initializeSaga () {
     const hasSession: boolean = yield call(restoreSessionFromStore);
     if (hasSession) {
       yield call(getSelfExecutor);
-      const {
-        accessToken,
-        refreshToken,
-        accessTokenValiditySeconds,
-        refreshTokenValiditySeconds
-      } = yield call(getToken);
-      yield put(controller.action.updateCtrl({
-        token: { accessToken, refreshToken, refreshTokenValiditySeconds, accessTokenValiditySeconds }
-      }));
+      const token: Token = yield call(getToken);
+      yield put(controller.action.updateCtrl({ token }));
     }
   } catch ({ message }) {
     yield call(signOutSaga);
