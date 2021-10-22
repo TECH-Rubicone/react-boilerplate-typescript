@@ -25,6 +25,7 @@ const FInput: React.FC<FInputProps> = props => {
     id={field.name}
     error={invalid}
     focused={meta.touched}
+    value={field.value ?? ''}
     autoComplete={field.value}
     InputProps={InputProps(valid, invalid)}
     helperText={meta.touched && meta.error}
