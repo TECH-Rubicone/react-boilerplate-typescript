@@ -70,30 +70,30 @@ const Test = () => {
 
   const validationSchema = useMemo(() => yup.object().shape({
     username: yup.string()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD')
-      .email('VALIDATION_ERROR.INVALID_EMAIL'),
+      .required(t('forms.validate.REQUIRED_FIELD'))
+      .email(t('forms.validate.INVALID_EMAIL')),
     password: yup.string()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD')
-      .min(8, 'VALIDATION_ERROR.MIN_LENGTH_CHARACTERS'),
+      .required(t('forms.validate.REQUIRED_FIELD'))
+      .min(8, t('forms.validate.MIN_LENGTH_CHARACTERS', { min: 8 })),
     radioAny: yup.bool()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD')
-      .oneOf([true], 'Field must be checked'),
+      .required(t('forms.validate.REQUIRED_FIELD'))
+      .oneOf([true], t('forms.validate.CHECKED')),
     radioNumber: yup.number()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD')
-      .oneOf([1, 2], 'Field must be checked'),
+      .required(t('forms.validate.REQUIRED_FIELD'))
+      .oneOf([1, 2], t('forms.validate.CHECKED')),
     checked: yup.bool()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD')
-      .oneOf([true], 'Field must be checked'),
+      .required(t('forms.validate.REQUIRED_FIELD'))
+      .oneOf([true], t('forms.validate.CHECKED')),
     userDate: yup.string()
       .nullable()
-      .required('REQUIRED_FIELD'),
+      .required(t('forms.validate.REQUIRED_FIELD')),
     formSwitch: yup.bool()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD')
-      .oneOf([true], 'Field must be checked'),
+      .required(t('forms.validate.REQUIRED_FIELD'))
+      .oneOf([true], t('forms.validate.CHECKED')),
     fsync: yup.string()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD')
-      .oneOf(['HI'], 'Field must be checked'),
-  }), []);
+      .required(t('forms.validate.REQUIRED_FIELD'))
+      .oneOf(['HI'], t('forms.validate.CHECKED')),
+  }), [t]);
 
   const onSubmit = useCallback(values => { updateData(values); }, [updateData]);
 
@@ -134,7 +134,7 @@ const Test = () => {
             <FDatePicker
               name="userDate"
               inputFormat="MM/DD/YYYY"
-              label="Add your birthday"
+              label={t('forms.label.add-birthday')}
             />
           </Grid>
           <Grid item xs={4}>
@@ -150,7 +150,7 @@ const Test = () => {
               size="medium"
               name="formSwitch"
               color="secondary"
-              label="Remember me"
+              label={t('forms.label.remember')}
               checkedIcon={<MoodIcon fontSize="small"/>}
               icon={<SentimentVeryDissatisfiedIcon fontSize="small"/>}
             />
@@ -158,7 +158,7 @@ const Test = () => {
               required
               fullWidth
               name="radioAny"
-              label="radioAny"
+              label={t('forms.label.radio-any')}
               getFieldValue={item => item}
               getOptionValue={item => item?.value}
               getOptionLabel={item => item?.label}
@@ -171,7 +171,7 @@ const Test = () => {
               required
               fullWidth
               name="radioNumber"
-              label="radioNumber"
+              label={t('forms.label.radio-number')}
               getFieldValue={item => item}
               getOptionValue={item => item?.value}
               getOptionLabel={item => item?.label}
@@ -184,7 +184,7 @@ const Test = () => {
               required
               fullWidth
               name="radio2"
-              label="radio2"
+              label={t('forms.label.radio2')}
               prepareFormValue={item => item}
               getFieldValue={item => item?.id}
               getOptionValue={item => item?.id}
@@ -196,7 +196,7 @@ const Test = () => {
             <FRadio
               fullWidth
               name="radioObject"
-              label="radioObject"
+              label={t('forms.label.radio-object')}
               prepareFormValue={item => item}
               getFieldValue={item => item?.id}
               getOptionValue={item => item?.id}
@@ -209,7 +209,7 @@ const Test = () => {
               required
               fullWidth
               name="checked"
-              label="Remember me"
+              label={t('forms.label.remember')}
               prepareFormValue={item => item}
               getOptionValue={item => item?.id}
               getOptionLabel={item => item?.label}
@@ -220,8 +220,8 @@ const Test = () => {
             <Select
               multiple
               size="small"
-              label="Select"
               getOptionLabel={getItemLabel}
+              label={t('forms.label.select')}
               options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
             />
           </Grid>
@@ -229,19 +229,19 @@ const Test = () => {
             <AsyncSelect
               multiple
               loadingText="LOADING"
-              label="Async multiple"
               loadOptions={getRoles}
               getOptionLabel={getItemName}
+              label={t('forms.label.select')}
             />
           </Grid>
           <Grid item xs={7}>
             <FSelect
               required
               name="fsync"
-              label="FSync"
               filterSelectedOptions
               getFieldValue={getItemValue}
               getOptionLabel={getItemLabel}
+              label={t('forms.label.select')}
               prepareValue={(value: AnyObject) => ({ value, label: value })}
               options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
               isOptionEqualToValue={(option, value) => option.value === value.value}
@@ -250,12 +250,12 @@ const Test = () => {
           <Grid item xs={7}>
             <FSelect
               multiple
-              label="FSync multiple"
               name="fsyncMultiple"
               filterSelectedOptions
               getFieldValue={value => value}
               getOptionLabel={({ label }) => label}
               prepareValue={(value: AnyObject) => value}
+              label={t('forms.label.select')}
               options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
               isOptionEqualToValue={(option, value) => option.value === value.value}
             />
@@ -263,8 +263,8 @@ const Test = () => {
           <Grid item xs={7}>
             <FSelect
               name="FSyncObj"
-              label="FSyncObj"
               getOptionLabel={({ label }) => label}
+              label={t('forms.label.select')}
               getFieldValue={({ value }: AnyObject) => value}
               prepareValue={(value: AnyObject) => ({ value, label: value })}
               options={['HI', 'HI1', 'HI2'].map(item => ({ value: item, label: item }))}
@@ -274,10 +274,10 @@ const Test = () => {
           <Grid item xs={7}>
             <FAsyncSelect
               name="async"
-              label="Async"
               loadingText="LOADING"
               filterSelectedOptions
               loadOptions={getRoles}
+              label={t('forms.label.select')}
               getFieldValue={({ name }: AnyObject) => name}
               getOptionLabel={option => option.name ? option.name : option}
               prepareValue={(value: AnyObject) => ({ name: value, label: value })}
@@ -290,11 +290,11 @@ const Test = () => {
               fullWidth
               name="fAsyncMultiple"
               loadingText="LOADING"
-              label="Async multiple"
               filterSelectedOptions
               loadOptions={getRoles}
               getOptionLabel={option => option.name}
               prepareValue={(value: AnyObject) => value}
+              label={t('forms.label.select')}
               getFieldValue={(value) => value}
               isOptionEqualToValue={(option, value) => option.name === value.name}
             />

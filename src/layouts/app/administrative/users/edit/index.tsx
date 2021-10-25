@@ -58,22 +58,22 @@ const UserEdit = () => {
   const validationSchema = useMemo(() => yup.object().shape({
     firstName: yup.string()
       .nullable()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD'),
+      .required(t('forms.validate.REQUIRED_FIELD')),
     lastName: yup.string()
       .nullable()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD'),
+      .required(t('forms.validate.REQUIRED_FIELD')),
     middleName: yup.string()
       .nullable(),
     roles: yup.array()
-      .min(1),
+      .min(1, t('forms.validate.MIN_VALUE', { entity: 1 })),
     email: yup.string()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD')
-      .email('VALIDATION_ERROR.INVALID_EMAIL'),
+      .required(t('forms.validate.REQUIRED_FIELD'))
+      .email(t('forms.validate.INVALID_EMAIL')),
     prefix: yup.string()
       .nullable(),
     suffix: yup.string()
       .nullable(),
-  }), []);
+  }), [t]);
 
   const freeHeight = useFreeHeight();
   const contentHeight = freeHeight

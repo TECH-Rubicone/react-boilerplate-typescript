@@ -35,12 +35,12 @@ const SignIn = () => {
   }, [clearCtrl, initialize]);
   const validationSchema = useMemo(() => yup.object().shape({
     username: yup.string()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD')
-      .email('VALIDATION_ERROR.INVALID_EMAIL'),
+      .required(t('forms.validate.REQUIRED_FIELD'))
+      .email(t('forms.validate.INVALID_EMAIL')),
     password: yup.string()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD')
-      .min(8, 'VALIDATION_ERROR.MIN_LENGTH_CHARACTERS'),
-  }), []);
+      .required(t('forms.validate.REQUIRED_FIELD'))
+      .min(8, t('forms.validate.MIN_LENGTH_CHARACTERS', { min: 8 })),
+  }), [t]);
   const onSubmit = useCallback(values => { signIn(values); }, [signIn]);
   const clearError = useCallback(() => { updateCtrl({ errorMessage: '' }); }, [updateCtrl]);
   const handleToggleHidePassword = useCallback(() => setIsPasswordHidden(!isPasswordHidden), [isPasswordHidden]);

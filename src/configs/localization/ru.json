@@ -40,7 +40,7 @@
         "USER_ALREADY_EXIST": "Пользователь с такой почтой уже существует.",
         "MIN_LENGTH_CHARACTERS": "Поле должно содержать не менее {{min}} символов",
         "TENANT_ALREADY_EXIST": "Арендатор с таким электронным адресом уже существует.",
-        "MAX_LENGTH_CHARACTERS": "The maximum number of characters for the field is {{max}}"
+        "MAX_LENGTH_CHARACTERS": "Максимальное количество символов для поля - {{max}}"
       },
       "placeholder": {
         "roles": "Роли",
@@ -59,29 +59,38 @@
         "of": "из",
         "id": "Id",
         "name": "Имя",
-        "email": "Электронная почта",
         "roles": "Роли",
-        "prefix": "Префикс",
-        "suffix": "Суфикс",
         "actions": "Опции",
+        "firstName": "Имя",
+        "suffix": "Суфикс",
+        "prefix": "Префикс",
         "password": "Пароли",
         "lastName": "Фамилия",
-        "username": "Имя пользователя",
-        "firstName": "Имя",
+        "submit": "Отправить",
         "middleName": "Второе имя",
+        "remember": "Запомнить меня",
+        "email": "Электронная почта",
+        "username": "Имя пользователя",
         "createdDate": "Дата создания",
-        "items-number": "Количество строк:"
+        "items-number": "Количество строк:",
+
+        "radio2": "Радио2",
+        "radio-any": "Радио any",
+        "select": "Выпадающий список",
+        "radio-number": "Радио число",
+        "radio-object": "Радио объект",
+        "add-birthday": "Ваш день рождения"
       },
       "errors": {
         "default": "Что-то пошло не так...",
         "undefined": "Что-то пошло не так...",
         "ACCESS_DENIED": "Доступ запрещен.",
-        "ACCESS_IS_DISABLED": "Пользователь отключен.",
         "UNKNOWN_ERROR": "Что-то пошло не так...",
         "SQL_CODE_NULL": "Что-то пошло не так...",
-        "EMAIL_IS_UNIQUE": "Электронная почта должна быть уникальной.",
+        "ACCESS_IS_DISABLED": "Пользователь отключен.",
         "TENANT_DOESNT_EXIST": "Арендатор не существует.",
         "RESET_TOKEN_EXPIRED": "Срок действия reset token истек.",
+        "EMAIL_IS_UNIQUE": "Электронная почта должна быть уникальной.",
         "BAD_CREDENTIALS": "Электронная почта или пароль недействительны."
       }
     },

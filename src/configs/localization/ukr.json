@@ -1,8 +1,174 @@
 {
   "translation": {
-    "project": "React Шаблон Тiпаскрiпт",
+    "project": "React boilerplate typescript",
+    "layouts": {
+      "test": "Тест",
+      "layout": "Макет",
+      "client": "Клієнт",
+      "auth": "Авторизація",
+      "administrative": "Адмінка",
+      "welcome": "Ласкаво просимо"
+    },
     "menu": {
-      "language": "Мова"
+      "menu": "Меню",
+      "test": "Тест",
+      "action": "Дія",
+      "sign-in": "Вхід",
+      "language": "Мова",
+      "auth": "Авторизація",
+      "users": "Користувачі",
+      "welcome": "Ласкаво просимо",
+      "sign-up": "Зареєструватися",
+      "administrative": "Адмінка"
+    },
+    "actions": {
+      "submit": "Відправити"
+    },
+    "forms": {
+      "validate": {
+        "NUMBER": "Має бути число",
+        "STRING": "Має бути рядок",
+        "INTEGER": "Має бути ціле число",
+        "REQUIRED_FIELD": "Обов'язкове поле",
+        "INVALID_EMAIL": "Неправильний e-mail",
+        "UNIQUE": "{{entity}} має бути унікальним",
+        "MIN_VALUE": "Мінімальне значення {{entity}}",
+        "MAX_VALUE": "Максимальне значення {{entity}}",
+        "DEFINED_FIELD": "{{entity}} має бути визначено",
+        "MIN_LENGTH": "Мінімум {{min}} {{entity}} слід надати",
+        "MAX_LENGTH": "Максимум {{max}} {{entity}} слід надати",
+        "USER_ALREADY_EXIST": "Користувач з такою поштою вже існує",
+        "MIN_LENGTH_CHARACTERS": "Поле має містити не менше {{min}} символів",
+        "TENANT_ALREADY_EXIST": "Орендар з такою електронною адресою вже існує",
+        "MAX_LENGTH_CHARACTERS": "Максимальна кількість символів для поля - це {{max}}"
+      },
+      "placeholder": {
+        "roles": "Ролі",
+        "search": "Пошук",
+        "suffix": "Суфікс",
+        "firstName": "Ім'я",
+        "prefix": "Префікс",
+        "password": "Пароль",
+        "lastName": "Прізвище",
+        "middleName": "Друге ім'я",
+        "email": "Електронна пошта",
+        "username": "Ім'я користувача",
+        "createdDate": "Дата створення"
+      },
+      "label": {
+        "of": "із",
+        "id": "Id",
+        "name": "Ім'я",
+        "roles": "Ролі",
+        "suffix": "Суфікс",
+        "actions": "Опції",
+        "firstName": "Ім'я",
+        "prefix": "Префікс",
+        "password": "Пароль",
+        "lastName": "Прізвище",
+        "submit": "Відправити",
+        "middleName": "Друге ім'я",
+        "email": "Електронна пошта",
+        "username": "Ім'я користувача",
+        "remember": "Запам'ятати мене",
+        "createdDate": "Дата створення",
+        "items-number": "Кількість рядків:",
+
+        "radio2": "Радыо2",
+        "radio-any": "Радіо any",
+        "select": "Випадаючий список",
+        "radio-number": "Радіо число",
+        "radio-object": "Радіо об'єкт",
+        "add-birthday": "Ваш день народження"
+      },
+      "errors": {
+        "ACCESS_DENIED": "Немає доступу.",
+        "default": "Щось пішло не так...",
+        "undefined": "Щось пішло не так...",
+        "UNKNOWN_ERROR": "Щось пішло не так...",
+        "SQL_CODE_NULL": "Щось пішло не так...",
+        "TENANT_DOESNT_EXIST": "Орендар не існує.",
+        "ACCESS_IS_DISABLED": "Користувач відключений.",
+        "EMAIL_IS_UNIQUE": "Електронна пошта має бути унікальною.",
+        "RESET_TOKEN_EXPIRED": "Термін дії reset token скінчився.",
+        "BAD_CREDENTIALS": "Електронна пошта або пароль недійсні."
+      }
+    },
+    "WELCOME": {
+      "notifications": {
+        "success": {
+        },
+        "error": {
+        },
+        "confirm": {
+        }
+      },
+      "general": {
+        "title": "Раді бачити!",
+        "other": "Раді бачити!",
+        "description": "Ми дуже раді бачити вас!"
+      }
+    },
+    "AUTH": {
+      "notifications": {
+        "success": {
+          "sign-in": "Ласкаво просимо, ми раді бачити вас!"
+        },
+        "error": {
+        },
+        "confirm": {
+        }
+      },
+      "actions": {
+        "login": "Увійти",
+        "forgot-password": "Забули пароль?"
+      },
+      "general": {
+        "title": "Boilerplate"
+      }
+    },
+    "USERS": {
+      "notifications": {
+        "success": {
+          "uploaded": "Користувачі успішно завантажені"
+        },
+        "error": {
+        },
+        "confirm": {
+          "delete": "Ви хочете видалити {{count: single = обраного користувача}} {{count: plural = обраних користувачів}}?"
+        }
+      },
+      "actions": {
+        "search": "Пошук",
+        "options": "Опції",
+        "next-page": "Далі",
+        "create": "Створити",
+        "remove": "Видалити",
+        "go-previous": "Назад"
+      },
+      "general": {
+        "title": "Користувачі"
+      }
+    },
+    "EDIT": {
+      "notifications": {
+        "success": {
+        },
+        "error": {
+        },
+        "confirm": {
+        }
+      },
+      "actions": {
+        "edit": "Змінити",
+        "create": "Створити"
+      },
+      "general": {
+        "role": "Роль",
+        "name": "Ім'я",
+        "edit-title": "Створити",
+        "create-title": "Змінити"
+      }
     }
   }
 }
