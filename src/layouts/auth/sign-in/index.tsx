@@ -1,6 +1,7 @@
 // outsource dependencies
 import * as yup from 'yup';
 import { Formik, Form } from 'formik';
+import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import { useController } from 'redux-saga-controller';
 import React, { memo, useEffect, useCallback, useMemo, useState } from 'react';
@@ -24,6 +25,8 @@ const SignIn = () => {
     { updateCtrl, clearCtrl, signIn, initialize }
   ] = useController(controller);
 
+  const { t } = useTranslation();
+
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
   useEffect(() => {
@@ -32,12 +35,12 @@ const SignIn = () => {
   }, [clearCtrl, initialize]);
   const validationSchema = useMemo(() => yup.object().shape({
     username: yup.string()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD')
-      .email('VALIDATION_ERROR.INVALID_EMAIL'),
+      .required(t('forms.validate.REQUIRED_FIELD'))
+      .email(t('forms.validate.INVALID_EMAIL')),
     password: yup.string()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD')
-      .min(8, 'VALIDATION_ERROR.MIN_LENGTH_CHARACTERS'),
-  }), []);
+      .required(t('forms.validate.REQUIRED_FIELD'))
+      .min(8, t('forms.validate.MIN_LENGTH_CHARACTERS', { min: 8 })),
+  }), [t]);
   const onSubmit = useCallback(values => { signIn(values); }, [signIn]);
   const clearError = useCallback(() => { updateCtrl({ errorMessage: '' }); }, [updateCtrl]);
   const handleToggleHidePassword = useCallback(() => setIsPasswordHidden(!isPasswordHidden), [isPasswordHidden]);
@@ -71,8 +74,8 @@ const SignIn = () => {
                   type="text"
                   name="username"
                   margin="normal"
-                  label="Email Address"
-                  placeholder="Email Address"
+                  label={t('forms.label.email')}
+                  placeholder={t('forms.placeholder.email')}
                 />
               </Grid>
               <Grid item xs={12} mb={1}>
@@ -81,14 +84,13 @@ const SignIn = () => {
                   type="password"
                   name="password"
                   margin="normal"
-                  label="Password"
-                  placeholder="Password"
+                  label={t('forms.label.password')}
+                  placeholder={t('forms.placeholder.password')}
                   InputProps={(valid, invalid) => ({
                     endAdornment: <InputAdornment position="end">
                       <IconButton
                         edge="end"
                         onClick={handleToggleHidePassword}
-                        aria-label="toggle password visibility"
                         color={validationStyles(valid, invalid)}
                       >
                         { isPasswordHidden ? <VisibilityIcon /> : <VisibilityOffIcon /> }
@@ -111,7 +113,7 @@ const SignIn = () => {
                   disabled={disabled || !initialized}
                 >
                   <Typography variant="body1" mr={1}>
-                    Login
+                    { t('AUTH.actions.login') }
                   </Typography>
                   { disabled && <CircularProgress color="info" size={20} /> }
                 </Button>
@@ -119,7 +121,7 @@ const SignIn = () => {
               <Grid item xs={12}>
                 <Link component={RouterLink} to={ROUTES.FORGOT_PASSWORD.LINK()} variant="body2">
                   <Typography variant="body1" align="center" pl={1}>
-                      Forgot password?
+                    { t('AUTH.actions.forgot-password') }
                   </Typography>
                 </Link>
               </Grid>

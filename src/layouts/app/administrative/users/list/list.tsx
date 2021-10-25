@@ -1,5 +1,6 @@
 // outsource dependencies
 import _ from 'lodash';
+import { useTranslation } from 'react-i18next';
 import React, { memo, useCallback, useMemo, FC } from 'react';
 import { useControllerActions, useControllerData } from 'redux-saga-controller';
 import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TableSortLabel, Checkbox, } from '@mui/material';
@@ -21,11 +22,11 @@ interface Column {
   name: 'name' | 'id' | 'createdDate' | 'roles' | 'actions'
 }
 
-const columns: Array<Column> = [
-  { name: 'name', label: 'Name', minWidth: 170, align: 'right' },
-  { name: 'id', label: 'Id', minWidth: 100, align: 'right' },
-  { name: 'createdDate', label: 'Creation Date', minWidth: 170, align: 'right', },
-  { name: 'roles', label: 'Roles', minWidth: 170, align: 'right', },
+const columnList: Array<Column> = [
+  { name: 'name', label: 'forms.label.name', minWidth: 170, align: 'right' },
+  { name: 'id', label: 'forms.label.id', minWidth: 100, align: 'right' },
+  { name: 'createdDate', label: 'forms.label.createdDate', minWidth: 170, align: 'right', },
+  { name: 'roles', label: 'forms.label.roles', minWidth: 170, align: 'right', },
 ];
 
 const List = () => {
@@ -37,6 +38,8 @@ const List = () => {
   - 52  // table pagination
   - 16; // mb
 
+  const { t } = useTranslation();
+
   const {
     list,
     size,
@@ -47,6 +50,13 @@ const List = () => {
     totalElements,
   } = useControllerData(controller);
   const { updateCtrl, updateFilters } = useControllerActions(controller);
+
+  const columns = useMemo(() => columnList.map(item => {
+    return {
+      ...item,
+      label: t(item.label)
+    };
+  }), [t]);
 
   const isEveryChecked = useMemo(
     () => list.every(item => _.find(selected, { id: item.id })),
@@ -92,7 +102,7 @@ const List = () => {
               <SortByField field={name}>{ label }</SortByField>
             </TableCell>) }
             <TableCell style={{ minWidth: 60 }}>
-              Actions
+              { t('forms.label.actions') }
             </TableCell>
           </TableRow>
         </TableHead>

@@ -2,6 +2,7 @@
 import * as yup from 'yup';
 import { Formik, Form } from 'formik';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useController } from 'redux-saga-controller';
 import React, { memo, useCallback, useEffect, useMemo } from 'react';
 import { Button, Typography, Grid, Card, CardContent, Divider, Box, CardHeader, Stack } from '@mui/material';
@@ -52,26 +53,27 @@ const UserEdit = () => {
     { initialize, clearCtrl, updateData },
     isControllerSubscribed
   ] = useController(controller);
+  const { t } = useTranslation();
 
   const validationSchema = useMemo(() => yup.object().shape({
     firstName: yup.string()
       .nullable()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD'),
+      .required(t('forms.validate.REQUIRED_FIELD')),
     lastName: yup.string()
       .nullable()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD'),
+      .required(t('forms.validate.REQUIRED_FIELD')),
     middleName: yup.string()
       .nullable(),
     roles: yup.array()
-      .min(1),
+      .min(1, t('forms.validate.MIN_VALUE', { entity: 1 })),
     email: yup.string()
-      .required('VALIDATION_ERROR.REQUIRED_FIELD')
-      .email('VALIDATION_ERROR.INVALID_EMAIL'),
+      .required(t('forms.validate.REQUIRED_FIELD'))
+      .email(t('forms.validate.INVALID_EMAIL')),
     prefix: yup.string()
       .nullable(),
     suffix: yup.string()
       .nullable(),
-  }), []);
+  }), [t]);
 
   const freeHeight = useFreeHeight();
   const contentHeight = freeHeight
@@ -96,12 +98,12 @@ const UserEdit = () => {
         <Form noValidate>
           <Grid container>
             <Grid item xs={12}>
-              <Typography variant="h3">{ id === NEW_ID ? 'Create' : 'Edit' } User</Typography>
+              <Typography variant="h3">{ id === NEW_ID ? t('EDIT.general.create-title') : t('EDIT.general.edit-title') }</Typography>
             </Grid>
             <Grid item container xs={12} spacing={3} justifyContent="center" alignContent="center" sx={{ height: contentHeight }}>
               <Grid item xs={12} md={6}>
                 <Card>
-                  <CardHeader title={<Typography variant="h4">Name</Typography>} />
+                  <CardHeader title={<Typography variant="h4">{ t('EDIT.general.name') }</Typography>} />
                   <Divider />
                   <CardContent>
                     <Stack spacing={2}>
@@ -111,7 +113,7 @@ const UserEdit = () => {
                         type="text"
                         size="small"
                         name="firstName"
-                        label={<strong>First Name</strong>}
+                        label={<strong>{ t('forms.label.firstName') }</strong>}
                       />
                       <FInput
                         required
@@ -119,7 +121,7 @@ const UserEdit = () => {
                         type="text"
                         size="small"
                         name="lastName"
-                        label={<strong>Last Name</strong>}
+                        label={<strong>{ t('forms.label.lastName') }</strong>}
                       />
                       { id !== NEW_ID && <>
                         <FInput
@@ -127,14 +129,14 @@ const UserEdit = () => {
                           type="text"
                           size="small"
                           name="middleName"
-                          label={<strong>Middle Name</strong>}
+                          label={<strong>{ t('forms.label.middleName') }</strong>}
                         />
                         <FInput
                           fullWidth
                           type="text"
                           size="small"
                           name="username"
-                          label={<strong>User Name</strong>}
+                          label={<strong>{ t('forms.label.username') }</strong>}
                         />
                       </> }
                     </Stack>
@@ -143,7 +145,7 @@ const UserEdit = () => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <Card>
-                  <CardHeader title={<Typography variant="h4">Role</Typography>} />
+                  <CardHeader title={<Typography variant="h4">{ t('EDIT.general.role') }</Typography>} />
                   <Divider />
                   <CardContent>
                     <Stack spacing={2}>
@@ -159,7 +161,7 @@ const UserEdit = () => {
                         prepareValue={getItem}
                         getFieldValue={getItem}
                         getOptionLabel={getItemName}
-                        label={<strong>Roles</strong>}
+                        label={<strong>{ t('forms.label.roles') }</strong>}
                         isOptionEqualToValue={isOptionEqualToValue}
                       />
                       <FInput
@@ -168,13 +170,13 @@ const UserEdit = () => {
                         size="small"
                         name="email"
                         required={id === NEW_ID}
-                        label={<strong>Email</strong>}
+                        label={<strong>{ t('forms.label.email') }</strong>}
                       />
                       { id !== NEW_ID && <>
                         <FDatePicker
                           inputFormat="L"
                           name="createdDate"
-                          label="Creation Date"
+                          label={t('forms.label.createdDate')}
                         />
                         <FSelect
                           fullWidth
@@ -183,7 +185,7 @@ const UserEdit = () => {
                           options={prefixes}
                           prepareValue={prepareValue}
                           getFieldValue={getItemValue}
-                          label={<strong>Prefix</strong>}
+                          label={<strong>{ t('forms.label.prefix') }</strong>}
                         />
                         <FSelect
                           fullWidth
@@ -192,7 +194,7 @@ const UserEdit = () => {
                           options={suffixes}
                           prepareValue={prepareValue}
                           getFieldValue={getItemValue}
-                          label={<strong>Suffix</strong>}
+                          label={<strong>{ t('forms.label.suffix') }</strong>}
                         />
                       </> }
                     </Stack>
@@ -203,7 +205,7 @@ const UserEdit = () => {
           </Grid>
           <Box mb={2} display="flex" justifyContent="flex-end">
             <Button type="submit" variant="contained" color="success" disabled={disabled}>
-              { id === NEW_ID ? 'Create' : 'Edit' }
+              { id === NEW_ID ? t('EDIT.actions.create') : t('EDIT.actions.edit') }
             </Button>
           </Box>
         </Form>
