@@ -1,0 +1,5 @@
+
+export enum ENTITY_STATUS {
+  ENABLED = 'ENABLED',
+  DISABLED = 'DISABLED',
+}

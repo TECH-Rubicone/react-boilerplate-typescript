@@ -1,9 +1,3 @@
-@import '~bootstrap/scss/functions';
-@import 'scss/bootstrap/variables';
-// Bootstrap
-@import '~bootstrap/scss/bootstrap.scss';
-
 // common styles
-@import 'scss/common/index';
-@import 'scss/helpers/index';
-@import 'scss/bootstrap/font-size';
+@import 'scss/common';
+@import 'scss/helpers';

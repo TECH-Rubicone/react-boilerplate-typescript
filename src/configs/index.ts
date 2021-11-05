@@ -1,7 +1,28 @@
 // outsource dependencies
 
-const config = {
-  ...process.env,
+interface Config {
+  DEBUG: boolean
+  VERSION: string
+  BASE_URL: string
+  API_PATH: string
+  DSLD_URL: string
+  DSLD_PATH: string
+  SERVICE_URL: string
+  DSLD_VERSION: string
+  CLIENT_TIME_FORMAT: string
+}
+
+const config: Config = {
+  VERSION: process.env.REACT_APP_VERSION!,
+  BASE_URL: process.env.REACT_APP_BASE_URL!,
+  API_PATH: process.env.REACT_APP_API_PATH!,
+  SERVICE_URL: process.env.REACT_APP_SERVICE_URL!,
+  CLIENT_TIME_FORMAT: process.env.REACT_APP_CLIENT_TIME_FORMAT!,
+  // DSLD
+  DSLD_URL: process.env.REACT_APP_DSLD_URL!,
+  DSLD_PATH: process.env.REACT_APP_DSLD_PATH!,
+  DSLD_VERSION: process.env.REACT_APP_DSLD_VERSION!,
+  // complex properties
   DEBUG: process.env.REACT_APP_DEBUG === String(true),
 };
 

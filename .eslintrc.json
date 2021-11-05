@@ -1,6 +1,10 @@
 {
   "parser": "@typescript-eslint/parser",
   "plugins": [
+    "react",
+    "jsx-a11y",
+    "import",
+    "react-hooks",
     "@typescript-eslint/eslint-plugin"
   ],
   "extends": [
@@ -44,6 +48,8 @@
         ]
       }
     ],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": [1, { "enableDangerousAutofixThisMayCauseInfiniteLoops": true }],
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "indent": ["warn", 2, {"SwitchCase": 1}],
     "no-use-before-define": "off",
@@ -151,6 +157,12 @@
     "func-style": ["error", "declaration", {"allowArrowFunctions": true}],
     "no-mixed-operators": ["error", {"groups": [["&&", "||"]]}],
     "no-restricted-imports": ["error", {"paths": ["import1", "import2"], "patterns": ["import1/private/*", "import2/*", "!import2/good"]}],
-    "no-prototype-builtins": ["off"]
+    "no-prototype-builtins": ["off"],
+    "react/jsx-curly-spacing": ["error", {
+      "when": "never",
+      "children": {
+        "when": "always"
+      }
+    }]
   }
 }
