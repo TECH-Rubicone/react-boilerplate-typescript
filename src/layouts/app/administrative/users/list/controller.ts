@@ -123,10 +123,9 @@ const initial: Initial = {
 export const controller: Controller<Actions, Initial> = create({
   initial,
   prefix: 'users-list',
-  actions: ['updateFilters', 'initialize', 'deleteItems'],
+  actions: ['updateFilters', 'initialize'],
   subscriber: function * () {
     yield takeEvery(controller.action.initialize.TYPE, initializeSaga);
-    yield takeEvery(controller.action.deleteItems.TYPE, deleteItemsSaga);
     yield takeEvery(controller.action.updateFilters.TYPE, updateFiltersSaga);
   },
 });
@@ -166,6 +165,3 @@ function * updateFiltersSaga ({ payload }: Act<Partial<Filters>>) {
   yield put(controller.action.updateCtrl({ disabled: false }));
 }
 
-function * deleteItemsSaga ({ payload }: Act<DeleteItemsPayload>) {
-  yield call(console.log, payload);
-}
