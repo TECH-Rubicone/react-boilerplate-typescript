@@ -25,6 +25,10 @@ jobs:
         uses: actions/setup-node@master
         with:
           node-version: ${{ matrix.node-verssion }}
+      - name: Random assign
+        uses: uesteibar/reviewer-lottery@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Auto assign
         uses: kentaro-m/auto-assign-action@v1.1.2
         with:
